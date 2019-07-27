@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Movie Catalogue</string>
+    <string name="title_activity_movie_details">Movie Details</string>
+    <string name="title_activity_tv_show_details">Tv Show Details</string>
+
+    <string name="title_movie">Movies</string>
+    <string name="title_tv_show">TvShows</string>
+    <string name="list_movies">Movie List</string>
+    <string name="list_tv_shows">Tv Show List</string>
+
+    <string name="title">Title:</string>
+    <string name="genre">Genre:</string>
+    <string name="rating">Rating:</string>
+    <string name="language">Language:</string>
+    <string name="release_date">Release Date:</string>
+    <string name="overview">Overview:</string>
+    <string name="cast_crew">Cast/Crew:</string>
+
+    <string name="todo">TODO</string>
+    <string name="no_rating">No Rating</string>
+    <string name="no_title">No Title</string>
+    <string name="no_release_date">No Release Date</string>
+    <string name="availability_overview">Overview not available.</string>
+    <string name="long_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
+</resources>
