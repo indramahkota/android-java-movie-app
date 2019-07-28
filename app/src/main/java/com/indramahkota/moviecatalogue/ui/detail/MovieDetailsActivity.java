@@ -10,8 +10,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.Constant;
-import com.indramahkota.moviecatalogue.data.model.DiscoverMovie;
+import com.indramahkota.moviecatalogue.data.remote.Constant;
+import com.indramahkota.moviecatalogue.data.remote.model.DiscoverMovie;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE = "extra_movie";

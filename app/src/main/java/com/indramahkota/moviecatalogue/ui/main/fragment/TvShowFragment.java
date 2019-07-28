@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.model.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.remote.model.DiscoverTvShow;
 import com.indramahkota.moviecatalogue.ui.main.adapter.TvShowAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.TvShowFragmentViewModel;
 

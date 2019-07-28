@@ -1,7 +1,7 @@
 package com.indramahkota.moviecatalogue.utils;
 
-import com.indramahkota.moviecatalogue.data.model.DiscoverMovie;
-import com.indramahkota.moviecatalogue.data.model.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.remote.model.DiscoverMovie;
+import com.indramahkota.moviecatalogue.data.remote.model.DiscoverTvShow;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.data.model;
+package com.indramahkota.moviecatalogue.data.remote.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

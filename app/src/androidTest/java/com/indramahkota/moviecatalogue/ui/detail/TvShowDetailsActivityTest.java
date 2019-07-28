@@ -7,7 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.model.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.remote.model.DiscoverTvShow;
 import com.indramahkota.moviecatalogue.utils.FakeDataDummy;
 
 import org.junit.After;

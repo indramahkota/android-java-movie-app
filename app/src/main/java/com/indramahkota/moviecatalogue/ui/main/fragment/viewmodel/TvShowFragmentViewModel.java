@@ -2,8 +2,8 @@ package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
 
 import androidx.lifecycle.ViewModel;
 
-import com.indramahkota.moviecatalogue.data.DataDummy;
-import com.indramahkota.moviecatalogue.data.model.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.remote.DataDummy;
+import com.indramahkota.moviecatalogue.data.remote.model.DiscoverTvShow;
 
 import java.util.List;
 

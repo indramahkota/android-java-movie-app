@@ -11,8 +11,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.Constant;
-import com.indramahkota.moviecatalogue.data.model.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.remote.Constant;
+import com.indramahkota.moviecatalogue.data.remote.model.DiscoverTvShow;
 
 public class TvShowDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_TV_SHOW = "extra_tv_show";
