@@ -10,8 +10,8 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.model.DiscoverTvShow;
 import com.indramahkota.moviecatalogue.utils.FakeDataDummy;
 
-import org.junit.After;
 import org.junit.Rule;
+import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -19,7 +19,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
-class TvShowDetailsActivityTest {
+public class TvShowDetailsActivityTest {
     private final DiscoverTvShow dummyTvShow = FakeDataDummy.generateDummyTvShows().get(0);
 
     @Rule
@@ -33,8 +33,8 @@ class TvShowDetailsActivityTest {
         }
     };
 
-    @After
-    public void tearDown() {
+    @Test
+    public void loadData() {
         onView(withId(R.id.txt_title)).check(matches(isDisplayed()));
         onView(withId(R.id.txt_title)).check(matches(withText(dummyTvShow.getName())));
 
