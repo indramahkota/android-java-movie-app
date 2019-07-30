@@ -1,7 +1,7 @@
 package com.indramahkota.moviecatalogue.di.component;
 
 import com.indramahkota.moviecatalogue.MovieCatalogueApp;
-import com.indramahkota.moviecatalogue.di.module.ActivityBindingModule;
+import com.indramahkota.moviecatalogue.di.module.ActivityModule;
 import com.indramahkota.moviecatalogue.di.module.ApiModule;
 import com.indramahkota.moviecatalogue.di.module.ApplicationModule;
 import com.indramahkota.moviecatalogue.di.module.RxModule;
@@ -13,10 +13,8 @@ import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 
 @AppScope
-@Component(modules = {ApplicationModule.class,
-        AndroidSupportInjectionModule.class,
-        ActivityBindingModule.class,
-        ApiModule.class, RxModule.class})
+@Component(modules = {ApplicationModule.class, AndroidSupportInjectionModule.class,
+        ActivityModule.class, ApiModule.class, RxModule.class})
 public interface ApplicationComponent extends AndroidInjector<MovieCatalogueApp> {
     void inject(MovieCatalogueApp application);
 
