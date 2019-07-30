@@ -10,8 +10,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.remote.ApiConstant;
-import com.indramahkota.moviecatalogue.data.source.remote.model.DiscoverMovie;
+import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovie;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE = "extra_movie";
@@ -31,7 +31,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         TextView txtRelease = findViewById(R.id.txt_release_date);
         TextView txtOverview = findViewById(R.id.txt_overview);
         ImageView background = findViewById(R.id.img_background);
-        TextView txtLanguage = findViewById(R.id.txt_language);
+        //TextView txtLanguage = findViewById(R.id.txt_language);
 
         DiscoverMovie movieDetail = getIntent().getParcelableExtra(EXTRA_MOVIE);
         if(movieDetail == null) return;
@@ -54,11 +54,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
             txtTitle.setText(getResources().getString(R.string.no_title));
         }
 
-        if(movieDetail.getLanguage() != null && !movieDetail.getLanguage().isEmpty()) {
+        /*if(movieDetail.getLanguage() != null && !movieDetail.getLanguage().isEmpty()) {
             txtLanguage.setText(movieDetail.getLanguage());
         } else {
             txtLanguage.setText(getResources().getString(R.string.no_title));
-        }
+        }*/
 
         if(movieDetail.getVoteAverage() != null) {
             txtRating.setText(String.valueOf(movieDetail.getVoteAverage()));

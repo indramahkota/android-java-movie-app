@@ -4,13 +4,13 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
-import com.indramahkota.moviecatalogue.data.remote.response.others.CreatedBy;
-import com.indramahkota.moviecatalogue.data.remote.response.others.Credits;
-import com.indramahkota.moviecatalogue.data.remote.response.others.Genres;
-import com.indramahkota.moviecatalogue.data.remote.response.others.LastEpisodeToAir;
-import com.indramahkota.moviecatalogue.data.remote.response.others.Networks;
-import com.indramahkota.moviecatalogue.data.remote.response.others.ProductionCompanies;
-import com.indramahkota.moviecatalogue.data.remote.response.others.Seasons;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.CreatedBy;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.Credits;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.Genres;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.LastEpisodeToAir;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.Networks;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.ProductionCompanies;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.Seasons;
 
 import java.util.ArrayList;
 import java.util.List;

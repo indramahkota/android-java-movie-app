@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.data.source.remote;
+package com.indramahkota.moviecatalogue.data.source.remote.api;
 
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;

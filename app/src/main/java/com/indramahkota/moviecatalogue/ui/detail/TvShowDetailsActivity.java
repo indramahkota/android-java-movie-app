@@ -11,8 +11,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.remote.ApiConstant;
-import com.indramahkota.moviecatalogue.data.source.remote.model.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShow;
 
 public class TvShowDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_TV_SHOW = "extra_tv_show";
@@ -32,7 +32,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         TextView txtRelease = findViewById(R.id.txt_release_date);
         TextView txtOverview = findViewById(R.id.txt_overview);
         ImageView background = findViewById(R.id.img_background);
-        TextView txtLanguage = findViewById(R.id.txt_language);
+        //TextView txtLanguage = findViewById(R.id.txt_language);
 
         DiscoverTvShow tvShowDetail = getIntent().getParcelableExtra(EXTRA_TV_SHOW);
         if(tvShowDetail == null) return;
@@ -56,11 +56,11 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             txtTitle.setText(getResources().getString(R.string.no_title));
         }
 
-        if(tvShowDetail.getLanguage() != null && !tvShowDetail.getLanguage().isEmpty()) {
+        /*if(tvShowDetail.getLanguage() != null && !tvShowDetail.getLanguage().isEmpty()) {
             txtLanguage.setText(tvShowDetail.getLanguage());
         } else {
             txtLanguage.setText(getResources().getString(R.string.no_title));
-        }
+        }*/
 
         if(tvShowDetail.getVoteAverage() != null) {
             txtRating.setText(String.valueOf(tvShowDetail.getVoteAverage()));

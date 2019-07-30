@@ -9,7 +9,6 @@ import java.util.List;
 
 public class MovieFragmentViewModel extends ViewModel {
     private RemoteRepository remoteRepository = new RemoteRepository();
-
     public List<DiscoverMovie> getListMovie() {
         return remoteRepository.loadListMovie();
     }

@@ -3,6 +3,8 @@ package com.indramahkota.moviecatalogue.data.source.remote;
 import androidx.annotation.NonNull;
 
 import com.indramahkota.moviecatalogue.BuildConfig;
+import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
+import com.indramahkota.moviecatalogue.data.source.remote.api.ApiEndPoint;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovie;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShow;

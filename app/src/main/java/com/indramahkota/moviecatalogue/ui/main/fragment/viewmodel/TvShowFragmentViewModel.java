@@ -9,7 +9,6 @@ import java.util.List;
 
 public class TvShowFragmentViewModel extends ViewModel {
     private RemoteRepository remoteRepository = new RemoteRepository();
-
     public List<DiscoverTvShow> getListTvShow() {
         return remoteRepository.loadListTvShow();
     }

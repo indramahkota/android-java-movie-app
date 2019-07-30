@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.data.source.remote;
+package com.indramahkota.moviecatalogue.data.source.remote.api;
 
 public class ApiConstant {
     public static final String BASE_URL_TMDB = "https://api.themoviedb.org/3/";
