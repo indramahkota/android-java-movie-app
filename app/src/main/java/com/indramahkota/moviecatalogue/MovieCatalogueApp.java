@@ -9,7 +9,7 @@ import javax.inject.Inject;
 
 import dagger.android.DispatchingAndroidInjector;
 
-public class MovieCatalogueApp extends Application  /*implements HasActivityInjector*/ {
+public class MovieCatalogueApp extends Application /*implements HasActivityInjector*/ {
 
     @Inject
     DispatchingAndroidInjector<Activity> activityDispatchingAndroidInjector;

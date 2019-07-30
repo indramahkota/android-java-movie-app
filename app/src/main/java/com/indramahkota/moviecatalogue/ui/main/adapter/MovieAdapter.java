@@ -24,6 +24,7 @@ import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryViewHolder> {
+    private List<DiscoverMovie> newsList;
     private final Context mContext;
     private final List<DiscoverMovie> listMovies;
 
@@ -34,6 +35,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
     public MovieAdapter(List<DiscoverMovie> listMovies, Context context) {
         this.listMovies = listMovies;
         this.mContext = context;
+    }
+
+    public void addNewsList(List<DiscoverMovie> newsList) {
+        if (!this.newsList.isEmpty()) {
+            this.newsList.clear();
+        }
+        this.newsList.addAll(newsList);
+        notifyDataSetChanged();
     }
 
     @NonNull

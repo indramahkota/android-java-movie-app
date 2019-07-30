@@ -13,13 +13,21 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.data.source.remote.TmdbViewModelFactory;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovie;
 import com.indramahkota.moviecatalogue.ui.main.adapter.MovieAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.MovieFragmentViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 public class MovieFragment extends Fragment {
+    @Inject
+    TmdbViewModelFactory tmdbViewModelFactory;
+
+    private RecyclerView rvMovies;
 
     public MovieFragment() { }
 
@@ -39,14 +47,28 @@ public class MovieFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        RecyclerView rvMovies = view.findViewById(R.id.rv_fragment_category);
+        rvMovies = view.findViewById(R.id.rv_fragment_category);
         rvMovies.setLayoutManager(linearLayoutManager);
         rvMovies.setHasFixedSize(true);
 
-        MovieFragmentViewModel viewModel = ViewModelProviders.of(this).get(MovieFragmentViewModel.class);
-        /*List<DiscoverMovie> discoverMovies = viewModel.getListMovie();
-        MovieAdapter listMovieAdapter = new MovieAdapter(discoverMovies, getContext());
+        MovieFragmentViewModel viewModel = ViewModelProviders.of(this, tmdbViewModelFactory).get(MovieFragmentViewModel.class);
+        MovieAdapter listMovieAdapter = new MovieAdapter(new ArrayList<>(), getContext());
         listMovieAdapter.notifyDataSetChanged();
-        rvMovies.setAdapter(listMovieAdapter);*/
+        rvMovies.setAdapter(listMovieAdapter);
+        viewModel.getMovieViewState().observe(this, newsListViewState -> {
+            switch (newsListViewState.getCurrentState()) {
+                case 0:
+                    //binding.setShowLoading(true);
+                    break;
+                case 1:
+                    //binding.setShowLoading(false);
+                    listMovieAdapter.addNewsList(newsListViewState.getData().getResults());
+                    break;
+                case -1: // show error
+                    //binding.setShowLoading(false);
+                    break;
+            }
+        });
+        viewModel.loadMovie();
     }
 }

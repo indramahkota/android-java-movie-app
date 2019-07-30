@@ -9,13 +9,15 @@ import java.util.List;
 
 public class DiscoverTvShowResponse implements Parcelable {
     @SerializedName("page")
-    private final Integer page;
+    private Integer page;
     @SerializedName("results")
-    private final List<DiscoverTvShow> results;
+    private List<DiscoverTvShow> results;
     @SerializedName("total_results")
-    private final Integer totalResults;
+    private Integer totalResults;
     @SerializedName("total_pages")
-    private final Integer totalPages;
+    private Integer totalPages;
+
+    public DiscoverTvShowResponse() {}
 
     private DiscoverTvShowResponse(Parcel in) {
         if (in.readByte() == 0) {
