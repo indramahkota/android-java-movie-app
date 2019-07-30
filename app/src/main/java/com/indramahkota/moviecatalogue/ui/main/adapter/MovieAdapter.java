@@ -17,7 +17,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.remote.ApiConstant;
-import com.indramahkota.moviecatalogue.data.source.remote.model.DiscoverMovie;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovie;
 import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
