@@ -8,30 +8,30 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.others.Langua
 
 import java.util.ArrayList;
 
-import retrofit2.Call;
+import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiEndPoint {
     @GET("discover/movie")
-    Call<DiscoverMovieResponse> getDiscoverMovies(@Query("api_key") String apiKey);
+    Single<DiscoverMovieResponse> getDiscoverMovies(@Query("api_key") String apiKey);
 
     @GET("discover/tv")
-    Call<DiscoverTvShowResponse> getDiscoverTvShows(@Query("api_key") String apiKey);
+    Single<DiscoverTvShowResponse> getDiscoverTvShows(@Query("api_key") String apiKey);
 
     @GET("movie/{movie_id}")
-    Call<MovieResponse> getMovie(
+    Single<MovieResponse> getMovie(
             @Path("movie_id") Integer id,
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse);
 
     @GET("tv/{tv_id}")
-    Call<TvShowResponse> getTvShow(
+    Single<TvShowResponse> getTvShow(
             @Path("tv_id") Integer id,
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse);
 
     @GET("configuration/languages")
-    Call<ArrayList<Language>> getLanguages(@Query("api_key") String apiKey);
+    Single<ArrayList<Language>> getLanguages(@Query("api_key") String apiKey);
 }

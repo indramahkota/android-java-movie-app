@@ -44,9 +44,9 @@ public class MovieFragment extends Fragment {
         rvMovies.setHasFixedSize(true);
 
         MovieFragmentViewModel viewModel = ViewModelProviders.of(this).get(MovieFragmentViewModel.class);
-        List<DiscoverMovie> discoverMovies = viewModel.getListMovie();
+        /*List<DiscoverMovie> discoverMovies = viewModel.getListMovie();
         MovieAdapter listMovieAdapter = new MovieAdapter(discoverMovies, getContext());
         listMovieAdapter.notifyDataSetChanged();
-        rvMovies.setAdapter(listMovieAdapter);
+        rvMovies.setAdapter(listMovieAdapter);*/
     }
 }

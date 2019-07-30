@@ -44,9 +44,9 @@ public class TvShowFragment extends Fragment {
         rvTvShows.setHasFixedSize(true);
 
         TvShowFragmentViewModel viewModel = ViewModelProviders.of(this).get(TvShowFragmentViewModel.class);
-        List<DiscoverTvShow> discoverTvShows = viewModel.getListTvShow();
+        /*List<DiscoverTvShow> discoverTvShows = viewModel.getListTvShow();
         TvShowAdapter listTvShowAdapter = new TvShowAdapter(discoverTvShows, getContext());
         listTvShowAdapter.notifyDataSetChanged();
-        rvTvShows.setAdapter(listTvShowAdapter);
+        rvTvShows.setAdapter(listTvShowAdapter);*/
     }
 }
