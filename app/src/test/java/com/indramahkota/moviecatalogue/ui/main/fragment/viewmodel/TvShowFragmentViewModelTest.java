@@ -1,6 +1,6 @@
 package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
 
-import com.indramahkota.moviecatalogue.data.remote.model.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.source.remote.model.DiscoverTvShow;
 
 import org.junit.Before;
 import org.junit.Test;

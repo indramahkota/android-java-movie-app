@@ -10,8 +10,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.remote.Constant;
-import com.indramahkota.moviecatalogue.data.remote.model.DiscoverMovie;
+import com.indramahkota.moviecatalogue.data.source.remote.ApiConstant;
+import com.indramahkota.moviecatalogue.data.source.remote.model.DiscoverMovie;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE = "extra_movie";
@@ -36,14 +36,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
         DiscoverMovie movieDetail = getIntent().getParcelableExtra(EXTRA_MOVIE);
         if(movieDetail == null) return;
 
-        String posterUrl = Constant.BASE_URL_POSTER + movieDetail.getPosterPath();
+        String posterUrl = ApiConstant.BASE_URL_POSTER + movieDetail.getPosterPath();
         Glide.with(this)
                 .load(posterUrl)
                 .error(R.drawable.poster_background_error)
                 .transform(new CenterCrop(), new RoundedCorners(8))
                 .into(imgPoster);
 
-        posterUrl = Constant.BASE_URL_BACKDROP_PATH + movieDetail.getBackdropPath();
+        posterUrl = ApiConstant.BASE_URL_BACKDROP_PATH + movieDetail.getBackdropPath();
         Glide.with(this)
                 .load(posterUrl)
                 .into(background);

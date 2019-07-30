@@ -21,6 +21,9 @@ android {
             debuggable true
         }
     }
+    defaultConfig {
+        buildConfigField("String", "TMDB_API_KEY", '"b650046bf640e7bf7054093854b8d02a"')
+    }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -78,4 +81,9 @@ dependencies {
 
     // Dependencies for Idle Resource
     implementation "androidx.test.espresso:espresso-idling-resource:$idleResourceVersion"
+
+    // Dependencies for Retrofit
+    implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
+    implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
 }

@@ -11,8 +11,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.remote.Constant;
-import com.indramahkota.moviecatalogue.data.remote.model.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.source.remote.ApiConstant;
+import com.indramahkota.moviecatalogue.data.source.remote.model.DiscoverTvShow;
 
 public class TvShowDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_TV_SHOW = "extra_tv_show";
@@ -37,14 +37,14 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         DiscoverTvShow tvShowDetail = getIntent().getParcelableExtra(EXTRA_TV_SHOW);
         if(tvShowDetail == null) return;
 
-        String posterUrl = Constant.BASE_URL_POSTER + tvShowDetail.getPosterPath();
+        String posterUrl = ApiConstant.BASE_URL_POSTER + tvShowDetail.getPosterPath();
         Glide.with(this)
                 .load(posterUrl)
                 .error(R.drawable.poster_background_error)
                 .transform(new CenterCrop(), new RoundedCorners(8))
                 .into(imgPoster);
 
-        posterUrl = Constant.BASE_URL_BACKDROP_PATH + tvShowDetail.getBackdropPath();
+        posterUrl = ApiConstant.BASE_URL_BACKDROP_PATH + tvShowDetail.getBackdropPath();
         Glide.with(this)
                 .load(posterUrl)
                 .apply(new RequestOptions().override(200, 300))

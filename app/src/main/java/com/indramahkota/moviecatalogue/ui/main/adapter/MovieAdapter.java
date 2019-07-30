@@ -16,8 +16,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.remote.Constant;
-import com.indramahkota.moviecatalogue.data.remote.model.DiscoverMovie;
+import com.indramahkota.moviecatalogue.data.source.remote.ApiConstant;
+import com.indramahkota.moviecatalogue.data.source.remote.model.DiscoverMovie;
 import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
@@ -69,7 +69,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
             holder.txtOverview.setText(mContext.getResources().getString(R.string.availability_overview));
         }
 
-        String posterUrl = Constant.BASE_URL_POSTER + getListMovies().get(position).getPosterPath();
+        String posterUrl = ApiConstant.BASE_URL_POSTER + getListMovies().get(position).getPosterPath();
         Glide.with(mContext)
                 .load(posterUrl)
                 .placeholder(R.drawable.poster_background_loading)
