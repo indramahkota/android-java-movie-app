@@ -22,4 +22,6 @@
     <string name="no_release_date">No Release Date</string>
     <string name="availability_overview">Overview not available.</string>
     <string name="long_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
+    <string name="no_data_found">No data found</string>
+    <string name="english">English</string>
 </resources>

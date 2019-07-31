@@ -65,7 +65,6 @@ dependencies {
     testImplementation "org.mockito:mockito-core:$mockitoVersion"
     testImplementation "androidx.arch.core:core-testing:$archLifecycleVersion"
 
-
     // Dependencies for Android unit tests
     androidTestImplementation "junit:junit:$junitVersion"
     androidTestImplementation "org.mockito:mockito-core:$mockitoVersion"
@@ -94,6 +93,11 @@ dependencies {
     // Dependencies for Dagger
     implementation "com.google.dagger:dagger:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
+
+    // Dependencies for Dagger Android
     implementation "com.google.dagger:dagger-android-support:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$daggerVersion"
+
+    // Dependencies for Facebook Shimmer
+    implementation 'com.facebook.shimmer:shimmer:0.4.0'
 }

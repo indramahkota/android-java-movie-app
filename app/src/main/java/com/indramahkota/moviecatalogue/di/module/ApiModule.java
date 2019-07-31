@@ -1,9 +1,11 @@
 package com.indramahkota.moviecatalogue.di.module;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiEndPoint;
-import com.indramahkota.moviecatalogue.di.scope.AppScope;
+
+import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
@@ -13,8 +15,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
 public class ApiModule {
-    @AppScope
     @Provides
+    @Singleton
+    Gson provideGson() {
+        GsonBuilder gsonBuilder = new GsonBuilder();
+        return gsonBuilder.create();
+    }
+
+    @Provides
+    @Singleton
     Retrofit provideRetrofit(Gson gson) {
         return new Retrofit.Builder().baseUrl(ApiConstant.BASE_URL_TMDB)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
@@ -22,8 +31,8 @@ public class ApiModule {
                 .build();
     }
 
-    @AppScope
     @Provides
+    @Singleton
     ApiEndPoint provideTmdbApi(Retrofit retrofit) {
         return retrofit.create(ApiEndPoint.class);
     }

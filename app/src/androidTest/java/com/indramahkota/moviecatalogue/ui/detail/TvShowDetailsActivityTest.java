@@ -7,7 +7,7 @@ import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.remote.model.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverTvShow;
 import com.indramahkota.moviecatalogue.utils.FakeDataDummy;
 
 import org.junit.Rule;
@@ -40,9 +40,6 @@ public class TvShowDetailsActivityTest {
 
         onView(withId(R.id.txt_rating)).check(matches(isDisplayed()));
         onView(withId(R.id.txt_rating)).check(matches(withText(String.valueOf(dummyTvShow.getVoteAverage()))));
-
-        onView(withId(R.id.txt_language)).check(matches(isDisplayed()));
-        onView(withId(R.id.txt_language)).check(matches(withText(dummyTvShow.getLanguage())));
 
         onView(withId(R.id.txt_release_date)).check(matches(isDisplayed()));
         onView(withId(R.id.txt_release_date)).check(matches(withText(dummyTvShow.getFirstAirDate())));

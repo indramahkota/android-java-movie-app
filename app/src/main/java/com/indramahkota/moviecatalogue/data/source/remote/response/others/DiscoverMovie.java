@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.data.source.remote.response;
+package com.indramahkota.moviecatalogue.data.source.remote.response.others;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -37,6 +37,16 @@ public class DiscoverMovie implements Parcelable {
     private Boolean video;
     @SerializedName("vote_average")
     private Double voteAverage;
+
+    public DiscoverMovie(String posterPath, String backdropPath, Integer id, String title, String overview, String releaseDate, Double voteAverage) {
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.releaseDate = releaseDate;
+        this.id = id;
+        this.title = title;
+        this.backdropPath = backdropPath;
+        this.voteAverage = voteAverage;
+    }
 
     protected DiscoverMovie(Parcel in) {
         posterPath = in.readString();

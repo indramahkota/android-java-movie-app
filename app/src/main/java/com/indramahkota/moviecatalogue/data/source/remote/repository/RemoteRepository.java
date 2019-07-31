@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.data.source.remote;
+package com.indramahkota.moviecatalogue.data.source.remote.repository;
 
 import com.indramahkota.moviecatalogue.BuildConfig;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiEndPoint;
@@ -6,9 +6,11 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovie
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 import io.reactivex.Single;
 
+@Singleton
 public class RemoteRepository {
     private final ApiEndPoint api;
 

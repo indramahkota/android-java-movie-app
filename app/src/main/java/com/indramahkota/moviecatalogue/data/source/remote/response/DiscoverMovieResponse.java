@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverMovie;
 
 import java.util.List;
 

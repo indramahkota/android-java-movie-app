@@ -12,7 +12,14 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.ui.main.fragment.MovieFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.TvShowFragment;
 
-public class MainActivity extends AppCompatActivity {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
+
+public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private static final String STATE_MODE = "state_mode";
 
     private int mode;
@@ -22,10 +29,15 @@ public class MainActivity extends AppCompatActivity {
     private MovieFragment mMovieFragment;
     private TvShowFragment mTvShowFragment;
 
+    @Inject
+    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        AndroidInjection.inject(this);
 
         mFragmentManager = getSupportFragmentManager();
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -87,5 +99,10 @@ public class MainActivity extends AppCompatActivity {
             mFragmentTransaction.replace(R.id.frame_container, mTvShowFragment, TvShowFragment.class.getSimpleName());
             mFragmentTransaction.commit();
         }
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return dispatchingAndroidInjector;
     }
 }

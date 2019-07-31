@@ -1,11 +1,14 @@
 package com.indramahkota.moviecatalogue.ui.main.fragment;
 
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.rule.ActivityTestRule;
 
+import com.indramahkota.moviecatalogue.EspressoIdlingResource;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.testing.SingleFragmentActivity;
 import com.indramahkota.moviecatalogue.utils.RecyclerViewItemCountAssertion;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,12 +26,18 @@ public class MovieFragmentTest {
 
     @Before
     public void setUp() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResource.getEspressoIdlingResource());
         activityRule.getActivity().setFragment(movieFragment);
     }
 
     @Test
     public void loadData() {
         onView(withId(R.id.rv_fragment_category)).check(matches(isDisplayed()));
-        onView(withId(R.id.rv_fragment_category)).check(new RecyclerViewItemCountAssertion(10));
+        onView(withId(R.id.rv_fragment_category)).check(new RecyclerViewItemCountAssertion(20));
+    }
+
+    @After
+    public void tearDown() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.getEspressoIdlingResource());
     }
 }

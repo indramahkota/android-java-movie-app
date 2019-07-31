@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.data.source.remote.response;
+package com.indramahkota.moviecatalogue.data.source.remote.response.others;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -35,6 +35,16 @@ public class DiscoverTvShow implements Parcelable {
     private Double voteAverage;
     @SerializedName("origin_country")
     private List<String> originCountry;
+
+    public DiscoverTvShow(String backdropPath, String posterPath, Integer id, String name, String overview, String firstAirDate, Double voteAverage) {
+        this.posterPath = posterPath;
+        this.overview = overview;
+        this.firstAirDate = firstAirDate;
+        this.id = id;
+        this.name = name;
+        this.backdropPath = backdropPath;
+        this.voteAverage = voteAverage;
+    }
 
     protected DiscoverTvShow(Parcel in) {
         posterPath = in.readString();

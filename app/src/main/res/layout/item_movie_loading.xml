@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/round_rect_background_elevation"
+    android:padding="10dp"
+    android:layout_marginBottom="10dp">
+
+    <View
+        android:id="@+id/item_movie_shim_1"
+        android:layout_width="100dp"
+        android:layout_height="150dp"
+        android:background="@color/background" />
+
+    <View
+        android:id="@+id/item_movie_shim_2"
+        android:layout_width="100dp"
+        android:layout_height="20dp"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@id/item_movie_shim_1"
+        android:background="@color/background" />
+
+    <View
+        android:id="@+id/item_movie_shim_3"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_below="@id/item_movie_shim_2"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/item_movie_shim_1"
+        android:background="@color/background" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_below="@+id/item_movie_shim_3"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@id/item_movie_shim_1"
+        android:background="@color/background" />
+
+    <View
+        android:id="@+id/img_star"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignBottom="@+id/item_movie_shim_1"
+        android:layout_marginStart="10dp"
+        android:layout_marginBottom="0dp"
+        android:background="@color/background"
+        android:layout_toEndOf="@+id/item_movie_shim_1" />
+
+    <View
+        android:id="@+id/item_movie_shim_4"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignBottom="@+id/item_movie_shim_1"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/img_star"
+        android:background="@color/background" />
+
+    <View
+        android:id="@+id/item_movie_shim_5"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignBottom="@+id/item_movie_shim_1"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/item_movie_shim_4"
+        android:background="@color/background" />
+
+    <View
+        android:layout_width="70dp"
+        android:layout_height="24dp"
+        android:layout_alignBottom="@+id/item_movie_shim_1"
+        android:layout_marginStart="0dp"
+        android:layout_marginBottom="0dp"
+        android:layout_toEndOf="@+id/item_movie_shim_5"
+        android:background="@color/background" />
+
+</RelativeLayout>

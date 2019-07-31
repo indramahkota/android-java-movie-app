@@ -12,7 +12,7 @@ import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverTvShow;
 
 public class TvShowDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_TV_SHOW = "extra_tv_show";

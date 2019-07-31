@@ -1,28 +1,72 @@
 package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
 
-import com.indramahkota.moviecatalogue.data.source.remote.model.DiscoverMovie;
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.Observer;
 
+import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
+import com.indramahkota.moviecatalogue.ui.main.fragment.state.MovieViewState;
+
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-import java.util.List;
+import io.reactivex.Single;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class MovieFragmentViewModelTest {
+    @Rule
+    public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
-    private MovieFragmentViewModel viewModel;
+    @Mock
+    RemoteRepository remoteRepository;
+
+    private MovieFragmentViewModel movieFragmentViewModel;
+
+    @Mock
+    Observer<MovieViewState> observer;
 
     @Before
     public void setUp() {
-        viewModel = new MovieFragmentViewModel();
+        MockitoAnnotations.initMocks(this);
+        movieFragmentViewModel = new MovieFragmentViewModel(remoteRepository, SingleSchedulers.TEST_SCHEDULER);
+        movieFragmentViewModel.getMovieViewState().observeForever(observer);
     }
 
     @Test
-    public void getListMovie() {
-        List<DiscoverMovie> discoverMovies = viewModel.getListMovie();
-        assertNotNull(discoverMovies);
-        assertEquals(10, discoverMovies.size());
+    public void testApiFetchData() {
+        when(remoteRepository.loadListTvShow()).thenReturn(null);
+        assertNotNull(movieFragmentViewModel.getMovieViewState());
+        assertTrue(movieFragmentViewModel.getMovieViewState().hasObservers());
+    }
+
+    @Test
+    public void testApiFetchDataSuccess() {
+        when(remoteRepository.loadListMovie()).thenReturn(Single.just(new DiscoverMovieResponse()));
+        movieFragmentViewModel.loadMovie();
+        verify(observer).onChanged(MovieViewState.LOADING_STATE);
+        verify(observer).onChanged(MovieViewState.SUCCESS_STATE);
+    }
+
+    @Test
+    public void testApiFetchDataError() {
+        when(remoteRepository.loadListMovie()).thenReturn(Single.error(new Throwable("Api error")));
+        movieFragmentViewModel.loadMovie();
+        verify(observer).onChanged(MovieViewState.LOADING_STATE);
+        verify(observer).onChanged(MovieViewState.ERROR_STATE);
+    }
+
+    @After
+    public void tearDown() {
+        remoteRepository = null;
+        movieFragmentViewModel = null;
     }
 }

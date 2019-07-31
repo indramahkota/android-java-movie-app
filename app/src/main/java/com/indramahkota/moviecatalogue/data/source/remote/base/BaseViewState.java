@@ -29,8 +29,8 @@ public class BaseViewState<T> {
         this.currentState = currentState;
     }
 
-    public enum State{
-        LOADING(0), SUCCESS(1),FAILED(-1);
+    public enum State {
+        LOADING(0), SUCCESS(1),ERROR(-1);
         public int value;
         State(int val) {
             value = val;

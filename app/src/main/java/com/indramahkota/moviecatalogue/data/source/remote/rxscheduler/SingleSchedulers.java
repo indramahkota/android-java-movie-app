@@ -1,11 +1,11 @@
-package com.indramahkota.moviecatalogue.data.source.remote;
+package com.indramahkota.moviecatalogue.data.source.remote.rxscheduler;
 
 import io.reactivex.SingleTransformer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
-public interface RxSingleSchedulers {
-    RxSingleSchedulers DEFAULT = new RxSingleSchedulers() {
+public interface SingleSchedulers {
+    SingleSchedulers DEFAULT = new SingleSchedulers() {
         @Override
         public <T> SingleTransformer<T, T> applySchedulers() {
             return single -> single
@@ -14,7 +14,7 @@ public interface RxSingleSchedulers {
         }
     };
 
-    RxSingleSchedulers TEST_SCHEDULER = new RxSingleSchedulers() {
+    SingleSchedulers TEST_SCHEDULER = new SingleSchedulers() {
         @Override
         public <T> SingleTransformer<T, T> applySchedulers() {
             return single -> single

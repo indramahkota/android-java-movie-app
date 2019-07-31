@@ -11,11 +11,21 @@ import androidx.fragment.app.Fragment;
 
 import com.indramahkota.moviecatalogue.R;
 
-public class SingleFragmentActivity extends AppCompatActivity {
+import javax.inject.Inject;
+
+import dagger.android.AndroidInjection;
+import dagger.android.AndroidInjector;
+import dagger.android.DispatchingAndroidInjector;
+import dagger.android.support.HasSupportFragmentInjector;
+
+public class SingleFragmentActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+    @Inject
+    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AndroidInjection.inject(this);
 
         View content = new FrameLayout(this);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(
@@ -39,5 +49,10 @@ public class SingleFragmentActivity extends AppCompatActivity {
                 .beginTransaction()
                 .add(R.id.container, fragment)
                 .commit();
+    }
+
+    @Override
+    public AndroidInjector<Fragment> supportFragmentInjector() {
+        return dispatchingAndroidInjector;
     }
 }
