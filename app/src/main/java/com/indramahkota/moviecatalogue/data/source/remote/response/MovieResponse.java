@@ -134,44 +134,8 @@ public class MovieResponse implements Parcelable {
         }
     };
 
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public List<Genres> getGenres() {
-        return genres;
-    }
-
     public Integer getId() {
         return id;
-    }
-
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public Double getVoteAverage() {
-        return voteAverage;
-    }
-
-    public Credits getCredits() {
-        return credits;
     }
 
     @Override

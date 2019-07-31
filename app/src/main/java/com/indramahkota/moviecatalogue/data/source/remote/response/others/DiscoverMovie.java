@@ -48,7 +48,7 @@ public class DiscoverMovie implements Parcelable {
         this.voteAverage = voteAverage;
     }
 
-    protected DiscoverMovie(Parcel in) {
+    private DiscoverMovie(Parcel in) {
         posterPath = in.readString();
         byte tmpAdult = in.readByte();
         adult = tmpAdult == 0 ? null : tmpAdult == 1;

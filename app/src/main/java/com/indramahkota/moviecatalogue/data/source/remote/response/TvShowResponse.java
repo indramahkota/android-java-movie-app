@@ -141,44 +141,12 @@ public class TvShowResponse implements Parcelable {
         }
     };
 
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public String getFirstAirDate() {
-        return firstAirDate;
-    }
-
-    public List<Genres> getGenres() {
-        return genres;
-    }
-
     public Integer getId() {
         return id;
     }
 
     public String getName() {
         return name;
-    }
-
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public String getOverview() {
-        return overview;
-    }
-
-    public String getPosterPath() {
-        return posterPath;
-    }
-
-    public Double getVoteAverage() {
-        return voteAverage;
-    }
-
-    public Credits getCredits() {
-        return credits;
     }
 
     @Override

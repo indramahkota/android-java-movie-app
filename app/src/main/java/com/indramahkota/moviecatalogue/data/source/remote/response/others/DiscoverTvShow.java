@@ -46,7 +46,7 @@ public class DiscoverTvShow implements Parcelable {
         this.voteAverage = voteAverage;
     }
 
-    protected DiscoverTvShow(Parcel in) {
+    private DiscoverTvShow(Parcel in) {
         posterPath = in.readString();
         overview = in.readString();
         firstAirDate = in.readString();

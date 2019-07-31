@@ -15,14 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.main.MainActivity"/>
         <activity
+            android:screenOrientation="portrait"
+            android:name=".ui.main.MainActivity"/>
+        <activity
+            android:screenOrientation="portrait"
             android:name=".ui.detail.MovieDetailsActivity"
             android:label="@string/title_activity_movie_details" />
         <activity
+            android:screenOrientation="portrait"
             android:name=".ui.detail.TvShowDetailsActivity"
             android:label="@string/title_activity_tv_show_details" />
-        <activity android:name=".ui.splash.SplashActivity"
+        <activity
+            android:screenOrientation="portrait"
+            android:name=".ui.splash.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
