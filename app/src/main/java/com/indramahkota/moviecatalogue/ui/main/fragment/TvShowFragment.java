@@ -16,9 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.EspressoIdlingResource;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverTvShow;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.adapter.TvShowAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.TvShowFragmentViewModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,6 +31,7 @@ public class TvShowFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private List<DiscoverTvShow> discoverTvShows;
     private ShimmerFrameLayout mShimmerViewContainer;
     private RelativeLayout relativeLayout;
 
@@ -71,7 +75,8 @@ public class TvShowFragment extends Fragment {
                     relativeLayout.setVisibility(View.GONE);
                     mShimmerViewContainer.setVisibility(View.GONE);
 
-                    TvShowAdapter listTvShowAdapter = new TvShowAdapter(tvShowListViewState.getData().getResults(), getContext());
+                    discoverTvShows = tvShowListViewState.getData().getResults();
+                    TvShowAdapter listTvShowAdapter = new TvShowAdapter(discoverTvShows, getContext());
                     listTvShowAdapter.notifyDataSetChanged();
                     rvTvShows.setAdapter(listTvShowAdapter);
 
@@ -84,7 +89,15 @@ public class TvShowFragment extends Fragment {
                     break;
             }
         });
-        viewModel.loadTvShow();
+
+        if(discoverTvShows != null) {
+            TvShowAdapter listTvShowAdapter = new TvShowAdapter(discoverTvShows, getContext());
+            listTvShowAdapter.notifyDataSetChanged();
+            rvTvShows.setAdapter(listTvShowAdapter);
+            mShimmerViewContainer.setVisibility(View.GONE);
+        } else {
+            viewModel.loadTvShow();
+        }
     }
 
     @Override

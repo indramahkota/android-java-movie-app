@@ -12,7 +12,6 @@ import dagger.android.DispatchingAndroidInjector;
 import dagger.android.HasActivityInjector;
 
 public class MovieCatalogueApp extends Application implements HasActivityInjector {
-
     @Inject
     DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
 

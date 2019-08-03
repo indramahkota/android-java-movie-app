@@ -16,9 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.EspressoIdlingResource;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverMovie;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.adapter.MovieAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.MovieFragmentViewModel;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -28,6 +31,7 @@ public class MovieFragment extends Fragment {
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private List<DiscoverMovie> discoverMovies;
     private ShimmerFrameLayout mShimmerViewContainer;
     private RelativeLayout relativeLayout;
 
@@ -71,7 +75,8 @@ public class MovieFragment extends Fragment {
                     relativeLayout.setVisibility(View.GONE);
                     mShimmerViewContainer.setVisibility(View.GONE);
 
-                    MovieAdapter listMovieAdapter = new MovieAdapter(movieViewState.getData().getResults(), getContext());
+                    discoverMovies = movieViewState.getData().getResults();
+                    MovieAdapter listMovieAdapter = new MovieAdapter(discoverMovies, getContext());
                     listMovieAdapter.notifyDataSetChanged();
                     rvMovies.setAdapter(listMovieAdapter);
 
@@ -84,7 +89,15 @@ public class MovieFragment extends Fragment {
                     break;
             }
         });
-        viewModel.loadMovie();
+
+        if(discoverMovies != null) {
+            MovieAdapter listMovieAdapter = new MovieAdapter(discoverMovies, getContext());
+            listMovieAdapter.notifyDataSetChanged();
+            rvMovies.setAdapter(listMovieAdapter);
+            mShimmerViewContainer.setVisibility(View.GONE);
+        } else {
+            viewModel.loadMovie();
+        }
     }
 
     @Override

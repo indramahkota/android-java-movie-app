@@ -15,9 +15,18 @@ import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.support.AndroidSupportInjectionModule;
 
+@Component(
+    modules = {
+            ApiModule.class,
+            ViewModelModule.class,
+            AndroidSupportInjectionModule.class,
+            ActivityModule.class,
+            FragmentModule.class,
+            RxModule.class
+    }
+)
+
 @Singleton
-@Component(modules = {ApiModule.class, ViewModelModule.class, AndroidSupportInjectionModule.class,
-        ActivityModule.class, FragmentModule.class, RxModule.class})
 public interface AppComponent {
     @Component.Builder
     interface Builder {
@@ -30,5 +39,5 @@ public interface AppComponent {
         AppComponent build();
     }
 
-    void inject(MovieCatalogueApp application);
+    void inject(MovieCatalogueApp movieCatalogueApp);
 }

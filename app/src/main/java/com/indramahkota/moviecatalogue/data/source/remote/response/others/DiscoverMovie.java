@@ -38,16 +38,6 @@ public class DiscoverMovie implements Parcelable {
     @SerializedName("vote_average")
     private Double voteAverage;
 
-    public DiscoverMovie(String posterPath, String backdropPath, Integer id, String title, String overview, String releaseDate, Double voteAverage) {
-        this.posterPath = posterPath;
-        this.overview = overview;
-        this.releaseDate = releaseDate;
-        this.id = id;
-        this.title = title;
-        this.backdropPath = backdropPath;
-        this.voteAverage = voteAverage;
-    }
-
     private DiscoverMovie(Parcel in) {
         posterPath = in.readString();
         byte tmpAdult = in.readByte();

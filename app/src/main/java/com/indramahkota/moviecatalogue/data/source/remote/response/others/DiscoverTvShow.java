@@ -36,16 +36,6 @@ public class DiscoverTvShow implements Parcelable {
     @SerializedName("origin_country")
     private List<String> originCountry;
 
-    public DiscoverTvShow(String backdropPath, String posterPath, Integer id, String name, String overview, String firstAirDate, Double voteAverage) {
-        this.posterPath = posterPath;
-        this.overview = overview;
-        this.firstAirDate = firstAirDate;
-        this.id = id;
-        this.name = name;
-        this.backdropPath = backdropPath;
-        this.voteAverage = voteAverage;
-    }
-
     private DiscoverTvShow(Parcel in) {
         posterPath = in.readString();
         overview = in.readString();

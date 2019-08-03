@@ -29,7 +29,7 @@ public class MovieDetailsViewModel extends ViewModel {
         return movieViewState;
     }
 
-    public void loadMovie(Integer movieId) {
+    public void loadMovieDetails(Integer movieId) {
         disposable.add(remoteRepository.loadMovieDetails(movieId)
                 .doOnEvent((movieResponse, throwable) -> onLoading())
                 .compose(singleSchedulers.applySchedulers())
