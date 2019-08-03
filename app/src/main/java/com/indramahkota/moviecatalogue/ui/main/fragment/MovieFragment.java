@@ -77,6 +77,7 @@ public class MovieFragment extends Fragment {
 
                     discoverMovies = movieViewState.getData().getResults();
                     MovieAdapter listMovieAdapter = new MovieAdapter(discoverMovies, getContext());
+
                     listMovieAdapter.notifyDataSetChanged();
                     rvMovies.setAdapter(listMovieAdapter);
 

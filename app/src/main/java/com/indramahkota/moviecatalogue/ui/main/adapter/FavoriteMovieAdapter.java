@@ -37,7 +37,7 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemRow = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
+        View itemRow = LayoutInflater.from(mContext).inflate(R.layout.item_movie, parent, false);
         return new CategoryViewHolder(itemRow);
     }
 
