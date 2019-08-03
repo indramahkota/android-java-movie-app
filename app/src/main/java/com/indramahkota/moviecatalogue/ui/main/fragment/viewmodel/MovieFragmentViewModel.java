@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
-import com.indramahkota.moviecatalogue.ui.main.fragment.state.MovieViewState;
+import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverMovieResponseState;
 
 import javax.inject.Inject;
 
@@ -16,7 +16,7 @@ public class MovieFragmentViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private final RemoteRepository remoteRepository;
     private final SingleSchedulers singleSchedulers;
-    private final MutableLiveData<MovieViewState> movieViewState = new MutableLiveData<>();
+    private final MutableLiveData<DiscoverMovieResponseState> movieViewState = new MutableLiveData<>();
 
     @Inject
     MovieFragmentViewModel(RemoteRepository remoteRepository, SingleSchedulers singleSchedulers) {
@@ -25,30 +25,30 @@ public class MovieFragmentViewModel extends ViewModel {
         disposable = new CompositeDisposable();
     }
 
-    public MutableLiveData<MovieViewState> getMovieViewState() {
+    public MutableLiveData<DiscoverMovieResponseState> getMovieViewState() {
         return movieViewState;
     }
 
     public void loadMovie() {
         disposable.add(remoteRepository.loadListMovie()
-                .doOnEvent((newsList, throwable) -> onLoading())
+                .doOnEvent((movieResponse, throwable) -> onLoading())
                 .compose(singleSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,
                         this::onError));
     }
 
     private void onSuccess(DiscoverMovieResponse discoverMovieResponse) {
-        MovieViewState.SUCCESS_STATE.setData(discoverMovieResponse);
-        movieViewState.postValue(MovieViewState.SUCCESS_STATE);
+        DiscoverMovieResponseState.SUCCESS_STATE.setData(discoverMovieResponse);
+        movieViewState.postValue(DiscoverMovieResponseState.SUCCESS_STATE);
     }
 
     private void onError(Throwable error) {
-        MovieViewState.ERROR_STATE.setError(error);
-        movieViewState.postValue(MovieViewState.ERROR_STATE);
+        DiscoverMovieResponseState.ERROR_STATE.setError(error);
+        movieViewState.postValue(DiscoverMovieResponseState.ERROR_STATE);
     }
 
     private void onLoading() {
-        movieViewState.postValue(MovieViewState.LOADING_STATE);
+        movieViewState.postValue(DiscoverMovieResponseState.LOADING_STATE);
     }
 
     @Override

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
-import com.indramahkota.moviecatalogue.ui.main.fragment.state.TvShowViewState;
+import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverTvShowResponseState;
 
 import javax.inject.Inject;
 
@@ -16,7 +16,7 @@ public class TvShowFragmentViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private final RemoteRepository remoteRepository;
     private final SingleSchedulers singleSchedulers;
-    private final MutableLiveData<TvShowViewState> tvShowViewState = new MutableLiveData<>();
+    private final MutableLiveData<DiscoverTvShowResponseState> tvShowViewState = new MutableLiveData<>();
 
     @Inject
     TvShowFragmentViewModel(RemoteRepository remoteRepository, SingleSchedulers singleSchedulers) {
@@ -25,30 +25,30 @@ public class TvShowFragmentViewModel extends ViewModel {
         disposable = new CompositeDisposable();
     }
 
-    public MutableLiveData<TvShowViewState> getTvShowViewState() {
+    public MutableLiveData<DiscoverTvShowResponseState> getTvShowViewState() {
         return tvShowViewState;
     }
 
     public void loadTvShow() {
         disposable.add(remoteRepository.loadListTvShow()
-                .doOnEvent((newsList, throwable) -> onLoading())
+                .doOnEvent((tvShowResponse, throwable) -> onLoading())
                 .compose(singleSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,
                         this::onError));
     }
 
     private void onSuccess(DiscoverTvShowResponse discoverTvShowResponse) {
-        TvShowViewState.SUCCESS_STATE.setData(discoverTvShowResponse);
-        tvShowViewState.postValue(TvShowViewState.SUCCESS_STATE);
+        DiscoverTvShowResponseState.SUCCESS_STATE.setData(discoverTvShowResponse);
+        tvShowViewState.postValue(DiscoverTvShowResponseState.SUCCESS_STATE);
     }
 
     private void onError(Throwable error) {
-        TvShowViewState.ERROR_STATE.setError(error);
-        tvShowViewState.postValue(TvShowViewState.ERROR_STATE);
+        DiscoverTvShowResponseState.ERROR_STATE.setError(error);
+        tvShowViewState.postValue(DiscoverTvShowResponseState.ERROR_STATE);
     }
 
     private void onLoading() {
-        tvShowViewState.postValue(TvShowViewState.LOADING_STATE);
+        tvShowViewState.postValue(DiscoverTvShowResponseState.LOADING_STATE);
     }
 
     @Override

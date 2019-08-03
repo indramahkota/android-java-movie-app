@@ -1,6 +1,6 @@
 package com.indramahkota.moviecatalogue.data.source.remote.base;
 
-public class BaseViewState<T> {
+public class BaseResponseState<T> {
     protected T data;
     protected Throwable error;
     protected int currentState;

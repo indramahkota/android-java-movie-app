@@ -14,55 +14,57 @@ import java.util.List;
 
 public class MovieResponse implements Parcelable {
     @SerializedName("adult")
-    private final Boolean adult;
+    private Boolean adult;
     @SerializedName("backdrop_path")
-    private final String backdropPath;
+    private String backdropPath;
     @SerializedName("budget")
-    private final Integer budget;
+    private Integer budget;
     @SerializedName("genres")
-    private final List<Genres> genres;
+    private List<Genres> genres;
     @SerializedName("homepage")
-    private final String homepage;
+    private String homepage;
     @SerializedName("id")
-    private final Integer id;
+    private Integer id;
     @SerializedName("imdb_id")
-    private final String imdbId;
+    private String imdbId;
     @SerializedName("original_language")
-    private final String originalLanguage;
+    private String originalLanguage;
     @SerializedName("original_title")
-    private final String originalTitle;
+    private String originalTitle;
     @SerializedName("overview")
-    private final String overview;
+    private String overview;
     @SerializedName("popularity")
-    private final Double popularity;
+    private Double popularity;
     @SerializedName("poster_path")
-    private final String posterPath;
+    private String posterPath;
     @SerializedName("production_companies")
-    private final List<ProductionCompanies> productionCompanies;
+    private List<ProductionCompanies> productionCompanies;
     @SerializedName("production_countries")
-    private final List<ProductionCountries> productionCountries;
+    private List<ProductionCountries> productionCountries;
     @SerializedName("release_date")
-    private final String releaseDate;
+    private String releaseDate;
     @SerializedName("revenue")
-    private final Double revenue;
+    private Double revenue;
     @SerializedName("runtime")
-    private final Integer runtime;
+    private Integer runtime;
     @SerializedName("spoken_languages")
-    private final List<SpokenLanguages> spokenLanguages;
+    private List<SpokenLanguages> spokenLanguages;
     @SerializedName("status")
-    private final String status;
+    private String status;
     @SerializedName("tagline")
-    private final String tagLine;
+    private String tagLine;
     @SerializedName("title")
-    private final String title;
+    private String title;
     @SerializedName("video")
-    private final Boolean video;
+    private Boolean video;
     @SerializedName("vote_average")
-    private final Double voteAverage;
+    private Double voteAverage;
     @SerializedName("vote_count")
-    private final Integer voteCount;
+    private Integer voteCount;
     @SerializedName("credits")
-    private final Credits credits;
+    private Credits credits;
+
+    public MovieResponse() {}
 
     private MovieResponse(Parcel in) {
         byte tmpAdult = in.readByte();

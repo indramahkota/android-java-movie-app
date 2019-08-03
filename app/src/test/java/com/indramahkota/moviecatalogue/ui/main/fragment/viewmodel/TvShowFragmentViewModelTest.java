@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
-import com.indramahkota.moviecatalogue.ui.main.fragment.state.TvShowViewState;
+import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverTvShowResponseState;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +32,7 @@ public class TvShowFragmentViewModelTest {
     private TvShowFragmentViewModel tvShowFragmentViewModel;
 
     @Mock
-    Observer<TvShowViewState> observer;
+    Observer<DiscoverTvShowResponseState> observer;
 
     @Before
     public void setUp() {
@@ -52,16 +52,16 @@ public class TvShowFragmentViewModelTest {
     public void testApiFetchDataSuccess() {
         when(remoteRepository.loadListTvShow()).thenReturn(Single.just(new DiscoverTvShowResponse()));
         tvShowFragmentViewModel.loadTvShow();
-        verify(observer).onChanged(TvShowViewState.LOADING_STATE);
-        verify(observer).onChanged(TvShowViewState.SUCCESS_STATE);
+        verify(observer).onChanged(DiscoverTvShowResponseState.LOADING_STATE);
+        verify(observer).onChanged(DiscoverTvShowResponseState.SUCCESS_STATE);
     }
 
     @Test
     public void testApiFetchDataError() {
         when(remoteRepository.loadListTvShow()).thenReturn(Single.error(new Throwable("Api error")));
         tvShowFragmentViewModel.loadTvShow();
-        verify(observer).onChanged(TvShowViewState.LOADING_STATE);
-        verify(observer).onChanged(TvShowViewState.ERROR_STATE);
+        verify(observer).onChanged(DiscoverTvShowResponseState.LOADING_STATE);
+        verify(observer).onChanged(DiscoverTvShowResponseState.ERROR_STATE);
     }
 
     @After

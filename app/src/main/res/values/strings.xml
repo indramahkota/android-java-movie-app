@@ -8,6 +8,10 @@
     <string name="list_movies">Movie List</string>
     <string name="list_tv_shows">Tv Show List</string>
 
+    <string name="movies">Movies</string>
+    <string name="tv_shows">Tv Shows</string>
+    <string name="favorite">Favorites</string>
+
     <string name="title">Title:</string>
     <string name="genre">Genre:</string>
     <string name="rating">Rating:</string>
@@ -15,6 +19,7 @@
     <string name="release_date">Release Date:</string>
     <string name="overview">Overview:</string>
     <string name="cast_crew">Cast/Crew:</string>
+    <string name="empty_fav">You don\'t have a favorite collection yet.</string>
 
     <string name="todo">TODO</string>
     <string name="no_rating">No Rating</string>

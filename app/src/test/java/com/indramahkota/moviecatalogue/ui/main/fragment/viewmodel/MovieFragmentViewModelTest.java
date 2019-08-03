@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer;
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
-import com.indramahkota.moviecatalogue.ui.main.fragment.state.MovieViewState;
+import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverMovieResponseState;
 
 import org.junit.After;
 import org.junit.Before;
@@ -32,7 +32,7 @@ public class MovieFragmentViewModelTest {
     private MovieFragmentViewModel movieFragmentViewModel;
 
     @Mock
-    Observer<MovieViewState> observer;
+    Observer<DiscoverMovieResponseState> observer;
 
     @Before
     public void setUp() {
@@ -52,16 +52,16 @@ public class MovieFragmentViewModelTest {
     public void testApiFetchDataSuccess() {
         when(remoteRepository.loadListMovie()).thenReturn(Single.just(new DiscoverMovieResponse()));
         movieFragmentViewModel.loadMovie();
-        verify(observer).onChanged(MovieViewState.LOADING_STATE);
-        verify(observer).onChanged(MovieViewState.SUCCESS_STATE);
+        verify(observer).onChanged(DiscoverMovieResponseState.LOADING_STATE);
+        verify(observer).onChanged(DiscoverMovieResponseState.SUCCESS_STATE);
     }
 
     @Test
     public void testApiFetchDataError() {
         when(remoteRepository.loadListMovie()).thenReturn(Single.error(new Throwable("Api error")));
         movieFragmentViewModel.loadMovie();
-        verify(observer).onChanged(MovieViewState.LOADING_STATE);
-        verify(observer).onChanged(MovieViewState.ERROR_STATE);
+        verify(observer).onChanged(DiscoverMovieResponseState.LOADING_STATE);
+        verify(observer).onChanged(DiscoverMovieResponseState.ERROR_STATE);
     }
 
     @After

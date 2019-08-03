@@ -17,62 +17,63 @@ import java.util.List;
 
 public class TvShowResponse implements Parcelable {
     @SerializedName("backdrop_path")
-    private final String backdropPath;
+    private String backdropPath;
     @SerializedName("created_by")
-    private final List<CreatedBy> createdBy;
+    private List<CreatedBy> createdBy;
     @SerializedName("episode_run_time")
     private List<Integer> episodeRunTime = new ArrayList<>();
     @SerializedName("first_air_date")
-    private final String firstAirDate;
+    private String firstAirDate;
     @SerializedName("genres")
-    private final List<Genres> genres;
+    private List<Genres> genres;
     @SerializedName("homepage")
-    private final String homepage;
+    private String homepage;
     @SerializedName("id")
-    private final Integer id;
+    private Integer id;
     @SerializedName("in_production")
-    private final Boolean inProduction;
+    private Boolean inProduction;
     @SerializedName("languages")
-    private final List<String> languages;
+    private List<String> languages;
     @SerializedName("last_air_date")
-    private final String lastAirDate;
+    private String lastAirDate;
     @SerializedName("last_episode_to_air")
-    private final LastEpisodeToAir lastEpisodeToAir;
+    private LastEpisodeToAir lastEpisodeToAir;
     @SerializedName("name")
-    private final String name;
+    private String name;
     @SerializedName("networks")
-    private final List<Networks> networks;
+    private List<Networks> networks;
     @SerializedName("number_of_episodes")
-    private final Integer numberOfEpisodes;
+    private Integer numberOfEpisodes;
     @SerializedName("number_of_seasons")
-    private final Integer numberOfSeasons;
+    private Integer numberOfSeasons;
     @SerializedName("origin_country")
-    private final List<String> originCountry;
+    private List<String> originCountry;
     @SerializedName("original_language")
-    private final String originalLanguage;
+    private String originalLanguage;
     @SerializedName("original_name")
-    private final String originalName;
+    private String originalName;
     @SerializedName("overview")
-    private final String overview;
+    private String overview;
     @SerializedName("popularity")
-    private final Double popularity;
+    private Double popularity;
     @SerializedName("poster_path")
-    private final String posterPath;
+    private String posterPath;
     @SerializedName("production_companies")
-    private final List<ProductionCompanies> productionCompanies;
+    private List<ProductionCompanies> productionCompanies;
     @SerializedName("seasons")
-    private final List<Seasons> seasons;
+    private List<Seasons> seasons;
     @SerializedName("status")
-    private final String status;
+    private String status;
     @SerializedName("type")
-    private final String type;
+    private String type;
     @SerializedName("vote_average")
-    private final Double voteAverage;
+    private Double voteAverage;
     @SerializedName("vote_count")
-    private final Integer voteCount;
+    private Integer voteCount;
     @SerializedName("credits")
-    private final Credits credits;
+    private Credits credits;
 
+    public TvShowResponse() {}
 
     private TvShowResponse(Parcel in) {
         backdropPath = in.readString();
