@@ -8,7 +8,6 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.others.Langua
 
 import java.util.ArrayList;
 
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -33,6 +32,16 @@ public interface ApiEndPoint {
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse);
 
+    @GET("search/movie")
+    Single<DiscoverMovieResponse> searchMovies(
+            @Query("api_key") String apiKey,
+            @Query("query") String query);
+
+    @GET("search/tv")
+    Single<DiscoverTvShowResponse> searchTvShows(
+            @Query("api_key") String apiKey,
+            @Query("query") String query);
+
     @GET("configuration/languages")
-    Observable<ArrayList<Language>> getLanguages(@Query("api_key") String apiKey);
+    Single<ArrayList<Language>> getLanguages(@Query("api_key") String apiKey);
 }
