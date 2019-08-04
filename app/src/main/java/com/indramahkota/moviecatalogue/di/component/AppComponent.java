@@ -11,6 +11,7 @@ import javax.inject.Singleton;
 
 import dagger.BindsInstance;
 import dagger.Component;
+import dagger.android.AndroidInjector;
 import dagger.android.support.AndroidSupportInjectionModule;
 
 @Component(
@@ -25,7 +26,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 )
 
 @Singleton
-public interface AppComponent {
+public interface AppComponent extends AndroidInjector<MovieCatalogueApp> {
     @Component.Builder
     interface Builder {
         @BindsInstance
