@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
+import com.indramahkota.moviecatalogue.ui.detail.viewmodel.LanguageViewModel;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.MovieDetailsViewModel;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.TvShowDetailsViewModel;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.MovieFragmentViewModel;
@@ -37,4 +38,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(TvShowDetailsViewModel.class)
     protected abstract ViewModel tvShowDetailViewModel(TvShowDetailsViewModel tvShowDetailsViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(LanguageViewModel.class)
+    protected abstract ViewModel languageViewModel(LanguageViewModel languageViewModel);
 }

@@ -6,10 +6,14 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovie
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 
 @Singleton
@@ -35,5 +39,9 @@ public class RemoteRepository {
 
     public Single<TvShowResponse> loadTvShowDetails(Integer tvShowId) {
         return api.getTvShow(tvShowId, BuildConfig.TMDB_API_KEY, "credits");
+    }
+
+    public Observable<ArrayList<Language>> loadLanguages() {
+        return api.getLanguages(BuildConfig.TMDB_API_KEY);
     }
 }

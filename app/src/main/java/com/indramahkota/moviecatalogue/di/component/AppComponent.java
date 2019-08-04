@@ -1,7 +1,5 @@
 package com.indramahkota.moviecatalogue.di.component;
 
-import android.app.Application;
-
 import com.indramahkota.moviecatalogue.MovieCatalogueApp;
 import com.indramahkota.moviecatalogue.di.module.ActivityModule;
 import com.indramahkota.moviecatalogue.di.module.ApiModule;
@@ -31,11 +29,7 @@ public interface AppComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
-        Builder application(Application application);
-
-        @BindsInstance
-        Builder apiModule(ApiModule apiModule);
-
+        Builder application(MovieCatalogueApp movieCatalogueApp);
         AppComponent build();
     }
 

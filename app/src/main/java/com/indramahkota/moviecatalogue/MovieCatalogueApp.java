@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.Application;
 
 import com.indramahkota.moviecatalogue.di.component.DaggerAppComponent;
-import com.indramahkota.moviecatalogue.di.module.ApiModule;
 
 import javax.inject.Inject;
 
@@ -25,7 +24,6 @@ public class MovieCatalogueApp extends Application implements HasActivityInjecto
         super.onCreate();
         DaggerAppComponent.builder()
                 .application(this)
-                .apiModule(new ApiModule())
                 .build()
                 .inject(this);
     }

@@ -1,6 +1,6 @@
 package com.indramahkota.moviecatalogue.ui.main.fragment.datastate;
 
-import com.indramahkota.moviecatalogue.data.source.remote.base.BaseResponseState;
+import com.indramahkota.moviecatalogue.data.source.remote.response.base.BaseResponseState;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 
 public class DiscoverTvShowResponseState extends BaseResponseState<DiscoverTvShowResponse> {

@@ -29,4 +29,6 @@
     <string name="long_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
     <string name="no_data_found">No data found</string>
     <string name="english">English</string>
+    <string name="no_genre">No Genres</string>
+    <string name="no_language">No Language</string>
 </resources>

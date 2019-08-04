@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.data.source.remote.base;
+package com.indramahkota.moviecatalogue.data.source.remote.response.base;
 
 public class BaseResponseState<T> {
     protected T data;
