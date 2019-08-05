@@ -5,9 +5,6 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class DiscoverTvShow implements Parcelable {
     @SerializedName("poster_path")
     private String posterPath;
@@ -15,26 +12,12 @@ public class DiscoverTvShow implements Parcelable {
     private String overview;
     @SerializedName("first_air_date")
     private String firstAirDate;
-    @SerializedName("genre_ids")
-    private List<Integer> genreIds = new ArrayList<>();
     @SerializedName("id")
     private Integer id;
-    @SerializedName("original_name")
-    private String originalName;
-    @SerializedName("original_language")
-    private String originalLanguage;
     @SerializedName("name")
     private String name;
-    @SerializedName("backdrop_path")
-    private String backdropPath;
-    @SerializedName("popularity")
-    private Double popularity;
-    @SerializedName("vote_count")
-    private Integer voteCount;
     @SerializedName("vote_average")
     private Double voteAverage;
-    @SerializedName("origin_country")
-    private List<String> originCountry;
 
     private DiscoverTvShow(Parcel in) {
         posterPath = in.readString();
@@ -45,26 +28,12 @@ public class DiscoverTvShow implements Parcelable {
         } else {
             id = in.readInt();
         }
-        originalName = in.readString();
-        originalLanguage = in.readString();
         name = in.readString();
-        backdropPath = in.readString();
-        if (in.readByte() == 0) {
-            popularity = null;
-        } else {
-            popularity = in.readDouble();
-        }
-        if (in.readByte() == 0) {
-            voteCount = null;
-        } else {
-            voteCount = in.readInt();
-        }
         if (in.readByte() == 0) {
             voteAverage = null;
         } else {
             voteAverage = in.readDouble();
         }
-        originCountry = in.createStringArrayList();
     }
 
     public static final Creator<DiscoverTvShow> CREATOR = new Creator<DiscoverTvShow>() {
@@ -82,13 +51,9 @@ public class DiscoverTvShow implements Parcelable {
     public String getPosterPath() {
         return posterPath;
     }
-    
+
     public String getOverview() {
         return overview;
-    }
-
-    public void setOverview(String overview) {
-        this.overview = overview;
     }
 
     public String getFirstAirDate() {
@@ -99,16 +64,8 @@ public class DiscoverTvShow implements Parcelable {
         return id;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public Double getVoteAverage() {
@@ -131,28 +88,12 @@ public class DiscoverTvShow implements Parcelable {
             parcel.writeByte((byte) 1);
             parcel.writeInt(id);
         }
-        parcel.writeString(originalName);
-        parcel.writeString(originalLanguage);
         parcel.writeString(name);
-        parcel.writeString(backdropPath);
-        if (popularity == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeDouble(popularity);
-        }
-        if (voteCount == null) {
-            parcel.writeByte((byte) 0);
-        } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeInt(voteCount);
-        }
         if (voteAverage == null) {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
             parcel.writeDouble(voteAverage);
         }
-        parcel.writeStringList(originCountry);
     }
 }

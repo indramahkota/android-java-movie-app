@@ -102,7 +102,7 @@ public class MovieFragment extends Fragment {
         }
     }
 
-    private void setAdapter(DiscoverMovieResponse disMovies) {
+    private void setAdapter(@NonNull DiscoverMovieResponse disMovies) {
         MovieAdapter listMovieAdapter = new MovieAdapter(disMovies.getResults(), getContext());
         listMovieAdapter.notifyDataSetChanged();
         rvFragmentMovies.setAdapter(listMovieAdapter);

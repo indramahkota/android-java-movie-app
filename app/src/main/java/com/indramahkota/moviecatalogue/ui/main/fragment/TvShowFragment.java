@@ -102,7 +102,7 @@ public class TvShowFragment extends Fragment {
         }
     }
 
-    private void setAdapter(DiscoverTvShowResponse disTvShows) {
+    private void setAdapter(@NonNull DiscoverTvShowResponse disTvShows) {
         TvShowAdapter listTvShowAdapter = new TvShowAdapter(disTvShows.getResults(), getContext());
         listTvShowAdapter.notifyDataSetChanged();
         rvFragmentTvShows.setAdapter(listTvShowAdapter);

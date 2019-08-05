@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,8 +25,8 @@ import javax.inject.Inject;
 import dagger.android.AndroidInjection;
 
 public class SearchActivity extends AppCompatActivity {
-    private static final String STATE_SCROLL = "state_scroll";
     public static final String EXTRA_SEARCH_QUERY = "extra_search_query";
+    private static final String STATE_SCROLL = "state_scroll";
     private static final String STATE_SEARCH_MOVIE_RESPONSE = "state_search_movie_response";
     private static final String STATE_SEARCH_TV_SHOW_RESPONSE = "state_search_tv_show_response";
 
@@ -140,7 +141,7 @@ public class SearchActivity extends AppCompatActivity {
         }
     }
 
-    private void setMovieAdapter(DiscoverMovieResponse disMovies) {
+    private void setMovieAdapter(@NonNull DiscoverMovieResponse disMovies) {
         MovieAdapter listMovieAdapter = new MovieAdapter(disMovies.getResults(), this);
         listMovieAdapter.notifyDataSetChanged();
         linearLayoutManager.scrollToPosition(scrollPosition);
@@ -148,7 +149,7 @@ public class SearchActivity extends AppCompatActivity {
         mShimmerViewContainer.setVisibility(View.GONE);
     }
 
-    private void setTvSowAdapter(DiscoverTvShowResponse disTvShows) {
+    private void setTvSowAdapter(@NonNull DiscoverTvShowResponse disTvShows) {
         TvShowAdapter listTvShowAdapter = new TvShowAdapter(disTvShows.getResults(), this);
         listTvShowAdapter.notifyDataSetChanged();
         linearLayoutManager.scrollToPosition(scrollPosition);
@@ -157,7 +158,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         scrollPosition = linearLayoutManager.findFirstVisibleItemPosition();
         outState.putInt(STATE_SCROLL, scrollPosition);
         outState.putParcelable(STATE_SEARCH_MOVIE_RESPONSE, searchMovies);
