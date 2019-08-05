@@ -3,7 +3,6 @@ package com.indramahkota.moviecatalogue.ui.search.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.indramahkota.moviecatalogue.EspressoIdlingResource;
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
@@ -38,7 +37,6 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void searchMovie(String query) {
-        EspressoIdlingResource.increment();
         disposable.add(remoteRepository.searchListMovie(query)
                 .doOnEvent((movieResponse, throwable) -> onSearchMovieLoading())
                 .compose(singleSchedulers.applySchedulers())
@@ -47,7 +45,6 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void searchTvShow(String query) {
-        EspressoIdlingResource.increment();
         disposable.add(remoteRepository.searchListTvShow(query)
                 .doOnEvent((tvShowResponse, throwable) -> onSearchTvShowLoading())
                 .compose(singleSchedulers.applySchedulers())
@@ -56,13 +53,11 @@ public class SearchViewModel extends ViewModel {
     }
 
     private void onSearchMovieSuccess(DiscoverMovieResponse discoverMovieResponse) {
-        EspressoIdlingResource.decrement();
         DiscoverMovieResponseState.SUCCESS_STATE.setData(discoverMovieResponse);
         movieViewState.postValue(DiscoverMovieResponseState.SUCCESS_STATE);
     }
 
     private void onSearchMovieError(Throwable error) {
-        EspressoIdlingResource.decrement();
         DiscoverMovieResponseState.ERROR_STATE.setError(error);
         movieViewState.postValue(DiscoverMovieResponseState.ERROR_STATE);
     }
@@ -72,13 +67,11 @@ public class SearchViewModel extends ViewModel {
     }
 
     private void onSearchTvShowSuccess(DiscoverTvShowResponse discoverTvShowResponse) {
-        EspressoIdlingResource.decrement();
         DiscoverTvShowResponseState.SUCCESS_STATE.setData(discoverTvShowResponse);
         tvShowViewState.postValue(DiscoverTvShowResponseState.SUCCESS_STATE);
     }
 
     private void onSearchTvShowError(Throwable error) {
-        EspressoIdlingResource.decrement();
         DiscoverTvShowResponseState.ERROR_STATE.setError(error);
         tvShowViewState.postValue(DiscoverTvShowResponseState.ERROR_STATE);
     }

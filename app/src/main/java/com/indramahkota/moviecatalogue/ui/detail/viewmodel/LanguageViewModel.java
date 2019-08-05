@@ -3,7 +3,6 @@ package com.indramahkota.moviecatalogue.ui.detail.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.indramahkota.moviecatalogue.EspressoIdlingResource;
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
@@ -34,7 +33,6 @@ public class LanguageViewModel extends ViewModel {
     }
 
     public void loadLanguages() {
-        EspressoIdlingResource.increment();
         languageViewState.postValue(LanguageResponseState.LOADING_STATE);
         disposable.add(remoteRepository.loadLanguages()
                 .compose(observableSchedulers.applySchedulers())
@@ -43,7 +41,6 @@ public class LanguageViewModel extends ViewModel {
     }
 
     private void onSuccess(ArrayList<Language> language) {
-        EspressoIdlingResource.decrement();
         LanguageResponse languageResponse = new LanguageResponse();
         languageResponse.setResults(language);
 
@@ -52,7 +49,6 @@ public class LanguageViewModel extends ViewModel {
     }
 
     private void onError(Throwable error) {
-        EspressoIdlingResource.decrement();
         LanguageResponseState.ERROR_STATE.setError(error);
         languageViewState.postValue(LanguageResponseState.ERROR_STATE);
     }

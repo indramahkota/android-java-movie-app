@@ -65,7 +65,7 @@ public class SearchViewModelTest {
     @Test
     public void testApiFetchDataMovieError() {
         when(remoteRepository.searchListMovie("Test")).thenReturn(Single.error(new Throwable("Api error")));
-        searchViewModel.searchTvShow("Test");
+        searchViewModel.searchMovie("Test");
         verify(movieObserver).onChanged(DiscoverMovieResponseState.LOADING_STATE);
         verify(movieObserver).onChanged(DiscoverMovieResponseState.ERROR_STATE);
     }
@@ -87,7 +87,7 @@ public class SearchViewModelTest {
 
     @Test
     public void testApiFetchDataTvShowError() {
-        when(remoteRepository.loadListMovie()).thenReturn(Single.error(new Throwable("Api error")));
+        when(remoteRepository.searchListTvShow("Test")).thenReturn(Single.error(new Throwable("Api error")));
         searchViewModel.searchTvShow("Test");
         verify(tvShowObserver).onChanged(DiscoverTvShowResponseState.LOADING_STATE);
         verify(tvShowObserver).onChanged(DiscoverTvShowResponseState.ERROR_STATE);

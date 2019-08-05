@@ -31,7 +31,6 @@ public class TvShowFragmentViewModel extends ViewModel {
     }
 
     public void loadTvShow() {
-        EspressoIdlingResource.increment();
         disposable.add(remoteRepository.loadListTvShow()
                 .doOnEvent((tvShowResponse, throwable) -> onLoading())
                 .compose(singleSchedulers.applySchedulers())
@@ -40,13 +39,11 @@ public class TvShowFragmentViewModel extends ViewModel {
     }
 
     private void onSuccess(DiscoverTvShowResponse discoverTvShowResponse) {
-        EspressoIdlingResource.decrement();
         DiscoverTvShowResponseState.SUCCESS_STATE.setData(discoverTvShowResponse);
         tvShowViewState.postValue(DiscoverTvShowResponseState.SUCCESS_STATE);
     }
 
     private void onError(Throwable error) {
-        EspressoIdlingResource.decrement();
         DiscoverTvShowResponseState.ERROR_STATE.setError(error);
         tvShowViewState.postValue(DiscoverTvShowResponseState.ERROR_STATE);
     }

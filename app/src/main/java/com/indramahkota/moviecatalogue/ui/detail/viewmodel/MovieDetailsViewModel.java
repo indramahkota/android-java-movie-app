@@ -3,7 +3,6 @@ package com.indramahkota.moviecatalogue.ui.detail.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.indramahkota.moviecatalogue.EspressoIdlingResource;
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
 import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
@@ -31,7 +30,6 @@ public class MovieDetailsViewModel extends ViewModel {
     }
 
     public void loadMovieDetails(Integer movieId) {
-        EspressoIdlingResource.increment();
         disposable.add(remoteRepository.loadMovieDetails(movieId)
                 .doOnEvent((movieResponse, throwable) -> onLoading())
                 .compose(singleSchedulers.applySchedulers())
@@ -40,13 +38,11 @@ public class MovieDetailsViewModel extends ViewModel {
     }
 
     private void onSuccess(MovieResponse movieResponse) {
-        EspressoIdlingResource.decrement();
         MovieResponseState.SUCCESS_STATE.setData(movieResponse);
         movieViewState.postValue(MovieResponseState.SUCCESS_STATE);
     }
 
     private void onError(Throwable error) {
-        EspressoIdlingResource.decrement();
         MovieResponseState.ERROR_STATE.setError(error);
         movieViewState.postValue(MovieResponseState.ERROR_STATE);
     }
