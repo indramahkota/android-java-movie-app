@@ -16,26 +16,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.adapter.TvShowAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.TvShowFragmentViewModel;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
 public class TvShowFragment extends Fragment {
+    private static final String STATE_SCROLL = "state_scroll";
     private static final String STATE_DISCOVER_TV_SHOW_RESPONSE = "state_discover_tv_show_response";
 
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private ArrayList<DiscoverTvShow> discoverTvShows;
+    private Integer scrollPosition = 0;
+    private RecyclerView rvFragmentTvShows;
+    private DiscoverTvShowResponse discoverTvShows;
     private ShimmerFrameLayout mShimmerViewContainer;
     private RelativeLayout relativeLayout;
+    private LinearLayoutManager linearLayoutManager;
 
     public TvShowFragment() { }
 
@@ -43,6 +45,11 @@ public class TvShowFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            scrollPosition = savedInstanceState.getInt(STATE_SCROLL);
+            discoverTvShows = savedInstanceState.getParcelable(STATE_DISCOVER_TV_SHOW_RESPONSE);
+        }
     }
 
     @Override
@@ -58,8 +65,8 @@ public class TvShowFragment extends Fragment {
         relativeLayout = view.findViewById(R.id.empty_indicator);
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_fragment_container);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        RecyclerView rvFragmentTvShows = view.findViewById(R.id.rv_fragment_category);
+        linearLayoutManager = new LinearLayoutManager(view.getContext());
+        rvFragmentTvShows = view.findViewById(R.id.rv_fragment_category);
         rvFragmentTvShows.setLayoutManager(linearLayoutManager);
         rvFragmentTvShows.setHasFixedSize(true);
 
@@ -73,16 +80,11 @@ public class TvShowFragment extends Fragment {
                     break;
                 case 1:
                     //show data
-                    mShimmerViewContainer.setVisibility(View.GONE);
-                    discoverTvShows = tvShowListViewState.getData().getResults();
-
-                    if(discoverTvShows.size() < 1) {
+                    discoverTvShows = tvShowListViewState.getData();
+                    setAdapter(discoverTvShows);
+                    if(discoverTvShows.getResults().size() < 1) {
                         relativeLayout.setVisibility(View.VISIBLE);
                     }
-
-                    TvShowAdapter listTvShowAdapter = new TvShowAdapter(discoverTvShows, getContext());
-                    listTvShowAdapter.notifyDataSetChanged();
-                    rvFragmentTvShows.setAdapter(listTvShowAdapter);
                     break;
                 case -1:
                     //show error
@@ -93,24 +95,27 @@ public class TvShowFragment extends Fragment {
             }
         });
 
-        if (savedInstanceState != null) {
-            discoverTvShows = savedInstanceState.getParcelableArrayList(STATE_DISCOVER_TV_SHOW_RESPONSE);
-        }
-
         if(discoverTvShows != null) {
-            TvShowAdapter listTvShowAdapter = new TvShowAdapter(discoverTvShows, getContext());
-            listTvShowAdapter.notifyDataSetChanged();
-            rvFragmentTvShows.setAdapter(listTvShowAdapter);
-            mShimmerViewContainer.setVisibility(View.GONE);
+            setAdapter(discoverTvShows);
         } else {
             viewModel.loadTvShow();
         }
     }
 
+    private void setAdapter(DiscoverTvShowResponse disTvShows) {
+        TvShowAdapter listTvShowAdapter = new TvShowAdapter(disTvShows.getResults(), getContext());
+        listTvShowAdapter.notifyDataSetChanged();
+        rvFragmentTvShows.setAdapter(listTvShowAdapter);
+        linearLayoutManager.scrollToPosition(scrollPosition);
+        mShimmerViewContainer.setVisibility(View.GONE);
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
+        scrollPosition = linearLayoutManager.findFirstVisibleItemPosition();
+        outState.putInt(STATE_SCROLL, scrollPosition);
+        outState.putParcelable(STATE_DISCOVER_TV_SHOW_RESPONSE, discoverTvShows);
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(STATE_DISCOVER_TV_SHOW_RESPONSE, discoverTvShows);
     }
 
     @Override

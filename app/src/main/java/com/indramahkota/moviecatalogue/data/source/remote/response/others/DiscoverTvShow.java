@@ -82,11 +82,7 @@ public class DiscoverTvShow implements Parcelable {
     public String getPosterPath() {
         return posterPath;
     }
-
-    public void setPosterPath(String posterPath) {
-        this.posterPath = posterPath;
-    }
-
+    
     public String getOverview() {
         return overview;
     }
@@ -99,40 +95,12 @@ public class DiscoverTvShow implements Parcelable {
         return firstAirDate;
     }
 
-    public void setFirstAirDate(String firstAirDate) {
-        this.firstAirDate = firstAirDate;
-    }
-
-    public List<Integer> getGenreIds() {
-        return genreIds;
-    }
-
-    public void setGenreIds(List<Integer> genreIds) {
-        this.genreIds = genreIds;
-    }
-
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getOriginalName() {
-        return originalName;
-    }
-
-    public void setOriginalName(String originalName) {
-        this.originalName = originalName;
-    }
-
-    public String getOriginalLanguage() {
-        return originalLanguage;
-    }
-
-    public void setOriginalLanguage(String originalLanguage) {
-        this.originalLanguage = originalLanguage;
     }
 
     public String getName() {
@@ -143,44 +111,8 @@ public class DiscoverTvShow implements Parcelable {
         this.name = name;
     }
 
-    public String getBackdropPath() {
-        return backdropPath;
-    }
-
-    public void setBackdropPath(String backdropPath) {
-        this.backdropPath = backdropPath;
-    }
-
-    public Double getPopularity() {
-        return popularity;
-    }
-
-    public void setPopularity(Double popularity) {
-        this.popularity = popularity;
-    }
-
-    public Integer getVoteCount() {
-        return voteCount;
-    }
-
-    public void setVoteCount(Integer voteCount) {
-        this.voteCount = voteCount;
-    }
-
     public Double getVoteAverage() {
         return voteAverage;
-    }
-
-    public void setVoteAverage(Double voteAverage) {
-        this.voteAverage = voteAverage;
-    }
-
-    public List<String> getOriginCountry() {
-        return originCountry;
-    }
-
-    public void setOriginCountry(List<String> originCountry) {
-        this.originCountry = originCountry;
     }
 
     @Override

@@ -16,26 +16,28 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverMovie;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.adapter.MovieAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.MovieFragmentViewModel;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import dagger.android.support.AndroidSupportInjection;
 
 public class MovieFragment extends Fragment {
+    private static final String STATE_SCROLL = "state_scroll";
     private static final String STATE_DISCOVER_MOVIE_RESPONSE = "state_discover_movie_response";
 
     @Inject
     ViewModelFactory viewModelFactory;
 
-    private ArrayList<DiscoverMovie> discoverMovies;
+    private Integer scrollPosition = 0;
+    private RecyclerView rvFragmentMovies;
+    private DiscoverMovieResponse discoverMovies;
     private ShimmerFrameLayout mShimmerViewContainer;
     private RelativeLayout relativeLayout;
+    private LinearLayoutManager linearLayoutManager;
 
     public MovieFragment() { }
 
@@ -43,6 +45,11 @@ public class MovieFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            scrollPosition = savedInstanceState.getInt(STATE_SCROLL);
+            discoverMovies = savedInstanceState.getParcelable(STATE_DISCOVER_MOVIE_RESPONSE);
+        }
     }
 
     @Override
@@ -58,8 +65,8 @@ public class MovieFragment extends Fragment {
         relativeLayout = view.findViewById(R.id.empty_indicator);
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_fragment_container);
 
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(view.getContext());
-        RecyclerView rvFragmentMovies = view.findViewById(R.id.rv_fragment_category);
+        linearLayoutManager = new LinearLayoutManager(view.getContext());
+        rvFragmentMovies = view.findViewById(R.id.rv_fragment_category);
         rvFragmentMovies.setLayoutManager(linearLayoutManager);
         rvFragmentMovies.setHasFixedSize(true);
 
@@ -73,16 +80,11 @@ public class MovieFragment extends Fragment {
                     break;
                 case 1:
                     //show data
-                    mShimmerViewContainer.setVisibility(View.GONE);
-                    discoverMovies = movieViewState.getData().getResults();
-
-                    if(discoverMovies.size() < 1) {
+                    discoverMovies = movieViewState.getData();
+                    setAdapter(discoverMovies);
+                    if(discoverMovies.getResults().size() < 1) {
                         relativeLayout.setVisibility(View.VISIBLE);
                     }
-
-                    MovieAdapter listMovieAdapter = new MovieAdapter(discoverMovies, getContext());
-                    listMovieAdapter.notifyDataSetChanged();
-                    rvFragmentMovies.setAdapter(listMovieAdapter);
                     break;
                 case -1:
                     //show error
@@ -93,24 +95,27 @@ public class MovieFragment extends Fragment {
             }
         });
 
-        if (savedInstanceState != null) {
-            discoverMovies = savedInstanceState.getParcelableArrayList(STATE_DISCOVER_MOVIE_RESPONSE);
-        }
-
         if(discoverMovies != null) {
-            MovieAdapter listMovieAdapter = new MovieAdapter(discoverMovies, getContext());
-            listMovieAdapter.notifyDataSetChanged();
-            rvFragmentMovies.setAdapter(listMovieAdapter);
-            mShimmerViewContainer.setVisibility(View.GONE);
+            setAdapter(discoverMovies);
         } else {
             viewModel.loadMovie();
         }
     }
 
+    private void setAdapter(DiscoverMovieResponse disMovies) {
+        MovieAdapter listMovieAdapter = new MovieAdapter(disMovies.getResults(), getContext());
+        listMovieAdapter.notifyDataSetChanged();
+        rvFragmentMovies.setAdapter(listMovieAdapter);
+        linearLayoutManager.scrollToPosition(scrollPosition);
+        mShimmerViewContainer.setVisibility(View.GONE);
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
+        scrollPosition = linearLayoutManager.findFirstVisibleItemPosition();
+        outState.putInt(STATE_SCROLL, scrollPosition);
+        outState.putParcelable(STATE_DISCOVER_MOVIE_RESPONSE, discoverMovies);
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(STATE_DISCOVER_MOVIE_RESPONSE, discoverMovies);
     }
 
     @Override

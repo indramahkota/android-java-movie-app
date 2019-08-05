@@ -28,7 +28,7 @@ import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
 import dagger.android.support.HasSupportFragmentInjector;
 
-public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private static final String STATE_MODE = "state_mode";
 
     private int mode;
@@ -57,7 +57,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         rootView = findViewById(R.id.container);
 
         searchView = findViewById(R.id.searchView);
-        searchView.setOnClickListener(this);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -168,12 +167,5 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     public AndroidInjector<Fragment> supportFragmentInjector() {
         return dispatchingAndroidInjector;
-    }
-
-    @Override
-    public void onClick(View view) {
-        if(view.getId() == R.id.searchView) {
-            searchView.setIconified(false);
-        }
     }
 }
