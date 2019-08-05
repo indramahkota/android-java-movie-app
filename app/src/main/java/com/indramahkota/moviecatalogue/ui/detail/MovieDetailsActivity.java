@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -33,6 +34,8 @@ import dagger.android.AndroidInjection;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE_ID = "extra_movie_id";
+    public static final String STATE_MOVIE_RESPONSE = "state_movie_response";
+    public static final String STATE_LANGUAGE_RESPONSE = "state_language_response";
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -52,14 +55,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_container);
 
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        AndroidInjection.inject(this);
 
         Integer movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, 0);
 
@@ -76,6 +78,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
         txtOverview = findViewById(R.id.txt_overview);
         background = findViewById(R.id.img_background);
         txtLanguage = findViewById(R.id.txt_language);
+
+        LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
+        languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
+            if(languageResponseState.getCurrentState() == 1) {
+                languageResponse = languageResponseState.getData();
+                if(movieResponse != null) {
+                    setTxtLanguage();
+                }
+            }
+        });
 
         MovieDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieDetailsViewModel.class);
         viewModel.getMovieViewState().observe(this, movieResponseState -> {
@@ -94,44 +106,52 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     break;
                 case -1:
                     //show error
-                    detailsContainer.setVisibility(View.VISIBLE);
+                    detailsContainer.setVisibility(View.GONE);
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
                     break;
             }
         });
 
-        LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
-        languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
-            if(languageResponseState.getCurrentState() == 1) {
-                languageResponse = languageResponseState.getData();
-                if(movieResponse != null) {
-                    setTxtLanguage();
-                }
-            }
-        });
+        if (savedInstanceState != null) {
+            movieResponse = savedInstanceState.getParcelable(STATE_MOVIE_RESPONSE);
+            languageResponse = savedInstanceState.getParcelable(STATE_LANGUAGE_RESPONSE);
+        }
 
-        if(languageResponse == null) {
+        if (languageResponse == null) {
             languageViewModel.loadLanguages();
         }
 
-        if(movieResponse == null) {
-            viewModel.loadMovieDetails(movieId);
-        } else {
+        if (movieResponse != null) {
             initializeUi(movieResponse);
+        } else {
+            viewModel.loadMovieDetails(movieId);
         }
     }
 
-    private void initializeUi(MovieResponse response) {
-        String posterUrl = ApiConstant.BASE_URL_POSTER + response.getPosterPath();
-        Glide.with(this)
-                .load(posterUrl)
-                .error(R.drawable.poster_background_error)
-                .transform(new CenterCrop(), new RoundedCorners(8))
-                .into(imgPoster);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(STATE_LANGUAGE_RESPONSE, languageResponse);
+        outState.putParcelable(STATE_MOVIE_RESPONSE, movieResponse);
+    }
 
-        posterUrl = ApiConstant.BASE_URL_BACKDROP_PATH + response.getBackdropPath();
-        Glide.with(this)
-                .load(posterUrl)
-                .into(background);
+    private void initializeUi(MovieResponse response) {
+        String posterUrl;
+        if(response.getPosterPath() != null && !response.getPosterPath().isEmpty()){
+            posterUrl = ApiConstant.BASE_URL_POSTER + response.getPosterPath();
+            Glide.with(this)
+                    .load(posterUrl)
+                    .error(R.drawable.poster_background_error)
+                    .transform(new CenterCrop(), new RoundedCorners(8))
+                    .into(imgPoster);
+        }
+
+        if(response.getBackdropPath() != null && !response.getBackdropPath().isEmpty()) {
+            posterUrl = ApiConstant.BASE_URL_BACKDROP_PATH + response.getBackdropPath();
+            Glide.with(this)
+                    .load(posterUrl)
+                    .into(background);
+        }
 
         if(response.getTitle() != null && !response.getTitle().isEmpty()) {
             txtTitle.setText(response.getTitle());

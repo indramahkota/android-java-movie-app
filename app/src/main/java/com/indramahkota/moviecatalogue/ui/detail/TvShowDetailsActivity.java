@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -13,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
@@ -34,6 +34,8 @@ import dagger.android.AndroidInjection;
 
 public class TvShowDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_TV_SHOW_ID = "extra_tv_show_id";
+    public static final String STATE_TV_SHOW_RESPONSE = "state_tv_show_response";
+    public static final String STATE_LANGUAGE_RESPONSE = "state_language_response";
 
     @Inject
     ViewModelFactory viewModelFactory;
@@ -53,14 +55,13 @@ public class TvShowDetailsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_details_container);
 
         if(getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-        AndroidInjection.inject(this);
 
         Integer tvShowId = getIntent().getIntExtra(EXTRA_TV_SHOW_ID, 0);
 
@@ -77,6 +78,16 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         txtOverview = findViewById(R.id.txt_overview);
         background = findViewById(R.id.img_background);
         txtLanguage = findViewById(R.id.txt_language);
+
+        LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
+        languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
+            if(languageResponseState.getCurrentState() == 1) {
+                languageResponse = languageResponseState.getData();
+                if(tvShowResponse != null) {
+                    setTxtLanguage();
+                }
+            }
+        });
 
         TvShowDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowDetailsViewModel.class);
         viewModel.getTvShowViewState().observe(this, tvShowResponseState -> {
@@ -95,45 +106,52 @@ public class TvShowDetailsActivity extends AppCompatActivity {
                     break;
                 case -1:
                     //show error
-                    detailsContainer.setVisibility(View.VISIBLE);
+                    detailsContainer.setVisibility(View.GONE);
+                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
                     break;
             }
         });
 
-        LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
-        languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
-            if(languageResponseState.getCurrentState() == 1) {
-                languageResponse = languageResponseState.getData();
-                if(tvShowResponse != null) {
-                    setTxtLanguage();
-                }
-            }
-        });
+        if (savedInstanceState != null) {
+            tvShowResponse = savedInstanceState.getParcelable(STATE_TV_SHOW_RESPONSE);
+            languageResponse = savedInstanceState.getParcelable(STATE_LANGUAGE_RESPONSE);
+        }
 
-        if(languageResponse == null) {
+        if (languageResponse == null) {
             languageViewModel.loadLanguages();
         }
 
-        if(tvShowResponse == null) {
-            viewModel.loadTvShowDetails(tvShowId);
-        } else {
+        if (tvShowResponse != null) {
             initializeUi(tvShowResponse);
+        } else {
+            viewModel.loadTvShowDetails(tvShowId);
         }
     }
 
-    private void initializeUi(TvShowResponse response) {
-        String posterUrl = ApiConstant.BASE_URL_POSTER + response.getPosterPath();
-        Glide.with(this)
-                .load(posterUrl)
-                .error(R.drawable.poster_background_error)
-                .transform(new CenterCrop(), new RoundedCorners(8))
-                .into(imgPoster);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(STATE_LANGUAGE_RESPONSE, languageResponse);
+        outState.putParcelable(STATE_TV_SHOW_RESPONSE, tvShowResponse);
+    }
 
-        posterUrl = ApiConstant.BASE_URL_BACKDROP_PATH + response.getBackdropPath();
-        Glide.with(this)
-                .load(posterUrl)
-                .apply(new RequestOptions().override(200, 300))
-                .into(background);
+    private void initializeUi(TvShowResponse response) {
+        String posterUrl;
+        if(response.getPosterPath() != null && !response.getPosterPath().isEmpty()){
+            posterUrl = ApiConstant.BASE_URL_POSTER + response.getPosterPath();
+            Glide.with(this)
+                    .load(posterUrl)
+                    .error(R.drawable.poster_background_error)
+                    .transform(new CenterCrop(), new RoundedCorners(8))
+                    .into(imgPoster);
+        }
+
+        if(response.getBackdropPath() != null && !response.getBackdropPath().isEmpty()) {
+            posterUrl = ApiConstant.BASE_URL_BACKDROP_PATH + response.getBackdropPath();
+            Glide.with(this)
+                    .load(posterUrl)
+                    .into(background);
+        }
 
         if(response.getName() != null && !response.getName().isEmpty()) {
             txtTitle.setText(response.getName());

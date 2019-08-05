@@ -3,9 +3,10 @@ package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
+import com.indramahkota.moviecatalogue.EspressoIdlingResource;
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
 import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverMovieResponseState;
 
 import javax.inject.Inject;
@@ -30,6 +31,7 @@ public class MovieFragmentViewModel extends ViewModel {
     }
 
     public void loadMovie() {
+        EspressoIdlingResource.increment();
         disposable.add(remoteRepository.loadListMovie()
                 .doOnEvent((movieResponse, throwable) -> onLoading())
                 .compose(singleSchedulers.applySchedulers())
@@ -38,11 +40,13 @@ public class MovieFragmentViewModel extends ViewModel {
     }
 
     private void onSuccess(DiscoverMovieResponse discoverMovieResponse) {
+        EspressoIdlingResource.decrement();
         DiscoverMovieResponseState.SUCCESS_STATE.setData(discoverMovieResponse);
         movieViewState.postValue(DiscoverMovieResponseState.SUCCESS_STATE);
     }
 
     private void onError(Throwable error) {
+        EspressoIdlingResource.decrement();
         DiscoverMovieResponseState.ERROR_STATE.setError(error);
         movieViewState.postValue(DiscoverMovieResponseState.ERROR_STATE);
     }

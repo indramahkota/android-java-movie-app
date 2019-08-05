@@ -29,8 +29,16 @@ public class RemoteRepository {
         return api.getDiscoverMovies(BuildConfig.TMDB_API_KEY);
     }
 
+    public Single<DiscoverMovieResponse> searchListMovie(String query) {
+        return api.searchMovies(BuildConfig.TMDB_API_KEY, query);
+    }
+
     public Single<DiscoverTvShowResponse> loadListTvShow() {
         return api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY);
+    }
+
+    public Single<DiscoverTvShowResponse> searchListTvShow(String query) {
+        return api.searchTvShows(BuildConfig.TMDB_API_KEY, query);
     }
 
     public Single<MovieResponse> loadMovieDetails(Integer movieId) {

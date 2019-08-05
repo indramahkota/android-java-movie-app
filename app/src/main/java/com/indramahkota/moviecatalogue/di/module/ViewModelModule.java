@@ -9,6 +9,7 @@ import com.indramahkota.moviecatalogue.ui.detail.viewmodel.MovieDetailsViewModel
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.TvShowDetailsViewModel;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.MovieFragmentViewModel;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.TvShowFragmentViewModel;
+import com.indramahkota.moviecatalogue.ui.search.viewmodel.SearchViewModel;
 
 import dagger.Binds;
 import dagger.Module;
@@ -43,4 +44,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(LanguageViewModel.class)
     protected abstract ViewModel languageViewModel(LanguageViewModel languageViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SearchViewModel.class)
+    protected abstract ViewModel searchViewModel(SearchViewModel searchViewModel);
 }

@@ -6,13 +6,13 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverTvShow;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class DiscoverTvShowResponse implements Parcelable {
     @SerializedName("page")
     private Integer page;
     @SerializedName("results")
-    private List<DiscoverTvShow> results;
+    private ArrayList<DiscoverTvShow> results;
     @SerializedName("total_results")
     private Integer totalResults;
     @SerializedName("total_pages")
@@ -51,8 +51,36 @@ public class DiscoverTvShowResponse implements Parcelable {
         }
     };
 
-    public List<DiscoverTvShow> getResults() {
+    public Integer getPage() {
+        return page;
+    }
+
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public ArrayList<DiscoverTvShow> getResults() {
         return results;
+    }
+
+    public void setResults(ArrayList<DiscoverTvShow> results) {
+        this.results = results;
+    }
+
+    public Integer getTotalResults() {
+        return totalResults;
+    }
+
+    public void setTotalResults(Integer totalResults) {
+        this.totalResults = totalResults;
+    }
+
+    public Integer getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(Integer totalPages) {
+        this.totalPages = totalPages;
     }
 
     @Override

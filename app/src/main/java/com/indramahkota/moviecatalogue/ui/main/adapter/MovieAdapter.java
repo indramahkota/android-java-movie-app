@@ -21,17 +21,17 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.others.Discov
 import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryViewHolder> {
     private final Context mContext;
-    private final List<DiscoverMovie> listMovies;
+    private final ArrayList<DiscoverMovie> listMovies;
 
-    private List<DiscoverMovie> getListMovies() {
+    private ArrayList<DiscoverMovie> getListMovies() {
         return listMovies;
     }
 
-    public MovieAdapter(List<DiscoverMovie> listMovies, Context context) {
+    public MovieAdapter(ArrayList<DiscoverMovie> listMovies, Context context) {
         this.listMovies = listMovies;
         this.mContext = context;
     }

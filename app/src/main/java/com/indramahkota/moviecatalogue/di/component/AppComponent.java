@@ -3,6 +3,7 @@ package com.indramahkota.moviecatalogue.di.component;
 import com.indramahkota.moviecatalogue.MovieCatalogueApp;
 import com.indramahkota.moviecatalogue.di.module.ActivityModule;
 import com.indramahkota.moviecatalogue.di.module.ApiModule;
+import com.indramahkota.moviecatalogue.di.module.AppModule;
 import com.indramahkota.moviecatalogue.di.module.FragmentModule;
 import com.indramahkota.moviecatalogue.di.module.RxModule;
 import com.indramahkota.moviecatalogue.di.module.ViewModelModule;
@@ -16,6 +17,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 
 @Component(
     modules = {
+            AppModule.class,
             ApiModule.class,
             ViewModelModule.class,
             AndroidSupportInjectionModule.class,

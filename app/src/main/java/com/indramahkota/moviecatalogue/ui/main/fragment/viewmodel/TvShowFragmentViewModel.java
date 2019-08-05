@@ -3,6 +3,7 @@ package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.indramahkota.moviecatalogue.EspressoIdlingResource;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
@@ -30,6 +31,7 @@ public class TvShowFragmentViewModel extends ViewModel {
     }
 
     public void loadTvShow() {
+        EspressoIdlingResource.increment();
         disposable.add(remoteRepository.loadListTvShow()
                 .doOnEvent((tvShowResponse, throwable) -> onLoading())
                 .compose(singleSchedulers.applySchedulers())
@@ -38,11 +40,13 @@ public class TvShowFragmentViewModel extends ViewModel {
     }
 
     private void onSuccess(DiscoverTvShowResponse discoverTvShowResponse) {
+        EspressoIdlingResource.decrement();
         DiscoverTvShowResponseState.SUCCESS_STATE.setData(discoverTvShowResponse);
         tvShowViewState.postValue(DiscoverTvShowResponseState.SUCCESS_STATE);
     }
 
     private void onError(Throwable error) {
+        EspressoIdlingResource.decrement();
         DiscoverTvShowResponseState.ERROR_STATE.setError(error);
         tvShowViewState.postValue(DiscoverTvShowResponseState.ERROR_STATE);
     }

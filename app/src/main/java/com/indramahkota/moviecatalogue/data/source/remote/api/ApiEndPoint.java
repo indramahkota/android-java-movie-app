@@ -8,6 +8,7 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.others.Langua
 
 import java.util.ArrayList;
 
+import io.reactivex.Observable;
 import io.reactivex.Single;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
@@ -43,5 +44,5 @@ public interface ApiEndPoint {
             @Query("query") String query);
 
     @GET("configuration/languages")
-    Single<ArrayList<Language>> getLanguages(@Query("api_key") String apiKey);
+    Observable<ArrayList<Language>> getLanguages(@Query("api_key") String apiKey);
 }

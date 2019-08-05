@@ -21,17 +21,17 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.others.Discov
 import com.indramahkota.moviecatalogue.ui.detail.TvShowDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.CategoryViewHolder> {
     private final Context mContext;
-    private final List<DiscoverTvShow> listTvShows;
+    private final ArrayList<DiscoverTvShow> listTvShows;
 
-    private List<DiscoverTvShow> getListTvShows() {
+    private ArrayList<DiscoverTvShow> getListTvShows() {
         return listTvShows;
     }
 
-    public TvShowAdapter(List<DiscoverTvShow> listTvShows, Context context) {
+    public TvShowAdapter(ArrayList<DiscoverTvShow> listTvShows, Context context) {
         this.listTvShows = listTvShows;
         this.mContext = context;
     }

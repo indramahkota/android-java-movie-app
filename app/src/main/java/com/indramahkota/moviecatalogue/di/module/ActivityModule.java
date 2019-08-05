@@ -5,6 +5,7 @@ import com.indramahkota.moviecatalogue.testing.SingleFragmentActivity;
 import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.detail.TvShowDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.main.MainActivity;
+import com.indramahkota.moviecatalogue.ui.search.SearchActivity;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -22,4 +23,7 @@ public abstract class ActivityModule {
 
     @ContributesAndroidInjector()
     abstract TvShowDetailsActivity contributeTvShowDetailsActivityInjector();
+
+    @ContributesAndroidInjector()
+    abstract SearchActivity contributeSearchActivityInjector();
 }
