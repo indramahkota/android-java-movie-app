@@ -9,14 +9,25 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
+import com.indramahkota.moviecatalogue.ui.main.adapter.FavoriteMovieAdapter;
+import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteMovieViewModel;
+
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 
 public class FavoriteMovieFragment extends Fragment {
     private static final String STATE_SCROLL = "state_scroll";
+
+    @Inject
+    ViewModelFactory viewModelFactory;
 
     private LinearLayoutManager linearLayoutManager;
     private ShimmerFrameLayout mShimmerViewContainer;
@@ -35,7 +46,9 @@ public class FavoriteMovieFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState != null) {
             scrollPosition = savedInstanceState.getInt(STATE_SCROLL);
         }
@@ -70,7 +83,7 @@ public class FavoriteMovieFragment extends Fragment {
         relativeLayout = view.findViewById(R.id.favorite_empty_indicator);
         relativeLayout.setVisibility(View.GONE);
 
-        /*FavoriteMovieViewModel favoriteMovieViewModel = ViewModelProviders.of(this).get(FavoriteMovieViewModel.class);
+        FavoriteMovieViewModel favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
         favoriteMovieViewModel.getListFavoriteMovie().observe(this, favMovies -> {
             FavoriteMovieAdapter favoriteMovieAdapter = new FavoriteMovieAdapter(favMovies, getContext());
             rvMovies.setAdapter(favoriteMovieAdapter);
@@ -82,7 +95,7 @@ public class FavoriteMovieFragment extends Fragment {
             } else {
                 relativeLayout.setVisibility(View.VISIBLE);
             }
-        });*/
+        });
     }
 
     @Override

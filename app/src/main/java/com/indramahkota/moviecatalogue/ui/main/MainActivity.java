@@ -1,12 +1,9 @@
 package com.indramahkota.moviecatalogue.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,7 +17,6 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.ui.main.fragment.FavoriteFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.MovieFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.TvShowFragment;
-import com.indramahkota.moviecatalogue.ui.search.SearchActivity;
 
 import javax.inject.Inject;
 
@@ -40,9 +36,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private TvShowFragment mTvShowFragment;
     private FavoriteFragment mFavoriteFragment;
 
-    private SearchView searchView;
-    private View rootView;
-
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
@@ -56,30 +49,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             getSupportActionBar().setElevation(0);
         }
 
-        rootView = findViewById(R.id.container);
-
-        searchView = findViewById(R.id.searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                Intent moveToSearchActivity = new Intent(MainActivity.this, SearchActivity.class);
-                String state;
-                if (mode == R.id.navigation_movie)
-                    state = "Movie";
-                else
-                    state = "Tv Show";
-
-                String[] extraData = {state, query};
-                moveToSearchActivity.putExtra(SearchActivity.EXTRA_SEARCH_QUERY, extraData);
-                startActivity(moveToSearchActivity);
-                return true;
-            }
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
         mFragmentManager = getSupportFragmentManager();
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
@@ -91,13 +60,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         } else {
             setMode(savedInstanceState.getInt(STATE_MODE));
         }
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        searchView.setQuery("", false);
-        rootView.requestFocus();
     }
 
     @Override
@@ -129,20 +91,17 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             case R.id.navigation_movie:
                 mode = R.id.navigation_movie;
                 setTitle(R.string.list_movies);
-                searchView.setVisibility(View.VISIBLE);
                 showMovieFragment();
                 return true;
             case R.id.navigation_tv_show:
                 mode = R.id.navigation_tv_show;
                 setTitle(R.string.list_tv_shows);
-                searchView.setVisibility(View.VISIBLE);
                 showTvShowFragment();
                 return true;
             case R.id.navigation_favorite:
                 mode = R.id.navigation_favorite;
                 setTitle(R.string.list_favoritess);
                 showFavoriteFragment();
-                searchView.setVisibility(View.GONE);
                 return true;
         }
         return false;

@@ -1,6 +1,7 @@
 package com.indramahkota.moviecatalogue.ui.main.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovie;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
+import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
 import java.util.List;
@@ -101,14 +103,11 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
         }
 
         void addListener(int position) {
-            itemView.setOnClickListener(new CustomOnItemClickListener(position, new CustomOnItemClickListener.OnItemClickCallback() {
-                @Override
-                public void onItemClicked(int position) {
-                    /*int id = (int) (long)getListMovies().get(position).getItemId();
-                    Intent moveWithDataIntent = new Intent(mContext, MovieDetailsActivity.class);
-                    moveWithDataIntent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, id);
-                    mContext.startActivity(moveWithDataIntent);*/
-                }
+            itemView.setOnClickListener(new CustomOnItemClickListener(position, position1 -> {
+                int id = (int) (long)getListMovies().get(position1).getItemId();
+                Intent moveWithDataIntent = new Intent(mContext, MovieDetailsActivity.class);
+                moveWithDataIntent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, id);
+                mContext.startActivity(moveWithDataIntent);
             }));
         }
     }

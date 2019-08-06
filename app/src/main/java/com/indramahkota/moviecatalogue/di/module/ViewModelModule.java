@@ -3,6 +3,7 @@ package com.indramahkota.moviecatalogue.di.module;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.indramahkota.moviecatalogue.di.scope.ViewModelKey;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.LanguageViewModel;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.MovieDetailsViewModel;

@@ -8,26 +8,14 @@
     android:focusableInTouchMode="true"
     tools:context=".ui.main.MainActivity">
 
-    <SearchView
-        android:id="@+id/searchView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/round_rect_background_search"
-        android:elevation="4dp"
-        android:queryHint="@string/searchToolTip"
-        android:queryBackground="@android:color/transparent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:iconifiedByDefault="false"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <FrameLayout
         android:id="@+id/frame_container"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/searchView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"

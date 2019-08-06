@@ -1,6 +1,7 @@
 package com.indramahkota.moviecatalogue.ui.main.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShow;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
+import com.indramahkota.moviecatalogue.ui.detail.TvShowDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
 import java.util.List;
@@ -101,14 +103,11 @@ public class FavoriteTvShowAdapter extends RecyclerView.Adapter<FavoriteTvShowAd
         }
 
         void addListener(int position) {
-            itemView.setOnClickListener(new CustomOnItemClickListener(position, new CustomOnItemClickListener.OnItemClickCallback() {
-                @Override
-                public void onItemClicked(int position) {
-                    /*int id = (int) (long)getListTvShows().get(position).getItemId();
-                    Intent moveWithDataIntent = new Intent(mContext, TvShowDetailsActivity.class);
-                    moveWithDataIntent.putExtra(TvShowDetailsActivity.EXTRA_TV_SHOW_ID, id);
-                    mContext.startActivity(moveWithDataIntent);*/
-                }
+            itemView.setOnClickListener(new CustomOnItemClickListener(position, position1 -> {
+                int id = (int) (long)getListTvShows().get(position1).getItemId();
+                Intent moveWithDataIntent = new Intent(mContext, TvShowDetailsActivity.class);
+                moveWithDataIntent.putExtra(TvShowDetailsActivity.EXTRA_TV_SHOW_ID, id);
+                mContext.startActivity(moveWithDataIntent);
             }));
         }
     }

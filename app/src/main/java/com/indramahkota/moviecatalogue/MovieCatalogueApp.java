@@ -3,7 +3,9 @@ package com.indramahkota.moviecatalogue;
 import android.app.Activity;
 import android.app.Application;
 
-import com.indramahkota.moviecatalogue.di.component.DaggerAppComponent;
+import com.indramahkota.moviecatalogue.di.component.DaggerApiComponent;
+import com.indramahkota.moviecatalogue.di.module.ApiModule;
+import com.indramahkota.moviecatalogue.di.module.DbModule;
 
 import javax.inject.Inject;
 
@@ -22,8 +24,10 @@ public class MovieCatalogueApp extends Application implements HasActivityInjecto
     @Override
     public void onCreate() {
         super.onCreate();
-        DaggerAppComponent.builder()
+        DaggerApiComponent.builder()
                 .application(this)
+                .apiModule(new ApiModule())
+                .dbModule(new DbModule())
                 .build()
                 .inject(this);
     }

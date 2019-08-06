@@ -1,10 +1,12 @@
 package com.indramahkota.moviecatalogue.ui.main.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -20,6 +22,7 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvSho
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.adapter.TvShowAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.TvShowFragmentViewModel;
+import com.indramahkota.moviecatalogue.ui.search.SearchActivity;
 
 import javax.inject.Inject;
 
@@ -38,6 +41,8 @@ public class TvShowFragment extends Fragment {
     private ShimmerFrameLayout mShimmerViewContainer;
     private RelativeLayout relativeLayout;
     private LinearLayoutManager linearLayoutManager;
+    private SearchView searchView;
+    private View rootView;
 
     public TvShowFragment() { }
 
@@ -62,6 +67,8 @@ public class TvShowFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        rootView = view.findViewById(R.id.rv_fragment_category_container);
+
         relativeLayout = view.findViewById(R.id.empty_indicator);
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_fragment_container);
 
@@ -69,6 +76,22 @@ public class TvShowFragment extends Fragment {
         rvFragmentTvShows = view.findViewById(R.id.rv_fragment_category);
         rvFragmentTvShows.setLayoutManager(linearLayoutManager);
         rvFragmentTvShows.setHasFixedSize(true);
+
+        searchView = view.findViewById(R.id.searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Intent moveToSearchActivity = new Intent(getContext(), SearchActivity.class);
+                String[] extraData = {"Tv Show", query};
+                moveToSearchActivity.putExtra(SearchActivity.EXTRA_SEARCH_QUERY, extraData);
+                startActivity(moveToSearchActivity);
+                return true;
+            }
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
 
         TvShowFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowFragmentViewModel.class);
         viewModel.getTvShowViewState().observe(this, tvShowListViewState -> {
@@ -122,6 +145,8 @@ public class TvShowFragment extends Fragment {
     public void onResume() {
         super.onResume();
         mShimmerViewContainer.startShimmer();
+        searchView.setQuery("", false);
+        rootView.requestFocus();
     }
 
     @Override

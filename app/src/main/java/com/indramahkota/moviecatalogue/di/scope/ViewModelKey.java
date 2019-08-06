@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.di.module;
+package com.indramahkota.moviecatalogue.di.scope;
 
 import androidx.lifecycle.ViewModel;
 

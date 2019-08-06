@@ -19,9 +19,16 @@ import com.indramahkota.moviecatalogue.ui.main.fragment.favorite.FavoriteTvShowF
 import java.util.ArrayList;
 import java.util.List;
 
-public class FavoriteFragment extends Fragment {
+import dagger.android.support.AndroidSupportInjection;
 
+public class FavoriteFragment extends Fragment {
     public FavoriteFragment() { }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidSupportInjection.inject(this);
+        super.onCreate(savedInstanceState);
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,

@@ -63,7 +63,6 @@ public class FavoriteMovieViewModel extends ViewModel implements LoadLocalDbCall
         Log.d("DB_EXECUTOR", String.valueOf(l));
     }
 
-
     @Override
     public void deleteSuccess(Boolean bool) {
 
