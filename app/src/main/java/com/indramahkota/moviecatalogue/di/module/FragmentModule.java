@@ -4,6 +4,7 @@ import com.indramahkota.moviecatalogue.ui.main.fragment.FavoriteFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.MovieFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.TvShowFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.favorite.FavoriteMovieFragment;
+import com.indramahkota.moviecatalogue.ui.main.fragment.favorite.FavoriteTvShowFragment;
 
 import dagger.Module;
 import dagger.android.ContributesAndroidInjector;
@@ -21,4 +22,7 @@ public abstract class FragmentModule {
 
     @ContributesAndroidInjector
     abstract FavoriteMovieFragment contributeFavoriteMovieFragment();
+
+    @ContributesAndroidInjector
+    abstract FavoriteTvShowFragment contributeFavoriteTvShowFragment();
 }

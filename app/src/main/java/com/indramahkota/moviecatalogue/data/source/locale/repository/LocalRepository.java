@@ -66,8 +66,8 @@ public class LocalRepository {
         dao.insertTvShows(favoriteTvShows);
     }
 
-    public void insertFavoriteTvShow(FavoriteTvShow favoriteTvShow) {
-        dao.insertTvShow(favoriteTvShow);
+    public Long insertFavoriteTvShow(FavoriteTvShow favoriteTvShow) {
+        return dao.insertTvShow(favoriteTvShow);
     }
 
     public void deleteFavoriteTvShow(long itemId) {

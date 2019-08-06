@@ -3,11 +3,13 @@ package com.indramahkota.moviecatalogue.ui.detail;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProviders;
@@ -18,6 +20,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShow;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
@@ -27,6 +30,7 @@ import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.GenreAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.LanguageViewModel;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.TvShowDetailsViewModel;
+import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteTvShowViewModel;
 
 import java.util.List;
 
@@ -55,6 +59,8 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
 
+    private FavoriteTvShowViewModel favoriteTvShowViewModel;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         AndroidInjection.inject(this);
@@ -80,6 +86,8 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         txtOverview = findViewById(R.id.txt_overview);
         background = findViewById(R.id.img_background);
         txtLanguage = findViewById(R.id.txt_language);
+
+        favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
 
         LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
         languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
@@ -134,6 +142,23 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.favorite_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == android.R.id.home) {
+            finish();
+        } else if(item.getItemId() == R.id.favorites && tvShowResponse != null) {
+            FavoriteTvShow favTvShow = new FavoriteTvShow();
+            favTvShow.setItemId(tvShowResponse.getId());
+            favTvShow.setName(tvShowResponse.getName());
+            favTvShow.setOverview(tvShowResponse.getOverview());
+            favTvShow.setPosterPath(tvShowResponse.getPosterPath());
+            favTvShow.setFirstAirDate(tvShowResponse.getFirstAirDate());
+            favTvShow.setVoteAverage(String.valueOf(tvShowResponse.getVoteAverage()));
+            favoriteTvShowViewModel.insertFavoriteTvShow(favTvShow);
+        }
         return true;
     }
 

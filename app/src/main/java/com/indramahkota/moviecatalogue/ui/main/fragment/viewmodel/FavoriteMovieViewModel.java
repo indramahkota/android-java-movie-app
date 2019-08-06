@@ -47,8 +47,8 @@ public class FavoriteMovieViewModel extends ViewModel implements LoadLocalDbCall
         }
 
         @Override
-        protected Long doInBackground(FavoriteMovie... favoriteMovie) {
-            return weakRepo.get().insertFavoriteMovie(favoriteMovie[0]);
+        protected Long doInBackground(FavoriteMovie... favoriteMovies) {
+            return weakRepo.get().insertFavoriteMovie(favoriteMovies[0]);
         }
 
         @Override

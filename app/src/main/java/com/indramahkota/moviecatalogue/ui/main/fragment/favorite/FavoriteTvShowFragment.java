@@ -9,14 +9,25 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
+import com.indramahkota.moviecatalogue.ui.main.adapter.FavoriteTvShowAdapter;
+import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteTvShowViewModel;
+
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
 
 public class FavoriteTvShowFragment extends Fragment {
     private static final String STATE_SCROLL = "state_scroll";
+
+    @Inject
+    ViewModelFactory viewModelFactory;
 
     private LinearLayoutManager linearLayoutManager;
     private ShimmerFrameLayout mShimmerViewContainer;
@@ -35,7 +46,9 @@ public class FavoriteTvShowFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
+
         if (savedInstanceState != null) {
             scrollPosition = savedInstanceState.getInt(STATE_SCROLL);
         }
@@ -70,22 +83,19 @@ public class FavoriteTvShowFragment extends Fragment {
         relativeLayout = view.findViewById(R.id.favorite_empty_indicator);
         relativeLayout.setVisibility(View.GONE);
 
-        /*FavoriteTvShowViewModel favoriteTvShowViewModel = ViewModelProviders.of(this).get(FavoriteTvShowViewModel.class);
-        favoriteTvShowViewModel.getListFavoriteTvShow().observe(this, new Observer<List<FavoriteTvShow>>() {
-            @Override
-            public void onChanged(List<FavoriteTvShow> favoriteTvShows) {
-                FavoriteTvShowAdapter favoriteTvShowAdapter = new FavoriteTvShowAdapter(favoriteTvShows, getContext());
-                rvTvShows.setAdapter(favoriteTvShowAdapter);
-                linearLayoutManager.scrollToPosition(scrollPosition);
-                mShimmerViewContainer.setVisibility(View.GONE);
+        FavoriteTvShowViewModel favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
+        favoriteTvShowViewModel.getListFavoriteTvShow().observe(this, favoriteTvShows -> {
+            FavoriteTvShowAdapter favoriteTvShowAdapter = new FavoriteTvShowAdapter(favoriteTvShows, getContext());
+            rvTvShows.setAdapter(favoriteTvShowAdapter);
+            linearLayoutManager.scrollToPosition(scrollPosition);
+            mShimmerViewContainer.setVisibility(View.GONE);
 
-                if(favoriteTvShows.size() > 0) {
-                    relativeLayout.setVisibility(View.GONE);
-                } else {
-                    relativeLayout.setVisibility(View.VISIBLE);
-                }
+            if(favoriteTvShows.size() > 0) {
+                relativeLayout.setVisibility(View.GONE);
+            } else {
+                relativeLayout.setVisibility(View.VISIBLE);
             }
-        });*/
+        });
     }
 
     @Override
