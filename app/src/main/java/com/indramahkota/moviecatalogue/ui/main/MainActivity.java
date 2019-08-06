@@ -17,6 +17,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.ui.main.fragment.FavoriteFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.MovieFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.TvShowFragment;
 import com.indramahkota.moviecatalogue.ui.search.SearchActivity;
@@ -37,6 +38,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     private MovieFragment mMovieFragment;
     private TvShowFragment mTvShowFragment;
+    private FavoriteFragment mFavoriteFragment;
 
     private SearchView searchView;
     private View rootView;
@@ -127,12 +129,20 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             case R.id.navigation_movie:
                 mode = R.id.navigation_movie;
                 setTitle(R.string.list_movies);
+                searchView.setVisibility(View.VISIBLE);
                 showMovieFragment();
                 return true;
             case R.id.navigation_tv_show:
                 mode = R.id.navigation_tv_show;
                 setTitle(R.string.list_tv_shows);
+                searchView.setVisibility(View.VISIBLE);
                 showTvShowFragment();
+                return true;
+            case R.id.navigation_favorite:
+                mode = R.id.navigation_favorite;
+                setTitle(R.string.list_favoritess);
+                showFavoriteFragment();
+                searchView.setVisibility(View.GONE);
                 return true;
         }
         return false;
@@ -160,6 +170,19 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         Fragment fragment = mFragmentManager.findFragmentByTag(TvShowFragment.class.getSimpleName());
         if (!(fragment instanceof TvShowFragment)) {
             mFragmentTransaction.replace(R.id.frame_container, mTvShowFragment, TvShowFragment.class.getSimpleName());
+            mFragmentTransaction.commit();
+        }
+    }
+
+    private void showFavoriteFragment() {
+        if(mFavoriteFragment == null) {
+            mFavoriteFragment = new FavoriteFragment();
+        }
+
+        mFragmentTransaction = mFragmentManager.beginTransaction();
+        Fragment fragment = mFragmentManager.findFragmentByTag(FavoriteFragment.class.getSimpleName());
+        if (!(fragment instanceof FavoriteFragment)) {
+            mFragmentTransaction.replace(R.id.frame_container, mFavoriteFragment, FavoriteFragment.class.getSimpleName());
             mFragmentTransaction.commit();
         }
     }

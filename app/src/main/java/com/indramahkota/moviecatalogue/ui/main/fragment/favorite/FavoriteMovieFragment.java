@@ -9,11 +9,14 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.ui.main.adapter.FavoriteMovieAdapter;
+import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteMovieViewModel;
 
 public class FavoriteMovieFragment extends Fragment {
     private static final String STATE_SCROLL = "state_scroll";
@@ -70,22 +73,19 @@ public class FavoriteMovieFragment extends Fragment {
         relativeLayout = view.findViewById(R.id.favorite_empty_indicator);
         relativeLayout.setVisibility(View.GONE);
 
-        /*FavoriteMovieViewModel favoriteMovieViewModel = ViewModelProviders.of(this).get(FavoriteMovieViewModel.class);
-        favoriteMovieViewModel.getListFavoriteMovie().observe(this, new Observer<List<FavoriteMovie>>() {
-            @Override
-            public void onChanged(List<FavoriteMovie> favMovies) {
-                FavoriteMovieAdapter favoriteMovieAdapter = new FavoriteMovieAdapter(favMovies, getContext());
-                rvMovies.setAdapter(favoriteMovieAdapter);
-                linearLayoutManager.scrollToPosition(scrollPosition);
-                mShimmerViewContainer.setVisibility(View.GONE);
+        FavoriteMovieViewModel favoriteMovieViewModel = ViewModelProviders.of(this).get(FavoriteMovieViewModel.class);
+        favoriteMovieViewModel.getListFavoriteMovie().observe(this, favMovies -> {
+            FavoriteMovieAdapter favoriteMovieAdapter = new FavoriteMovieAdapter(favMovies, getContext());
+            rvMovies.setAdapter(favoriteMovieAdapter);
+            linearLayoutManager.scrollToPosition(scrollPosition);
+            mShimmerViewContainer.setVisibility(View.GONE);
 
-                if(favMovies.size() > 0) {
-                    relativeLayout.setVisibility(View.GONE);
-                } else {
-                    relativeLayout.setVisibility(View.VISIBLE);
-                }
+            if(favMovies.size() > 0) {
+                relativeLayout.setVisibility(View.GONE);
+            } else {
+                relativeLayout.setVisibility(View.VISIBLE);
             }
-        });*/
+        });
     }
 
     @Override

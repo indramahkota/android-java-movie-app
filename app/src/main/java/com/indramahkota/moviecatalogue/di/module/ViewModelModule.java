@@ -7,6 +7,7 @@ import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.LanguageViewModel;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.MovieDetailsViewModel;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.TvShowDetailsViewModel;
+import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteMovieViewModel;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.MovieFragmentViewModel;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.TvShowFragmentViewModel;
 import com.indramahkota.moviecatalogue.ui.search.viewmodel.SearchViewModel;
@@ -49,4 +50,9 @@ public abstract class ViewModelModule {
     @IntoMap
     @ViewModelKey(SearchViewModel.class)
     protected abstract ViewModel searchViewModel(SearchViewModel searchViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(FavoriteMovieViewModel.class)
+    protected abstract ViewModel favoriteMovieViewModel(FavoriteMovieViewModel favoriteMovieViewModel);
 }

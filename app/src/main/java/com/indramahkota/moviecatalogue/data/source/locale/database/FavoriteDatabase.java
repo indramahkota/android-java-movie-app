@@ -12,18 +12,25 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShow;
 
 @Database(entities = {FavoriteMovie.class, FavoriteTvShow.class}, version = 1, exportSchema = false)
 public abstract class FavoriteDatabase extends RoomDatabase {
-    private static final String DATABASE_NAME = "favorite_database";
-    private static FavoriteDatabase instance;
+    public static final String DATABASE_NAME = "favorite_database.db";
+    private static FavoriteDatabase INSTANCE;
 
     public abstract FavoriteDao favoriteDao();
 
     public static synchronized FavoriteDatabase getInstance(Context context) {
-        if(instance == null) {
-            instance = Room.databaseBuilder(context.getApplicationContext(),
-                    FavoriteDatabase.class, FavoriteDatabase.DATABASE_NAME)
-                    .fallbackToDestructiveMigration()
-                    .build();
+        if(INSTANCE == null) {
+            synchronized (FavoriteDatabase.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = buildDatabase(context);
+                }
+            }
         }
-        return instance;
+        return INSTANCE;
+    }
+
+    private static FavoriteDatabase buildDatabase(Context context) {
+        return Room.databaseBuilder(context,
+                FavoriteDatabase.class, DATABASE_NAME)
+                .allowMainThreadQueries().build();
     }
 }
