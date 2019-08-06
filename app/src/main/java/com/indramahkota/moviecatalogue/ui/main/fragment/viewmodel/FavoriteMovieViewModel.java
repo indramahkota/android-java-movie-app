@@ -3,7 +3,6 @@ package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -21,7 +20,7 @@ public class FavoriteMovieViewModel extends ViewModel implements LoadLocalDbCall
     private LiveData<List<FavoriteMovie>> listFavoriteMovie;
 
     @Inject
-    FavoriteMovieViewModel(@NonNull LocalRepository localRepository) {
+    FavoriteMovieViewModel(LocalRepository localRepository) {
         this.localRepository = localRepository;
         listFavoriteMovie = localRepository.getAllFavoriteMovie();
     }
@@ -53,9 +52,9 @@ public class FavoriteMovieViewModel extends ViewModel implements LoadLocalDbCall
         }
 
         @Override
-        protected void onPostExecute(Long l) {
-            super.onPostExecute(l);
-            weakCallback.get().insertSuccess(l);
+        protected void onPostExecute(Long ln) {
+            super.onPostExecute(ln);
+            weakCallback.get().insertSuccess(ln);
         }
     }
 
@@ -63,7 +62,6 @@ public class FavoriteMovieViewModel extends ViewModel implements LoadLocalDbCall
     public void insertSuccess(Long l) {
         Log.d("DB_EXECUTOR", String.valueOf(l));
     }
-
 
 
     @Override

@@ -20,7 +20,6 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovie;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
@@ -30,7 +29,6 @@ import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.GenreAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.LanguageViewModel;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.MovieDetailsViewModel;
-import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteMovieViewModel;
 
 import java.util.List;
 
@@ -59,7 +57,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
 
-    private FavoriteMovieViewModel favoriteMovieViewModel;
+//    private FavoriteMovieViewModel favoriteMovieViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +85,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         background = findViewById(R.id.img_background);
         txtLanguage = findViewById(R.id.txt_language);
 
-        favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
+//        favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
 
         LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
         languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
@@ -147,7 +145,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.favorites && movieResponse != null) {
+        /*if(item.getItemId() == R.id.favorites && movieResponse != null) {
             FavoriteMovie favMovie = new FavoriteMovie();
             favMovie.setItemId(movieResponse.getId());
             favMovie.setTitle(movieResponse.getTitle());
@@ -156,7 +154,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             favMovie.setReleaseDate(movieResponse.getReleaseDate());
             favMovie.setVoteAverage(String.valueOf(movieResponse.getVoteAverage()));
             favoriteMovieViewModel.insertFavoriteMovie(favMovie);
-        }
+        }*/
         return true;
     }
 
