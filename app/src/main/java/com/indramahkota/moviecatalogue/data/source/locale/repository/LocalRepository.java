@@ -41,8 +41,8 @@ public class LocalRepository {
         return dao.insertMovie(favoriteMovie);
     }
 
-    public void deleteFavoriteMovie(long itemId) {
-        dao.deleteMovieById(itemId);
+    public Integer deleteFavoriteMovie(long itemId) {
+        return dao.deleteMovieById(itemId);
     }
 
     public void updateFavoriteMovie(FavoriteMovie favoriteMovie) {
@@ -70,8 +70,8 @@ public class LocalRepository {
         return dao.insertTvShow(favoriteTvShow);
     }
 
-    public void deleteFavoriteTvShow(long itemId) {
-        dao.deleteTvShowById(itemId);
+    public Integer deleteFavoriteTvShow(long itemId) {
+        return dao.deleteTvShowById(itemId);
     }
 
     public void updateFavoriteTvShow(FavoriteTvShow favoriteTvShow) {

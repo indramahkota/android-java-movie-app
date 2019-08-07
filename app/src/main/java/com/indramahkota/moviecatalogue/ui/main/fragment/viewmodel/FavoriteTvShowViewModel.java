@@ -24,14 +24,25 @@ public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCal
         this.localRepository = localRepository;
         listFavoriteTvShow = localRepository.getAllFavoriteTvShow();
     }
-
     /*
-     * Favorite Movie
+     * Get List Favorite Tv Show
      * */
 
     public LiveData<List<FavoriteTvShow>> getListFavoriteTvShow() {
         return listFavoriteTvShow;
     }
+
+    /*
+     * Get Favorite Tv Show
+     * */
+
+    public LiveData<FavoriteTvShow> getFavoriteTvShow(Long ln) {
+        return localRepository.getFavoriteTvShow(ln);
+    }
+
+    /*
+     * Insert Favorite Tv Show
+     * */
 
     public void insertFavoriteTvShow(FavoriteTvShow favoriteTvShow) {
         new InsertFavoriteTvShowAsyncTask(localRepository, this).execute(favoriteTvShow);
@@ -63,8 +74,37 @@ public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCal
         Log.d("DB_EXECUTOR", String.valueOf(l));
     }
 
-    @Override
-    public void deleteSuccess(Boolean bool) {
+    /*
+     * Delete Favorite Tv Show
+     * */
 
+    public void deleteFavoriteMovie(Long itemId) {
+        new DeleteFavoriteTvShowAsyncTask(localRepository, this).execute(itemId);
+    }
+
+    private static class DeleteFavoriteTvShowAsyncTask extends AsyncTask<Long, Void, Integer> {
+        private final WeakReference<LocalRepository> weakRepo;
+        private final WeakReference<LoadLocalDbCallback> weakCallback;
+
+        DeleteFavoriteTvShowAsyncTask(LocalRepository localRepository, LoadLocalDbCallback loadLocalDbCallback) {
+            this.weakRepo = new WeakReference<>(localRepository);
+            this.weakCallback = new WeakReference<>(loadLocalDbCallback);
+        }
+
+        @Override
+        protected Integer doInBackground(Long... ln) {
+            return weakRepo.get().deleteFavoriteTvShow(ln[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Integer ln) {
+            super.onPostExecute(ln);
+            weakCallback.get().deleteSuccess(ln);
+        }
+    }
+
+    @Override
+    public void deleteSuccess(Integer ln) {
+        Log.d("DB_EXECUTOR", String.valueOf(ln));
     }
 }

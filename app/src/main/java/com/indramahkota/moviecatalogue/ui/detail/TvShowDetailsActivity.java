@@ -46,6 +46,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private Menu menu;
     private ImageView imgPoster;
     private TextView txtTitle;
     private TextView txtRating;
@@ -54,6 +55,8 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     private ImageView background;
     private TextView txtLanguage;
 
+    private Integer tvShowId;
+    private FavoriteTvShow favoriteTvShow;
     private TvShowResponse tvShowResponse;
     private LanguageResponse languageResponse;
     private ConstraintLayout detailsContainer;
@@ -71,7 +74,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Integer tvShowId = getIntent().getIntExtra(EXTRA_TV_SHOW_ID, 0);
+        tvShowId = getIntent().getIntExtra(EXTRA_TV_SHOW_ID, 0);
 
         detailsContainer = findViewById(R.id.layout_details);
         detailsContainer.setVisibility(View.GONE);
@@ -142,6 +145,14 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.favorite_menu, menu);
+        this.menu = menu;
+
+        favoriteTvShowViewModel.getFavoriteTvShow((long)tvShowId).observe(this, favTvShow -> {
+            favoriteTvShow = favTvShow;
+            if(favoriteTvShow != null) {
+                menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
+            }
+        });
         return true;
     }
 
@@ -150,14 +161,20 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         if(item.getItemId() == android.R.id.home) {
             finish();
         } else if(item.getItemId() == R.id.favorites && tvShowResponse != null) {
-            FavoriteTvShow favTvShow = new FavoriteTvShow();
-            favTvShow.setItemId(tvShowResponse.getId());
-            favTvShow.setName(tvShowResponse.getName());
-            favTvShow.setOverview(tvShowResponse.getOverview());
-            favTvShow.setPosterPath(tvShowResponse.getPosterPath());
-            favTvShow.setFirstAirDate(tvShowResponse.getFirstAirDate());
-            favTvShow.setVoteAverage(String.valueOf(tvShowResponse.getVoteAverage()));
-            favoriteTvShowViewModel.insertFavoriteTvShow(favTvShow);
+            if(favoriteTvShow != null) {
+                favoriteTvShowViewModel.deleteFavoriteMovie((long)tvShowId);
+                menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_border_white_24dp);
+            } else {
+                FavoriteTvShow favTvShow = new FavoriteTvShow();
+                favTvShow.setItemId(tvShowResponse.getId());
+                favTvShow.setName(tvShowResponse.getName());
+                favTvShow.setOverview(tvShowResponse.getOverview());
+                favTvShow.setPosterPath(tvShowResponse.getPosterPath());
+                favTvShow.setFirstAirDate(tvShowResponse.getFirstAirDate());
+                favTvShow.setVoteAverage(String.valueOf(tvShowResponse.getVoteAverage()));
+                favoriteTvShowViewModel.insertFavoriteTvShow(favTvShow);
+                menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
+            }
         }
         return true;
     }
@@ -169,7 +186,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         outState.putParcelable(STATE_TV_SHOW_RESPONSE, tvShowResponse);
     }
 
-    private void initializeUi(TvShowResponse response) {
+    private void initializeUi(@NonNull TvShowResponse response) {
         String posterUrl;
         if(response.getPosterPath() != null && !response.getPosterPath().isEmpty()){
             posterUrl = ApiConstant.BASE_URL_POSTER + response.getPosterPath();

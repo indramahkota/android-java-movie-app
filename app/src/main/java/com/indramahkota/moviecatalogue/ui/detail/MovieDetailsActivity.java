@@ -46,6 +46,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private Menu menu;
     private ImageView imgPoster;
     private TextView txtTitle;
     private TextView txtRating;
@@ -54,11 +55,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private ImageView background;
     private TextView txtLanguage;
 
+    private Integer movieId;
     private MovieResponse movieResponse;
     private LanguageResponse languageResponse;
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
 
+    private Boolean isInsertSuccess;
+    private Boolean isDeleteSuccess;
+    private FavoriteMovie favoriteMovie;
     private FavoriteMovieViewModel favoriteMovieViewModel;
 
     @Override
@@ -71,7 +76,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        Integer movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, 0);
+        movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, 0);
 
         detailsContainer = findViewById(R.id.layout_details);
         detailsContainer.setVisibility(View.GONE);
@@ -142,6 +147,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.favorite_menu, menu);
+        this.menu = menu;
+
+        favoriteMovieViewModel.getFavoriteMovie((long)movieId).observe(this, favMovie -> {
+            favoriteMovie = favMovie;
+            if(favoriteMovie != null) {
+                menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
+            }
+        });
         return true;
     }
 
@@ -150,14 +163,20 @@ public class MovieDetailsActivity extends AppCompatActivity {
         if(item.getItemId() == android.R.id.home) {
             finish();
         } else if(item.getItemId() == R.id.favorites && movieResponse != null) {
-            FavoriteMovie favMovie = new FavoriteMovie();
-            favMovie.setItemId(movieResponse.getId());
-            favMovie.setTitle(movieResponse.getTitle());
-            favMovie.setOverview(movieResponse.getOverview());
-            favMovie.setPosterPath(movieResponse.getPosterPath());
-            favMovie.setReleaseDate(movieResponse.getReleaseDate());
-            favMovie.setVoteAverage(String.valueOf(movieResponse.getVoteAverage()));
-            favoriteMovieViewModel.insertFavoriteMovie(favMovie);
+            if(favoriteMovie != null) {
+                favoriteMovieViewModel.deleteFavoriteMovie((long)movieId);
+                menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_border_white_24dp);
+            } else {
+                FavoriteMovie favMovie = new FavoriteMovie();
+                favMovie.setItemId(movieResponse.getId());
+                favMovie.setTitle(movieResponse.getTitle());
+                favMovie.setOverview(movieResponse.getOverview());
+                favMovie.setPosterPath(movieResponse.getPosterPath());
+                favMovie.setReleaseDate(movieResponse.getReleaseDate());
+                favMovie.setVoteAverage(String.valueOf(movieResponse.getVoteAverage()));
+                favoriteMovieViewModel.insertFavoriteMovie(favMovie);
+                menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
+            }
         }
         return true;
     }
