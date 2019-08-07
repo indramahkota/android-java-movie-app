@@ -38,7 +38,7 @@ public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCal
      * */
 
     public LiveData<FavoriteTvShowEntity> getFavoriteTvShow(Long ln) {
-        return localRepository.getFavoriteTvShow(ln);
+        return localRepository.getFavoriteTvShowById(ln);
     }
 
     /*

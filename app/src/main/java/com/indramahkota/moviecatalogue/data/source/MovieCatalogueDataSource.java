@@ -1,25 +1,54 @@
 package com.indramahkota.moviecatalogue.data.source;
 
+import androidx.lifecycle.LiveData;
+import androidx.paging.PagedList;
+
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
+
+import java.util.List;
+
+import io.reactivex.Observable;
+import io.reactivex.Single;
+
 public interface MovieCatalogueDataSource {
+    /*
+    * Main Activity
+    * */
 
-    /*// Untuk Halaman Academy
-    LiveData<Resource<List<CourseEntity>>> getAllCourses();
+    //Movie Fragment & Search Activity
+    Single<Resource<DiscoverMovieResponse>> loadDiscoverMovie();
 
-    // Untuk Halaman Detail
-    LiveData<Resource<CourseWithModule>> getCourseWithModules(String courseId);
+    //Tv Show Fragment & Search Activity
+    Single<Resource<DiscoverTvShowResponse>> loadDiscoverTvShow();
 
-    // Untuk Halaman Reader (fragment list + fragment content)
-    LiveData<Resource<List<ModuleEntity>>> getAllModulesByCourse(String courseId);
+    //Favorite Movie Fragment
+    LiveData<Resource<PagedList<FavoriteMovieEntity>>> getListFavoriteMovie();
+    LiveData<Resource<FavoriteMovieEntity>> getFavoriteMovieById(Long ln);
+    long insertFavoriteMovie(FavoriteMovieEntity favoriteMovieEntity);
+    int deleteFavoriteMovieById(long id);
 
-    // Untuk Halaman Bookmark
-    LiveData<Resource<List<CourseEntity>>> getBookmarkedCourses();
+    //Favorite Tv Show Fragment
+    LiveData<Resource<PagedList<FavoriteTvShowEntity>>> getListFavoriteTvShow();
+    LiveData<Resource<FavoriteTvShowEntity>> getFavoriteTvShowById(Long ln);
+    long insertTvShowMovie(FavoriteTvShowEntity favoriteTvShowEntity);
+    int deleteFavoriteTvShowById(long id);
 
-    // Untuk getContent
-    LiveData<Resource<ModuleEntity>> getContent(String moduleId);
+    /*
+    * Detail Activity
+    * */
 
-    // Untuk halaman detail, set bookmark
-    void setCourseBookmark(CourseEntity course, boolean state);
+    //Movie Detail
+    Single<Resource<MovieEntity>> loadMovie();
 
-    // Untuk halaman reader, read module
-    void setReadModule(ModuleEntity module);*/
+    //Tv Show Detail
+    Single<Resource<TvShowEntity>> loadTvShow();
+
+    //Language
+    Observable<Resource<List<Language>>> loadLanguage();
 }

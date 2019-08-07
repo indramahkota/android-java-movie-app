@@ -19,7 +19,7 @@ import java.util.List;
 
 @Entity(tableName = MovieEntity.TABLE_NAME)
 public class MovieEntity implements Parcelable {
-    static final String TABLE_NAME = "movie";
+    public static final String TABLE_NAME = "movie";
 
     private static final String ITEM_ID = "itemId";
     private static final String TITLE = "title";

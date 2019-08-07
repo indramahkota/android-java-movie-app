@@ -9,6 +9,8 @@ import androidx.room.Query;
 
 import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
 import java.util.List;
 
@@ -16,21 +18,57 @@ import java.util.List;
 public interface FavoriteDao {
     /*
      *
+     * Movie
+     * */
+
+    @WorkerThread
+    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME)
+    LiveData<List<MovieEntity>> selectAllMovie();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long insertMovie(MovieEntity movieEntity);
+
+    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
+    LiveData<MovieEntity> selectMovieById(long id);
+
+    @Query("DELETE FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
+    int deleteMovieById(long id);
+
+    /*
+     *
+     * Tv Show
+     * */
+
+    @WorkerThread
+    @Query("SELECT * FROM " + FavoriteTvShowEntity.TABLE_NAME)
+    LiveData<List<TvShowEntity>> selectAllTvShow();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    long insertTvShow(TvShowEntity tvShowEntity);
+
+    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE itemId = :id")
+    LiveData<TvShowEntity> selectTvShowById(long id);
+
+    @Query("DELETE FROM " + TvShowEntity.TABLE_NAME + " WHERE itemId = :id")
+    int deleteTvShowById(long id);
+
+    /*
+     *
      * Favorite Movie
      * */
 
     @WorkerThread
     @Query("SELECT * FROM " + FavoriteMovieEntity.TABLE_NAME)
-    LiveData<List<FavoriteMovieEntity>> selectAllMovie();
+    LiveData<List<FavoriteMovieEntity>> selectAllFavoriteMovie();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insertMovie(FavoriteMovieEntity favoriteMovieEntity);
+    long insertFavoriteMovie(FavoriteMovieEntity favoriteMovieEntity);
 
-    @Query("SELECT * FROM " + FavoriteMovieEntity.TABLE_NAME + " WHERE itemId = :itemId")
-    LiveData<FavoriteMovieEntity> selectMovieById(long itemId);
+    @Query("SELECT * FROM " + FavoriteMovieEntity.TABLE_NAME + " WHERE itemId = :id")
+    LiveData<FavoriteMovieEntity> selectFavoriteMovieById(long id);
 
-    @Query("DELETE FROM " + FavoriteMovieEntity.TABLE_NAME + " WHERE itemId = :itemId")
-    int deleteMovieById(long itemId);
+    @Query("DELETE FROM " + FavoriteMovieEntity.TABLE_NAME + " WHERE itemId = :id")
+    int deleteFavoriteMovieById(long id);
 
     /*
      *
@@ -39,14 +77,14 @@ public interface FavoriteDao {
 
     @WorkerThread
     @Query("SELECT * FROM " + FavoriteTvShowEntity.TABLE_NAME)
-    LiveData<List<FavoriteTvShowEntity>> selectAllTvShow();
+    LiveData<List<FavoriteTvShowEntity>> selectAllFavoriteTvShow();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insertTvShow(FavoriteTvShowEntity favoriteTvShowEntity);
+    long insertFavoriteTvShow(FavoriteTvShowEntity favoriteTvShowEntity);
 
-    @Query("SELECT * FROM " + FavoriteTvShowEntity.TABLE_NAME + " WHERE itemId = :itemId")
-    LiveData<FavoriteTvShowEntity> selectTvShowById(long itemId);
+    @Query("SELECT * FROM " + FavoriteTvShowEntity.TABLE_NAME + " WHERE itemId = :id")
+    LiveData<FavoriteTvShowEntity> selectFavoriteTvShowById(long id);
 
-    @Query("DELETE FROM " + FavoriteTvShowEntity.TABLE_NAME + " WHERE itemId = :itemId")
-    int deleteTvShowById(long itemId);
+    @Query("DELETE FROM " + FavoriteTvShowEntity.TABLE_NAME + " WHERE itemId = :id")
+    int deleteFavoriteTvShowById(long id);
 }

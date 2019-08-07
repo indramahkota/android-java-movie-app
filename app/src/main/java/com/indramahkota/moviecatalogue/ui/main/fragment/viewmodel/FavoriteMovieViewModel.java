@@ -39,7 +39,7 @@ public class FavoriteMovieViewModel extends ViewModel implements LoadLocalDbCall
      * */
 
     public LiveData<FavoriteMovieEntity> getFavoriteMovie(Long ln) {
-        return localRepository.getFavoriteMovie(ln);
+        return localRepository.getFavoriteMovieById(ln);
     }
 
     /*

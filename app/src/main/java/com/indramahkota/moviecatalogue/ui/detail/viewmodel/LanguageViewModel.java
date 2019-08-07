@@ -9,7 +9,7 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.others.Langua
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
 import com.indramahkota.moviecatalogue.ui.detail.datastate.LanguageResponseState;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -40,7 +40,7 @@ public class LanguageViewModel extends ViewModel {
                         this::onError));
     }
 
-    private void onSuccess(ArrayList<Language> language) {
+    private void onSuccess(List<Language> language) {
         LanguageResponse languageResponse = new LanguageResponse();
         languageResponse.setResults(language);
 
