@@ -9,7 +9,7 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.others.Cast;
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class CastListTypeConverter {
+public class CastsTypeConverter {
 
     @TypeConverter
     public List<Cast> fromString(String value) {

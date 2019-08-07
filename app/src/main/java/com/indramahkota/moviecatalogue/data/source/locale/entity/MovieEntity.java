@@ -11,7 +11,7 @@ import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 import com.indramahkota.moviecatalogue.data.source.locale.converter.CreditsTypeConverter;
-import com.indramahkota.moviecatalogue.data.source.locale.converter.GenreListTypeConverter;
+import com.indramahkota.moviecatalogue.data.source.locale.converter.GenresTypeConverter;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Credits;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Genres;
 
@@ -21,7 +21,7 @@ import java.util.List;
 public class MovieEntity implements Parcelable {
     static final String TABLE_NAME = "movie";
 
-    private static final String ID = "itemId";
+    private static final String ITEM_ID = "itemId";
     private static final String TITLE = "title";
     private static final String RELEASE_DATE = "releaseDate";
     private static final String VOTE_AVERAGE = "voteAverage";
@@ -33,7 +33,7 @@ public class MovieEntity implements Parcelable {
     private static final String ORIGINAL_LANGUAGE = "original_language";
 
     @PrimaryKey()
-    @ColumnInfo(name = ID)
+    @ColumnInfo(name = ITEM_ID)
     @SerializedName("id")
     private Long id;
 
@@ -67,7 +67,7 @@ public class MovieEntity implements Parcelable {
     private Credits credits;
 
     @ColumnInfo(name = GENRES)
-    @TypeConverters(GenreListTypeConverter.class)
+    @TypeConverters(GenresTypeConverter.class)
     @SerializedName("genres")
     private List<Genres> genres;
 
@@ -114,8 +114,16 @@ public class MovieEntity implements Parcelable {
         return id;
     }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public String getTitle() {
         return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getReleaseDate() {
@@ -128,6 +136,10 @@ public class MovieEntity implements Parcelable {
 
     public String getOverview() {
         return overview;
+    }
+
+    public void setOverview(String overview) {
+        this.overview = overview;
     }
 
     public String getPosterPath() {

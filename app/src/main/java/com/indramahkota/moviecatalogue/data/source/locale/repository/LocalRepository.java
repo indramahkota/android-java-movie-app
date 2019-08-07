@@ -16,7 +16,7 @@ public class LocalRepository {
     private final FavoriteDao dao;
 
     @Inject
-    LocalRepository(FavoriteDao dao) {
+    public LocalRepository(FavoriteDao dao) {
         this.dao = dao;
     }
 

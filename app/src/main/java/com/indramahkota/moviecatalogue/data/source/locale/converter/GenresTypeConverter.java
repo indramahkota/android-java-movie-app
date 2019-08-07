@@ -9,7 +9,7 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.others.Genres
 import java.lang.reflect.Type;
 import java.util.List;
 
-public class GenreListTypeConverter {
+public class GenresTypeConverter {
 
     @TypeConverter
     public List<Genres> fromString(String value) {
