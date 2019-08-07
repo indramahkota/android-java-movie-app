@@ -107,7 +107,7 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.CategoryVi
 
         void addListener(int position) {
             itemView.setOnClickListener(new CustomOnItemClickListener(position, listPosition -> {
-                Integer tvShowId = getListTvShows().get(listPosition).getId();
+                Long tvShowId = getListTvShows().get(listPosition).getId();
                 Intent moveWithDataIntent = new Intent(mContext, TvShowDetailsActivity.class);
                 moveWithDataIntent.putExtra(TvShowDetailsActivity.EXTRA_TV_SHOW_ID, tvShowId);
                 mContext.startActivity(moveWithDataIntent);

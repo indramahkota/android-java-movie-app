@@ -23,13 +23,13 @@ public interface ApiEndPoint {
 
     @GET("movie/{movie_id}")
     Single<MovieEntity> getMovie(
-            @Path("movie_id") Integer id,
+            @Path("movie_id") Long id,
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse);
 
     @GET("tv/{tv_id}")
     Single<TvShowEntity> getTvShow(
-            @Path("tv_id") Integer id,
+            @Path("tv_id") Long id,
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse);
 

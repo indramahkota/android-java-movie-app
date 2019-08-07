@@ -3,6 +3,8 @@ package com.indramahkota.moviecatalogue.data.source.remote.response.others;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 public class DiscoverTvShow implements Parcelable {
@@ -13,20 +15,20 @@ public class DiscoverTvShow implements Parcelable {
     @SerializedName("first_air_date")
     private String firstAirDate;
     @SerializedName("id")
-    private Integer id;
+    private Long id;
     @SerializedName("name")
     private String name;
     @SerializedName("vote_average")
     private Double voteAverage;
 
-    private DiscoverTvShow(Parcel in) {
+    private DiscoverTvShow(@NonNull Parcel in) {
         posterPath = in.readString();
         overview = in.readString();
         firstAirDate = in.readString();
         if (in.readByte() == 0) {
             id = null;
         } else {
-            id = in.readInt();
+            id = in.readLong();
         }
         name = in.readString();
         if (in.readByte() == 0) {
@@ -60,7 +62,7 @@ public class DiscoverTvShow implements Parcelable {
         return firstAirDate;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
@@ -86,7 +88,7 @@ public class DiscoverTvShow implements Parcelable {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeInt(id);
+            parcel.writeLong(id);
         }
         parcel.writeString(name);
         if (voteAverage == null) {

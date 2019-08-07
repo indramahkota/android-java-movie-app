@@ -29,7 +29,7 @@ public class TvShowDetailsViewModel extends ViewModel {
         return tvShowViewState;
     }
 
-    public void loadTvShowDetails(Integer tvShowId) {
+    public void loadTvShowDetails(Long tvShowId) {
         disposable.add(remoteRepository.loadTvShowDetails(tvShowId)
                 .doOnEvent((tvShowResponse, throwable) -> onLoading())
                 .compose(singleSchedulers.applySchedulers())

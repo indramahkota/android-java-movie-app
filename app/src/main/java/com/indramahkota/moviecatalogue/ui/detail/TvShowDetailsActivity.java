@@ -56,7 +56,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     private ImageView background;
     private TextView txtLanguage;
 
-    private Integer tvShowId;
+    private Long tvShowId;
     private FavoriteTvShowEntity favoriteTvShowEntity;
     private TvShowEntity tvShowEntity;
     private LanguageResponse languageResponse;
@@ -75,7 +75,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        tvShowId = getIntent().getIntExtra(EXTRA_TV_SHOW_ID, 0);
+        tvShowId = getIntent().getLongExtra(EXTRA_TV_SHOW_ID, 0);
 
         detailsContainer = findViewById(R.id.layout_details);
         detailsContainer.setVisibility(View.GONE);
@@ -148,7 +148,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         inflater.inflate(R.menu.favorite_menu, menu);
         this.menu = menu;
 
-        favoriteTvShowViewModel.getFavoriteTvShow((long)tvShowId).observe(this, favTvShow -> {
+        favoriteTvShowViewModel.getFavoriteTvShow(tvShowId).observe(this, favTvShow -> {
             favoriteTvShowEntity = favTvShow;
             if(favoriteTvShowEntity != null) {
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
@@ -163,7 +163,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             finish();
         } else if(item.getItemId() == R.id.favorites && tvShowEntity != null) {
             if(favoriteTvShowEntity != null) {
-                favoriteTvShowViewModel.deleteFavoriteMovie((long)tvShowId);
+                favoriteTvShowViewModel.deleteFavoriteMovie(tvShowId);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_border_white_24dp);
             } else {
                 FavoriteTvShowEntity favTvShow = new FavoriteTvShowEntity();

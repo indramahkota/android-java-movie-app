@@ -41,11 +41,11 @@ public class RemoteRepository {
         return api.searchTvShows(BuildConfig.TMDB_API_KEY, query);
     }
 
-    public Single<MovieEntity> loadMovieDetails(Integer movieId) {
+    public Single<MovieEntity> loadMovieDetails(Long movieId) {
         return api.getMovie(movieId, BuildConfig.TMDB_API_KEY, "credits");
     }
 
-    public Single<TvShowEntity> loadTvShowDetails(Integer tvShowId) {
+    public Single<TvShowEntity> loadTvShowDetails(Long tvShowId) {
         return api.getTvShow(tvShowId, BuildConfig.TMDB_API_KEY, "credits");
     }
 

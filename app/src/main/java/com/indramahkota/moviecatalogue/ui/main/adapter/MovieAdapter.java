@@ -107,7 +107,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
 
         void addListener(int position) {
             itemView.setOnClickListener(new CustomOnItemClickListener(position, listPosition -> {
-                Integer movieId = getListMovies().get(listPosition).getId();
+                Long movieId = getListMovies().get(listPosition).getId();
                 Intent moveWithDataIntent = new Intent(mContext, MovieDetailsActivity.class);
                 moveWithDataIntent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
                 mContext.startActivity(moveWithDataIntent);

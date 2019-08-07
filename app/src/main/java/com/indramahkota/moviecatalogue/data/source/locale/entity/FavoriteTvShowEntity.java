@@ -11,6 +11,7 @@ import androidx.room.PrimaryKey;
 @Entity(tableName = FavoriteTvShowEntity.TABLE_NAME)
 public class FavoriteTvShowEntity implements Parcelable {
     public static final String TABLE_NAME = "favorite_tv_show";
+
     private static final String ID = BaseColumns._ID;
     private static final String ITEM_ID = "itemId";
     private static final String NAME = "name";
@@ -21,9 +22,9 @@ public class FavoriteTvShowEntity implements Parcelable {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = ID)
-    private long id;
+    private Long id;
     @ColumnInfo(name = ITEM_ID)
-    private long itemId;
+    private Long itemId;
     @ColumnInfo(name = NAME)
     private String name;
     @ColumnInfo(name = FIRST_AIR_DATE)
@@ -38,8 +39,16 @@ public class FavoriteTvShowEntity implements Parcelable {
     public FavoriteTvShowEntity() {}
 
     private FavoriteTvShowEntity(Parcel in) {
-        id = in.readLong();
-        itemId = in.readLong();
+        if (in.readByte() == 0) {
+            id = null;
+        } else {
+            id = in.readLong();
+        }
+        if (in.readByte() == 0) {
+            itemId = null;
+        } else {
+            itemId = in.readLong();
+        }
         name = in.readString();
         firstAirDate = in.readString();
         voteAverage = in.readString();
@@ -59,19 +68,19 @@ public class FavoriteTvShowEntity implements Parcelable {
         }
     };
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
-    public long getItemId() {
+    public Long getItemId() {
         return itemId;
     }
 
-    public void setItemId(long itemId) {
+    public void setItemId(Long itemId) {
         this.itemId = itemId;
     }
 
@@ -122,8 +131,18 @@ public class FavoriteTvShowEntity implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeLong(id);
-        parcel.writeLong(itemId);
+        if (id == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(id);
+        }
+        if (itemId == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(itemId);
+        }
         parcel.writeString(name);
         parcel.writeString(firstAirDate);
         parcel.writeString(voteAverage);

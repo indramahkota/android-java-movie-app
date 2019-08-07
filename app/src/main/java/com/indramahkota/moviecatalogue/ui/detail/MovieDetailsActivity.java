@@ -56,7 +56,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private ImageView background;
     private TextView txtLanguage;
 
-    private Integer movieId;
+    private Long movieId;
     private MovieEntity movieEntity;
     private LanguageResponse languageResponse;
     private ConstraintLayout detailsContainer;
@@ -75,7 +75,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        movieId = getIntent().getIntExtra(EXTRA_MOVIE_ID, 0);
+        movieId = getIntent().getLongExtra(EXTRA_MOVIE_ID, 0);
 
         detailsContainer = findViewById(R.id.layout_details);
         detailsContainer.setVisibility(View.GONE);
@@ -148,7 +148,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         inflater.inflate(R.menu.favorite_menu, menu);
         this.menu = menu;
 
-        favoriteMovieViewModel.getFavoriteMovie((long)movieId).observe(this, favMovie -> {
+        favoriteMovieViewModel.getFavoriteMovie(movieId).observe(this, favMovie -> {
             favoriteMovieEntity = favMovie;
             if(favoriteMovieEntity != null) {
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
@@ -163,7 +163,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             finish();
         } else if(item.getItemId() == R.id.favorites && movieEntity != null) {
             if(favoriteMovieEntity != null) {
-                favoriteMovieViewModel.deleteFavoriteMovie((long)movieId);
+                favoriteMovieViewModel.deleteFavoriteMovie(movieId);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_border_white_24dp);
             } else {
                 FavoriteMovieEntity favMovie = new FavoriteMovieEntity();
