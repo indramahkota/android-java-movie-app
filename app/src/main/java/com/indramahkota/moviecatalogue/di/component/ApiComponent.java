@@ -8,6 +8,7 @@ import com.indramahkota.moviecatalogue.di.module.ApiModule;
 import com.indramahkota.moviecatalogue.di.module.AppModule;
 import com.indramahkota.moviecatalogue.di.module.DbModule;
 import com.indramahkota.moviecatalogue.di.module.FragmentModule;
+import com.indramahkota.moviecatalogue.di.module.RepositoryModule;
 import com.indramahkota.moviecatalogue.di.module.RxModule;
 import com.indramahkota.moviecatalogue.di.module.ViewModelModule;
 
@@ -22,6 +23,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
             AppModule.class,
             ApiModule.class,
             DbModule.class,
+            RepositoryModule.class,
             ViewModelModule.class,
             AndroidSupportInjectionModule.class,
             ActivityModule.class,

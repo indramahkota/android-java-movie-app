@@ -3,7 +3,7 @@ package com.indramahkota.moviecatalogue.ui.detail.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
+import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
 import com.indramahkota.moviecatalogue.ui.detail.datastate.MovieResponseState;
@@ -14,13 +14,13 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class MovieDetailsViewModel extends ViewModel {
     private CompositeDisposable disposable;
-    private final RemoteRepository remoteRepository;
+    private final MovieCatalogueRepository repository;
     private final SingleSchedulers singleSchedulers;
     private final MutableLiveData<MovieResponseState> movieViewState = new MutableLiveData<>();
 
     @Inject
-    MovieDetailsViewModel(RemoteRepository remoteRepository, SingleSchedulers singleSchedulers) {
-        this.remoteRepository = remoteRepository;
+    MovieDetailsViewModel(MovieCatalogueRepository repository, SingleSchedulers singleSchedulers) {
+        this.repository = repository;
         this.singleSchedulers = singleSchedulers;
         disposable = new CompositeDisposable();
     }
@@ -30,7 +30,7 @@ public class MovieDetailsViewModel extends ViewModel {
     }
 
     public void loadMovieDetails(Long movieId) {
-        disposable.add(remoteRepository.loadMovieDetails(movieId)
+        disposable.add(repository.loadMovieDetails(movieId)
                 .doOnEvent((movieResponse, throwable) -> onLoading())
                 .compose(singleSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,

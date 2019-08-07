@@ -7,8 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
-import com.indramahkota.moviecatalogue.data.source.locale.repository.LocalRepository;
 import com.indramahkota.moviecatalogue.ui.detail.interfaces.LoadLocalDbCallback;
 
 import java.lang.ref.WeakReference;
@@ -17,13 +17,13 @@ import java.util.List;
 import javax.inject.Inject;
 
 public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCallback  {
-    private final LocalRepository localRepository;
+    private final MovieCatalogueRepository repository;
     private LiveData<List<FavoriteTvShowEntity>> listFavoriteTvShow;
 
     @Inject
-    FavoriteTvShowViewModel(@NonNull LocalRepository localRepository) {
-        this.localRepository = localRepository;
-        listFavoriteTvShow = localRepository.getAllFavoriteTvShow();
+    FavoriteTvShowViewModel(@NonNull MovieCatalogueRepository repository) {
+        this.repository = repository;
+        listFavoriteTvShow = repository.getAllFavoriteTvShow();
     }
     /*
      * Get List Favorite Tv Show
@@ -38,7 +38,7 @@ public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCal
      * */
 
     public LiveData<FavoriteTvShowEntity> getFavoriteTvShow(Long ln) {
-        return localRepository.getFavoriteTvShowById(ln);
+        return repository.getFavoriteTvShowById(ln);
     }
 
     /*
@@ -46,15 +46,15 @@ public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCal
      * */
 
     public void insertFavoriteTvShow(FavoriteTvShowEntity favoriteTvShowEntity) {
-        new InsertFavoriteTvShowAsyncTask(localRepository, this).execute(favoriteTvShowEntity);
+        new InsertFavoriteTvShowAsyncTask(repository, this).execute(favoriteTvShowEntity);
     }
 
     private static class InsertFavoriteTvShowAsyncTask extends AsyncTask<FavoriteTvShowEntity, Void, Long> {
-        private final WeakReference<LocalRepository> weakRepo;
+        private final WeakReference<MovieCatalogueRepository> weakRepo;
         private final WeakReference<LoadLocalDbCallback> weakCallback;
 
-        InsertFavoriteTvShowAsyncTask(LocalRepository localRepository, LoadLocalDbCallback loadLocalDbCallback) {
-            this.weakRepo = new WeakReference<>(localRepository);
+        InsertFavoriteTvShowAsyncTask(MovieCatalogueRepository repository, LoadLocalDbCallback loadLocalDbCallback) {
+            this.weakRepo = new WeakReference<>(repository);
             this.weakCallback = new WeakReference<>(loadLocalDbCallback);
         }
 
@@ -80,21 +80,21 @@ public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCal
      * */
 
     public void deleteFavoriteMovie(Long itemId) {
-        new DeleteFavoriteTvShowAsyncTask(localRepository, this).execute(itemId);
+        new DeleteFavoriteTvShowAsyncTask(repository, this).execute(itemId);
     }
 
     private static class DeleteFavoriteTvShowAsyncTask extends AsyncTask<Long, Void, Integer> {
-        private final WeakReference<LocalRepository> weakRepo;
+        private final WeakReference<MovieCatalogueRepository> weakRepo;
         private final WeakReference<LoadLocalDbCallback> weakCallback;
 
-        DeleteFavoriteTvShowAsyncTask(LocalRepository localRepository, LoadLocalDbCallback loadLocalDbCallback) {
-            this.weakRepo = new WeakReference<>(localRepository);
+        DeleteFavoriteTvShowAsyncTask(MovieCatalogueRepository repository, LoadLocalDbCallback loadLocalDbCallback) {
+            this.weakRepo = new WeakReference<>(repository);
             this.weakCallback = new WeakReference<>(loadLocalDbCallback);
         }
 
         @Override
         protected Integer doInBackground(Long... ln) {
-            return weakRepo.get().deleteFavoriteTvShow(ln[0]);
+            return weakRepo.get().deleteFavoriteTvShowById(ln[0]);
         }
 
         @Override

@@ -3,7 +3,7 @@ package com.indramahkota.moviecatalogue.ui.detail.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
+import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
@@ -17,13 +17,13 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class LanguageViewModel extends ViewModel {
     private CompositeDisposable disposable;
-    private final RemoteRepository remoteRepository;
+    private final MovieCatalogueRepository repository;
     private final ObservableSchedulers observableSchedulers;
     private final MutableLiveData<LanguageResponseState> languageViewState = new MutableLiveData<>();
 
     @Inject
-    LanguageViewModel(RemoteRepository remoteRepository, ObservableSchedulers observableSchedulers) {
-        this.remoteRepository = remoteRepository;
+    LanguageViewModel(MovieCatalogueRepository repository, ObservableSchedulers observableSchedulers) {
+        this.repository = repository;
         this.observableSchedulers = observableSchedulers;
         disposable = new CompositeDisposable();
     }
@@ -34,7 +34,7 @@ public class LanguageViewModel extends ViewModel {
 
     public void loadLanguages() {
         languageViewState.postValue(LanguageResponseState.LOADING_STATE);
-        disposable.add(remoteRepository.loadLanguages()
+        disposable.add(repository.loadLanguages()
                 .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,
                         this::onError));

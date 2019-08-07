@@ -130,8 +130,16 @@ public class TvShowEntity implements Parcelable {
         return firstAirDate;
     }
 
+    public void setFirstAirDate(String firstAirDate) {
+        this.firstAirDate = firstAirDate;
+    }
+
     public Double getVoteAverage() {
         return voteAverage;
+    }
+
+    public void setVoteAverage(Double voteAverage) {
+        this.voteAverage = voteAverage;
     }
 
     public String getOverview() {
@@ -146,20 +154,40 @@ public class TvShowEntity implements Parcelable {
         return posterPath;
     }
 
+    public void setPosterPath(String posterPath) {
+        this.posterPath = posterPath;
+    }
+
     public String getBackdropPath() {
         return backdropPath;
+    }
+
+    public void setBackdropPath(String backdropPath) {
+        this.backdropPath = backdropPath;
     }
 
     public Credits getCredits() {
         return credits;
     }
 
+    public void setCredits(Credits credits) {
+        this.credits = credits;
+    }
+
     public List<Genres> getGenres() {
         return genres;
     }
 
+    public void setGenres(List<Genres> genres) {
+        this.genres = genres;
+    }
+
     public String getOriginalLanguage() {
         return originalLanguage;
+    }
+
+    public void setOriginalLanguage(String originalLanguage) {
+        this.originalLanguage = originalLanguage;
     }
 
     @Override

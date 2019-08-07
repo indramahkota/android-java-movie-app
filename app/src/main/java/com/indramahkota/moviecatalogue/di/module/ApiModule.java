@@ -4,7 +4,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiEndPoint;
-import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
 
 import javax.inject.Singleton;
 
@@ -36,11 +35,5 @@ public class ApiModule {
     @Singleton
     ApiEndPoint provideTmdbApi(Retrofit retrofit) {
         return retrofit.create(ApiEndPoint.class);
-    }
-
-    @Provides
-    @Singleton
-    RemoteRepository provideRemoteRepository(ApiEndPoint apiEndPoint) {
-        return new RemoteRepository(apiEndPoint);
     }
 }

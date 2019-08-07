@@ -3,7 +3,7 @@ package com.indramahkota.moviecatalogue.ui.search.viewmodel;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
+import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
@@ -16,14 +16,14 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class SearchViewModel extends ViewModel {
     private CompositeDisposable disposable;
-    private final RemoteRepository remoteRepository;
+    private final MovieCatalogueRepository repository;
     private final SingleSchedulers singleSchedulers;
     private final MutableLiveData<DiscoverMovieResponseState> movieViewState = new MutableLiveData<>();
     private final MutableLiveData<DiscoverTvShowResponseState> tvShowViewState = new MutableLiveData<>();
 
     @Inject
-    SearchViewModel(RemoteRepository remoteRepository, SingleSchedulers singleSchedulers) {
-        this.remoteRepository = remoteRepository;
+    SearchViewModel(MovieCatalogueRepository repository, SingleSchedulers singleSchedulers) {
+        this.repository = repository;
         this.singleSchedulers = singleSchedulers;
         disposable = new CompositeDisposable();
     }
@@ -37,7 +37,7 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void searchMovie(String query) {
-        disposable.add(remoteRepository.searchListMovie(query)
+        disposable.add(repository.searchListMovie(query)
                 .doOnEvent((movieResponse, throwable) -> onSearchMovieLoading())
                 .compose(singleSchedulers.applySchedulers())
                 .subscribe(this::onSearchMovieSuccess,
@@ -45,7 +45,7 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void searchTvShow(String query) {
-        disposable.add(remoteRepository.searchListTvShow(query)
+        disposable.add(repository.searchListTvShow(query)
                 .doOnEvent((tvShowResponse, throwable) -> onSearchTvShowLoading())
                 .compose(singleSchedulers.applySchedulers())
                 .subscribe(this::onSearchTvShowSuccess,

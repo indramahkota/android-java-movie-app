@@ -7,7 +7,6 @@ import androidx.room.Room;
 
 import com.indramahkota.moviecatalogue.data.source.locale.dao.FavoriteDao;
 import com.indramahkota.moviecatalogue.data.source.locale.database.FavoriteDatabase;
-import com.indramahkota.moviecatalogue.data.source.locale.repository.LocalRepository;
 
 import javax.inject.Singleton;
 
@@ -30,11 +29,5 @@ public class DbModule {
     @Singleton
     FavoriteDao provideFavoriteDao(@NonNull FavoriteDatabase favoriteDatabase) {
         return favoriteDatabase.favoriteDao();
-    }
-
-    @Provides
-    @Singleton
-    LocalRepository provideLocalRepository(FavoriteDao favoriteDao) {
-        return new LocalRepository(favoriteDao);
     }
 }

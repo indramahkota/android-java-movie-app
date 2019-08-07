@@ -1,7 +1,6 @@
 package com.indramahkota.moviecatalogue.data.source;
 
 import androidx.lifecycle.LiveData;
-import androidx.paging.PagedList;
 
 import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
@@ -11,6 +10,7 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovie
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -21,34 +21,44 @@ public interface MovieCatalogueDataSource {
     * Main Activity
     * */
 
-    //Movie Fragment & Search Activity
-    Single<Resource<DiscoverMovieResponse>> loadDiscoverMovie();
+    //Movie Fragment
+    Single<DiscoverMovieResponse> loadListMovie();
 
-    //Tv Show Fragment & Search Activity
-    Single<Resource<DiscoverTvShowResponse>> loadDiscoverTvShow();
+    //Tv Show Fragment
+    Single<DiscoverTvShowResponse> loadListTvShow();
 
     //Favorite Movie Fragment
-    LiveData<Resource<PagedList<FavoriteMovieEntity>>> getListFavoriteMovie();
-    LiveData<Resource<FavoriteMovieEntity>> getFavoriteMovieById(Long ln);
+    LiveData<List<FavoriteMovieEntity>> getAllFavoriteMovie();
+    LiveData<FavoriteMovieEntity> getFavoriteMovieById(Long id);
     long insertFavoriteMovie(FavoriteMovieEntity favoriteMovieEntity);
     int deleteFavoriteMovieById(long id);
 
     //Favorite Tv Show Fragment
-    LiveData<Resource<PagedList<FavoriteTvShowEntity>>> getListFavoriteTvShow();
-    LiveData<Resource<FavoriteTvShowEntity>> getFavoriteTvShowById(Long ln);
-    long insertTvShowMovie(FavoriteTvShowEntity favoriteTvShowEntity);
+    LiveData<List<FavoriteTvShowEntity>> getAllFavoriteTvShow();
+    LiveData<FavoriteTvShowEntity> getFavoriteTvShowById(Long id);
+    long insertFavoriteTvShow(FavoriteTvShowEntity favoriteTvShowEntity);
     int deleteFavoriteTvShowById(long id);
 
     /*
     * Detail Activity
     * */
 
-    //Movie Detail
-    Single<Resource<MovieEntity>> loadMovie();
+    //Movie Detail Activity
+    Single<MovieEntity> loadMovieDetails(Long movieId);
 
-    //Tv Show Detail
-    Single<Resource<TvShowEntity>> loadTvShow();
+    //Tv Show Detail Activity
+    Single<TvShowEntity> loadTvShowDetails(Long tvShowId);
 
     //Language
-    Observable<Resource<List<Language>>> loadLanguage();
+    Observable<ArrayList<Language>> loadLanguages();
+
+    /*
+     * Search Activity
+     * */
+
+    //Search Activity
+    Single<DiscoverMovieResponse> searchListMovie(String query);
+
+    //Search Activity
+    Single<DiscoverTvShowResponse> searchListTvShow(String query);
 }
