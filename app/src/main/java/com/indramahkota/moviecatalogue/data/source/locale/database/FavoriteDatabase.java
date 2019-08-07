@@ -7,12 +7,12 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 import com.indramahkota.moviecatalogue.data.source.locale.dao.FavoriteDao;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovie;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShow;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
 
-@Database(entities = {FavoriteMovie.class, FavoriteTvShow.class}, version = 1, exportSchema = false)
+@Database(entities = {FavoriteMovieEntity.class, FavoriteTvShowEntity.class}, version = 1, exportSchema = false)
 public abstract class FavoriteDatabase extends RoomDatabase {
-    public static final String DATABASE_NAME = "favorite_database.db";
+    public static final String DATABASE_NAME = "my_movie_catalogue_database.db";
     private static FavoriteDatabase INSTANCE;
 
     public abstract FavoriteDao favoriteDao();

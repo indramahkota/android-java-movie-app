@@ -16,7 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovie;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
@@ -26,13 +26,13 @@ import java.util.List;
 
 public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdapter.CategoryViewHolder> {
     private final Context mContext;
-    private final List<FavoriteMovie> listMovies;
+    private final List<FavoriteMovieEntity> listMovies;
 
-    private List<FavoriteMovie> getListMovies() {
+    private List<FavoriteMovieEntity> getListMovies() {
         return listMovies;
     }
 
-    public FavoriteMovieAdapter(List<FavoriteMovie> listMovies, Context context) {
+    public FavoriteMovieAdapter(List<FavoriteMovieEntity> listMovies, Context context) {
         this.listMovies = listMovies;
         this.mContext = context;
     }

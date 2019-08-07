@@ -16,7 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShow;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.ui.detail.TvShowDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
@@ -26,13 +26,13 @@ import java.util.List;
 
 public class FavoriteTvShowAdapter extends RecyclerView.Adapter<FavoriteTvShowAdapter.CategoryViewHolder> {
     private final Context mContext;
-    private final List<FavoriteTvShow> listTvShows;
+    private final List<FavoriteTvShowEntity> listTvShows;
 
-    private List<FavoriteTvShow> getListTvShows() {
+    private List<FavoriteTvShowEntity> getListTvShows() {
         return listTvShows;
     }
 
-    public FavoriteTvShowAdapter(List<FavoriteTvShow> listTvShow, Context context) {
+    public FavoriteTvShowAdapter(List<FavoriteTvShowEntity> listTvShow, Context context) {
         this.listTvShows = listTvShow;
         this.mContext = context;
     }

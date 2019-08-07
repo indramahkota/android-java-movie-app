@@ -11,12 +11,9 @@ import java.util.List;
 public class Credits implements Parcelable {
     @SerializedName("cast")
     private final List<Cast> cast;
-    @SerializedName("crew")
-    private final List<Crew> crew;
 
     private Credits(Parcel in) {
         cast = in.createTypedArrayList(Cast.CREATOR);
-        crew = in.createTypedArrayList(Crew.CREATOR);
     }
 
     public static final Creator<Credits> CREATOR = new Creator<Credits>() {
@@ -51,6 +48,5 @@ public class Credits implements Parcelable {
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeTypedList(cast);
-        parcel.writeTypedList(crew);
     }
 }

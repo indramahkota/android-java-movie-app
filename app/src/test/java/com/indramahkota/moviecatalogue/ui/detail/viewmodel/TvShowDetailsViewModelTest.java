@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
-import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
 import com.indramahkota.moviecatalogue.ui.detail.datastate.TvShowResponseState;
 
@@ -50,7 +50,7 @@ public class TvShowDetailsViewModelTest {
 
     @Test
     public void testApiFetchDataSuccess() {
-        when(remoteRepository.loadTvShowDetails(60735)).thenReturn(Single.just(new TvShowResponse()));
+        when(remoteRepository.loadTvShowDetails(60735)).thenReturn(Single.just(new TvShowEntity()));
         tvShowDetailsViewModel.loadTvShowDetails(60735);
         verify(observer).onChanged(TvShowResponseState.LOADING_STATE);
         verify(observer).onChanged(TvShowResponseState.SUCCESS_STATE);

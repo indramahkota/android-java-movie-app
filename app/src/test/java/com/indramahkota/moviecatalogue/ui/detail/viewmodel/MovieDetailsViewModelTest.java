@@ -4,7 +4,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
-import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
 import com.indramahkota.moviecatalogue.ui.detail.datastate.MovieResponseState;
 
@@ -50,7 +50,7 @@ public class MovieDetailsViewModelTest {
 
     @Test
     public void testApiFetchDataSuccess() {
-        when(remoteRepository.loadMovieDetails(384018)).thenReturn(Single.just(new MovieResponse()));
+        when(remoteRepository.loadMovieDetails(384018)).thenReturn(Single.just(new MovieEntity()));
         movieDetailsViewModel.loadMovieDetails(384018);
         verify(observer).onChanged(MovieResponseState.LOADING_STATE);
         verify(observer).onChanged(MovieResponseState.SUCCESS_STATE);

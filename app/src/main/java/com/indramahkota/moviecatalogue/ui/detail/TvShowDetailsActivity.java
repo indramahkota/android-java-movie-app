@@ -20,10 +20,10 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShow;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
@@ -31,6 +31,7 @@ import com.indramahkota.moviecatalogue.ui.detail.adapter.GenreAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.LanguageViewModel;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.TvShowDetailsViewModel;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteTvShowViewModel;
+import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 
 import java.util.List;
 
@@ -56,8 +57,8 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     private TextView txtLanguage;
 
     private Integer tvShowId;
-    private FavoriteTvShow favoriteTvShow;
-    private TvShowResponse tvShowResponse;
+    private FavoriteTvShowEntity favoriteTvShowEntity;
+    private TvShowEntity tvShowEntity;
     private LanguageResponse languageResponse;
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
@@ -96,7 +97,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
             if(languageResponseState.getCurrentState() == 1) {
                 languageResponse = languageResponseState.getData();
-                if(tvShowResponse != null) {
+                if(tvShowEntity != null) {
                     setTxtLanguage();
                 }
             }
@@ -112,8 +113,8 @@ public class TvShowDetailsActivity extends AppCompatActivity {
                     break;
                 case 1:
                     //show data
-                    tvShowResponse = tvShowResponseState.getData();
-                    initializeUi(tvShowResponse);
+                    tvShowEntity = tvShowResponseState.getData();
+                    initializeUi(tvShowEntity);
                     mShimmerViewContainer.setVisibility(View.GONE);
                     detailsContainer.setVisibility(View.VISIBLE);
                     break;
@@ -126,7 +127,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState != null) {
-            tvShowResponse = savedInstanceState.getParcelable(STATE_TV_SHOW_RESPONSE);
+            tvShowEntity = savedInstanceState.getParcelable(STATE_TV_SHOW_RESPONSE);
             languageResponse = savedInstanceState.getParcelable(STATE_LANGUAGE_RESPONSE);
         }
 
@@ -134,8 +135,8 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             languageViewModel.loadLanguages();
         }
 
-        if (tvShowResponse != null) {
-            initializeUi(tvShowResponse);
+        if (tvShowEntity != null) {
+            initializeUi(tvShowEntity);
         } else {
             viewModel.loadTvShowDetails(tvShowId);
         }
@@ -148,8 +149,8 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         this.menu = menu;
 
         favoriteTvShowViewModel.getFavoriteTvShow((long)tvShowId).observe(this, favTvShow -> {
-            favoriteTvShow = favTvShow;
-            if(favoriteTvShow != null) {
+            favoriteTvShowEntity = favTvShow;
+            if(favoriteTvShowEntity != null) {
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
             }
         });
@@ -160,18 +161,18 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home) {
             finish();
-        } else if(item.getItemId() == R.id.favorites && tvShowResponse != null) {
-            if(favoriteTvShow != null) {
+        } else if(item.getItemId() == R.id.favorites && tvShowEntity != null) {
+            if(favoriteTvShowEntity != null) {
                 favoriteTvShowViewModel.deleteFavoriteMovie((long)tvShowId);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_border_white_24dp);
             } else {
-                FavoriteTvShow favTvShow = new FavoriteTvShow();
-                favTvShow.setItemId(tvShowResponse.getId());
-                favTvShow.setName(tvShowResponse.getName());
-                favTvShow.setOverview(tvShowResponse.getOverview());
-                favTvShow.setPosterPath(tvShowResponse.getPosterPath());
-                favTvShow.setFirstAirDate(tvShowResponse.getFirstAirDate());
-                favTvShow.setVoteAverage(String.valueOf(tvShowResponse.getVoteAverage()));
+                FavoriteTvShowEntity favTvShow = new FavoriteTvShowEntity();
+                favTvShow.setItemId(tvShowEntity.getId());
+                favTvShow.setName(tvShowEntity.getName());
+                favTvShow.setOverview(tvShowEntity.getOverview());
+                favTvShow.setPosterPath(tvShowEntity.getPosterPath());
+                favTvShow.setFirstAirDate(tvShowEntity.getFirstAirDate());
+                favTvShow.setVoteAverage(String.valueOf(tvShowEntity.getVoteAverage()));
                 favoriteTvShowViewModel.insertFavoriteTvShow(favTvShow);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
             }
@@ -183,10 +184,10 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(STATE_LANGUAGE_RESPONSE, languageResponse);
-        outState.putParcelable(STATE_TV_SHOW_RESPONSE, tvShowResponse);
+        outState.putParcelable(STATE_TV_SHOW_RESPONSE, tvShowEntity);
     }
 
-    private void initializeUi(@NonNull TvShowResponse response) {
+    private void initializeUi(@NonNull TvShowEntity response) {
         String posterUrl;
         if(response.getPosterPath() != null && !response.getPosterPath().isEmpty()){
             posterUrl = ApiConstant.BASE_URL_POSTER + response.getPosterPath();
@@ -217,7 +218,9 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         }
 
         if(response.getFirstAirDate() != null && !response.getFirstAirDate().isEmpty()) {
-            txtRelease.setText(response.getFirstAirDate());
+            String date = response.getFirstAirDate();
+            String newDate = CustomDateFormat.formatDateFromString(date);
+            txtRelease.setText(newDate);
         } else {
             txtRelease.setText(getResources().getString(R.string.no_release_date));
         }
@@ -249,7 +252,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
 
         for (int i = 0; i<len; ++i) {
             Language lang = languages.get(i);
-            if(lang.getIso().equals(tvShowResponse.getOriginalLanguage())){
+            if(lang.getIso().equals(tvShowEntity.getOriginalLanguage())){
                 if(lang.getIso() != null && !lang.getIso().isEmpty()) {
                     txtLanguage.setText(lang.getEnglishName());
                 } else {

@@ -2,8 +2,8 @@ package com.indramahkota.moviecatalogue.data.source.remote.api;
 
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
 
 import java.util.ArrayList;
@@ -22,13 +22,13 @@ public interface ApiEndPoint {
     Single<DiscoverTvShowResponse> getDiscoverTvShows(@Query("api_key") String apiKey);
 
     @GET("movie/{movie_id}")
-    Single<MovieResponse> getMovie(
+    Single<MovieEntity> getMovie(
             @Path("movie_id") Integer id,
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse);
 
     @GET("tv/{tv_id}")
-    Single<TvShowResponse> getTvShow(
+    Single<TvShowEntity> getTvShow(
             @Path("tv_id") Integer id,
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse);

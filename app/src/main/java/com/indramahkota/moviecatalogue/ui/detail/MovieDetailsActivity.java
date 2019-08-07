@@ -20,10 +20,10 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovie;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
@@ -31,6 +31,7 @@ import com.indramahkota.moviecatalogue.ui.detail.adapter.GenreAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.LanguageViewModel;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.MovieDetailsViewModel;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteMovieViewModel;
+import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 
 import java.util.List;
 
@@ -56,14 +57,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private TextView txtLanguage;
 
     private Integer movieId;
-    private MovieResponse movieResponse;
+    private MovieEntity movieEntity;
     private LanguageResponse languageResponse;
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
 
-    private Boolean isInsertSuccess;
-    private Boolean isDeleteSuccess;
-    private FavoriteMovie favoriteMovie;
+    private FavoriteMovieEntity favoriteMovieEntity;
     private FavoriteMovieViewModel favoriteMovieViewModel;
 
     @Override
@@ -98,7 +97,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
             if(languageResponseState.getCurrentState() == 1) {
                 languageResponse = languageResponseState.getData();
-                if(movieResponse != null) {
+                if(movieEntity != null) {
                     setTxtLanguage();
                 }
             }
@@ -114,8 +113,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     break;
                 case 1:
                     //show data
-                    movieResponse = movieResponseState.getData();
-                    initializeUi(movieResponse);
+                    movieEntity = movieResponseState.getData();
+                    initializeUi(movieEntity);
                     mShimmerViewContainer.setVisibility(View.GONE);
                     detailsContainer.setVisibility(View.VISIBLE);
                     break;
@@ -128,7 +127,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         });
 
         if (savedInstanceState != null) {
-            movieResponse = savedInstanceState.getParcelable(STATE_MOVIE_RESPONSE);
+            movieEntity = savedInstanceState.getParcelable(STATE_MOVIE_RESPONSE);
             languageResponse = savedInstanceState.getParcelable(STATE_LANGUAGE_RESPONSE);
         }
 
@@ -136,8 +135,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
             languageViewModel.loadLanguages();
         }
 
-        if (movieResponse != null) {
-            initializeUi(movieResponse);
+        if (movieEntity != null) {
+            initializeUi(movieEntity);
         } else {
             viewModel.loadMovieDetails(movieId);
         }
@@ -150,8 +149,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         this.menu = menu;
 
         favoriteMovieViewModel.getFavoriteMovie((long)movieId).observe(this, favMovie -> {
-            favoriteMovie = favMovie;
-            if(favoriteMovie != null) {
+            favoriteMovieEntity = favMovie;
+            if(favoriteMovieEntity != null) {
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
             }
         });
@@ -162,18 +161,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == android.R.id.home) {
             finish();
-        } else if(item.getItemId() == R.id.favorites && movieResponse != null) {
-            if(favoriteMovie != null) {
+        } else if(item.getItemId() == R.id.favorites && movieEntity != null) {
+            if(favoriteMovieEntity != null) {
                 favoriteMovieViewModel.deleteFavoriteMovie((long)movieId);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_border_white_24dp);
             } else {
-                FavoriteMovie favMovie = new FavoriteMovie();
-                favMovie.setItemId(movieResponse.getId());
-                favMovie.setTitle(movieResponse.getTitle());
-                favMovie.setOverview(movieResponse.getOverview());
-                favMovie.setPosterPath(movieResponse.getPosterPath());
-                favMovie.setReleaseDate(movieResponse.getReleaseDate());
-                favMovie.setVoteAverage(String.valueOf(movieResponse.getVoteAverage()));
+                FavoriteMovieEntity favMovie = new FavoriteMovieEntity();
+                favMovie.setItemId(movieEntity.getId());
+                favMovie.setTitle(movieEntity.getTitle());
+                favMovie.setOverview(movieEntity.getOverview());
+                favMovie.setPosterPath(movieEntity.getPosterPath());
+                favMovie.setReleaseDate(movieEntity.getReleaseDate());
+                favMovie.setVoteAverage(String.valueOf(movieEntity.getVoteAverage()));
                 favoriteMovieViewModel.insertFavoriteMovie(favMovie);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
             }
@@ -185,10 +184,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(STATE_LANGUAGE_RESPONSE, languageResponse);
-        outState.putParcelable(STATE_MOVIE_RESPONSE, movieResponse);
+        outState.putParcelable(STATE_MOVIE_RESPONSE, movieEntity);
     }
 
-    private void initializeUi(@NonNull MovieResponse response) {
+    private void initializeUi(@NonNull MovieEntity response) {
         String posterUrl;
         if(response.getPosterPath() != null && !response.getPosterPath().isEmpty()){
             posterUrl = ApiConstant.BASE_URL_POSTER + response.getPosterPath();
@@ -219,7 +218,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         if(response.getReleaseDate() != null && !response.getReleaseDate().isEmpty()) {
-            txtRelease.setText(response.getReleaseDate());
+            String date = response.getReleaseDate();
+            String newDate = CustomDateFormat.formatDateFromString(date);
+            txtRelease.setText(newDate);
         } else {
             txtRelease.setText(getResources().getString(R.string.no_release_date));
         }
@@ -251,7 +252,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         for (int i = 0; i<len; ++i) {
             Language lang = languages.get(i);
-            if(lang.getIso().equals(movieResponse.getOriginalLanguage())){
+            if(lang.getIso().equals(movieEntity.getOriginalLanguage())){
                 if(lang.getIso() != null && !lang.getIso().isEmpty()) {
                     txtLanguage.setText(lang.getEnglishName());
                 } else {

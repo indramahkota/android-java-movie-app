@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.data.source.remote.response;
+package com.indramahkota.moviecatalogue.data.source.locale.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,7 +9,7 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.others.Genres
 
 import java.util.List;
 
-public class MovieResponse implements Parcelable {
+public class MovieEntity implements Parcelable {
     @SerializedName("backdrop_path")
     private String backdropPath;
     @SerializedName("genres")
@@ -31,9 +31,9 @@ public class MovieResponse implements Parcelable {
     @SerializedName("credits")
     private Credits credits;
 
-    public MovieResponse() {}
+    public MovieEntity() {}
 
-    private MovieResponse(Parcel in) {
+    private MovieEntity(Parcel in) {
         backdropPath = in.readString();
         genres = in.createTypedArrayList(Genres.CREATOR);
         if (in.readByte() == 0) {
@@ -54,15 +54,15 @@ public class MovieResponse implements Parcelable {
         credits = in.readParcelable(Credits.class.getClassLoader());
     }
 
-    public static final Creator<MovieResponse> CREATOR = new Creator<MovieResponse>() {
+    public static final Creator<MovieEntity> CREATOR = new Creator<MovieEntity>() {
         @Override
-        public MovieResponse createFromParcel(Parcel in) {
-            return new MovieResponse(in);
+        public MovieEntity createFromParcel(Parcel in) {
+            return new MovieEntity(in);
         }
 
         @Override
-        public MovieResponse[] newArray(int size) {
-            return new MovieResponse[size];
+        public MovieEntity[] newArray(int size) {
+            return new MovieEntity[size];
         }
     };
 

@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.data.source.remote.response;
+package com.indramahkota.moviecatalogue.data.source.locale.entity;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,7 +9,7 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.others.Genres
 
 import java.util.List;
 
-public class TvShowResponse implements Parcelable {
+public class TvShowEntity implements Parcelable {
     @SerializedName("backdrop_path")
     private String backdropPath;
     @SerializedName("first_air_date")
@@ -31,9 +31,9 @@ public class TvShowResponse implements Parcelable {
     @SerializedName("credits")
     private Credits credits;
 
-    public TvShowResponse() {}
+    public TvShowEntity() {}
 
-    private TvShowResponse(Parcel in) {
+    private TvShowEntity(Parcel in) {
         backdropPath = in.readString();
         firstAirDate = in.readString();
         genres = in.createTypedArrayList(Genres.CREATOR);
@@ -54,15 +54,15 @@ public class TvShowResponse implements Parcelable {
         credits = in.readParcelable(Credits.class.getClassLoader());
     }
 
-    public static final Creator<TvShowResponse> CREATOR = new Creator<TvShowResponse>() {
+    public static final Creator<TvShowEntity> CREATOR = new Creator<TvShowEntity>() {
         @Override
-        public TvShowResponse createFromParcel(Parcel in) {
-            return new TvShowResponse(in);
+        public TvShowEntity createFromParcel(Parcel in) {
+            return new TvShowEntity(in);
         }
 
         @Override
-        public TvShowResponse[] newArray(int size) {
-            return new TvShowResponse[size];
+        public TvShowEntity[] newArray(int size) {
+            return new TvShowEntity[size];
         }
     };
 

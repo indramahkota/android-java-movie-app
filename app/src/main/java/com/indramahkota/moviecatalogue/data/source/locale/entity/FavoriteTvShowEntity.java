@@ -1,6 +1,5 @@
 package com.indramahkota.moviecatalogue.data.source.locale.entity;
 
-import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.BaseColumns;
@@ -9,16 +8,16 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = FavoriteTvShow.TABLE_NAME)
-public class FavoriteTvShow implements Parcelable {
-    public static final String ID = BaseColumns._ID;
+@Entity(tableName = FavoriteTvShowEntity.TABLE_NAME)
+public class FavoriteTvShowEntity implements Parcelable {
     public static final String TABLE_NAME = "favorite_tv_show";
-    public static final String ITEM_ID = "itemId";
-    public static final String NAME = "name";
-    public static final String FIRST_AIR_DATE = "firstAirDate";
-    public static final String VOTE_AVERAGE = "voteAverage";
-    public static final String OVERVIEW = "overview";
-    public static final String POSTER_PATH = "posterPath";
+    private static final String ID = BaseColumns._ID;
+    private static final String ITEM_ID = "itemId";
+    private static final String NAME = "name";
+    private static final String FIRST_AIR_DATE = "firstAirDate";
+    private static final String VOTE_AVERAGE = "voteAverage";
+    private static final String OVERVIEW = "overview";
+    private static final String POSTER_PATH = "posterPath";
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = ID)
@@ -36,35 +35,9 @@ public class FavoriteTvShow implements Parcelable {
     @ColumnInfo(name = POSTER_PATH)
     private String posterPath;
 
-    public FavoriteTvShow() {}
+    public FavoriteTvShowEntity() {}
 
-    public static FavoriteTvShow fromContentValues(ContentValues values) {
-        final FavoriteTvShow favoriteTvShow = new FavoriteTvShow();
-        if (values.containsKey(ID)) {
-            favoriteTvShow.id = values.getAsLong(ID);
-        }
-        if (values.containsKey(ITEM_ID)) {
-            favoriteTvShow.itemId = values.getAsLong(ITEM_ID);
-        }
-        if (values.containsKey(NAME)) {
-            favoriteTvShow.name = values.getAsString(NAME);
-        }
-        if (values.containsKey(FIRST_AIR_DATE)) {
-            favoriteTvShow.firstAirDate = values.getAsString(FIRST_AIR_DATE);
-        }
-        if (values.containsKey(VOTE_AVERAGE)) {
-            favoriteTvShow.voteAverage = values.getAsString(VOTE_AVERAGE);
-        }
-        if (values.containsKey(OVERVIEW)) {
-            favoriteTvShow.overview = values.getAsString(OVERVIEW);
-        }
-        if (values.containsKey(POSTER_PATH)) {
-            favoriteTvShow.posterPath = values.getAsString(POSTER_PATH);
-        }
-        return favoriteTvShow;
-    }
-
-    protected FavoriteTvShow(Parcel in) {
+    private FavoriteTvShowEntity(Parcel in) {
         id = in.readLong();
         itemId = in.readLong();
         name = in.readString();
@@ -74,15 +47,15 @@ public class FavoriteTvShow implements Parcelable {
         posterPath = in.readString();
     }
 
-    public static final Creator<FavoriteTvShow> CREATOR = new Creator<FavoriteTvShow>() {
+    public static final Creator<FavoriteTvShowEntity> CREATOR = new Creator<FavoriteTvShowEntity>() {
         @Override
-        public FavoriteTvShow createFromParcel(Parcel in) {
-            return new FavoriteTvShow(in);
+        public FavoriteTvShowEntity createFromParcel(Parcel in) {
+            return new FavoriteTvShowEntity(in);
         }
 
         @Override
-        public FavoriteTvShow[] newArray(int size) {
-            return new FavoriteTvShow[size];
+        public FavoriteTvShowEntity[] newArray(int size) {
+            return new FavoriteTvShowEntity[size];
         }
     };
 

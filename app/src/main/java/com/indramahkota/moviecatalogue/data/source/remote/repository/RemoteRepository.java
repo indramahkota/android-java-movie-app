@@ -4,8 +4,8 @@ import com.indramahkota.moviecatalogue.BuildConfig;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiEndPoint;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
 
 import java.util.ArrayList;
@@ -41,11 +41,11 @@ public class RemoteRepository {
         return api.searchTvShows(BuildConfig.TMDB_API_KEY, query);
     }
 
-    public Single<MovieResponse> loadMovieDetails(Integer movieId) {
+    public Single<MovieEntity> loadMovieDetails(Integer movieId) {
         return api.getMovie(movieId, BuildConfig.TMDB_API_KEY, "credits");
     }
 
-    public Single<TvShowResponse> loadTvShowDetails(Integer tvShowId) {
+    public Single<TvShowEntity> loadTvShowDetails(Integer tvShowId) {
         return api.getTvShow(tvShowId, BuildConfig.TMDB_API_KEY, "credits");
     }
 

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Katalog Film</string>
-    <string name="title_activity_movie_details">Detil Film</string>
-    <string name="title_activity_tv_show_details">Detil Acara Tv</string>
+    <string name="title_activity_movie_details">Detail Film</string>
+    <string name="title_activity_tv_show_details">Detail Acara Tv</string>
 
     <string name="title_movie">Film</string>
     <string name="title_tv_show">Acara Tv</string>

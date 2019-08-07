@@ -1,6 +1,5 @@
 package com.indramahkota.moviecatalogue.data.source.locale.entity;
 
-import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.provider.BaseColumns;
@@ -9,16 +8,16 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
-@Entity(tableName = FavoriteMovie.TABLE_NAME)
-public class FavoriteMovie implements Parcelable {
-    public static final String ID = BaseColumns._ID;
+@Entity(tableName = FavoriteMovieEntity.TABLE_NAME)
+public class FavoriteMovieEntity implements Parcelable {
     public static final String TABLE_NAME = "favorite_movie";
-    public static final String ITEM_ID = "itemId";
-    public static final String TITLE = "title";
-    public static final String RELEASE_DATE = "releaseDate";
-    public static final String VOTE_AVERAGE = "voteAverage";
-    public static final String OVERVIEW = "overview";
-    public static final String POSTER_PATH = "posterPath";
+    private static final String ID = BaseColumns._ID;
+    private static final String ITEM_ID = "itemId";
+    private static final String TITLE = "title";
+    private static final String RELEASE_DATE = "releaseDate";
+    private static final String VOTE_AVERAGE = "voteAverage";
+    private static final String OVERVIEW = "overview";
+    private static final String POSTER_PATH = "posterPath";
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(index = true, name = ID)
@@ -36,35 +35,9 @@ public class FavoriteMovie implements Parcelable {
     @ColumnInfo(name = POSTER_PATH)
     private String posterPath;
 
-    public FavoriteMovie() {}
+    public FavoriteMovieEntity() {}
 
-    public static FavoriteMovie fromContentValues(ContentValues values) {
-        final FavoriteMovie favoriteMovie = new FavoriteMovie();
-        if (values.containsKey(ID)) {
-            favoriteMovie.id = values.getAsLong(ID);
-        }
-        if (values.containsKey(ITEM_ID)) {
-            favoriteMovie.itemId = values.getAsLong(ITEM_ID);
-        }
-        if (values.containsKey(TITLE)) {
-            favoriteMovie.title = values.getAsString(TITLE);
-        }
-        if (values.containsKey(RELEASE_DATE)) {
-            favoriteMovie.releaseDate = values.getAsString(RELEASE_DATE);
-        }
-        if (values.containsKey(VOTE_AVERAGE)) {
-            favoriteMovie.voteAverage = values.getAsString(VOTE_AVERAGE);
-        }
-        if (values.containsKey(OVERVIEW)) {
-            favoriteMovie.overview = values.getAsString(OVERVIEW);
-        }
-        if (values.containsKey(POSTER_PATH)) {
-            favoriteMovie.posterPath = values.getAsString(POSTER_PATH);
-        }
-        return favoriteMovie;
-    }
-
-    protected FavoriteMovie(Parcel in) {
+    private FavoriteMovieEntity(Parcel in) {
         id = in.readLong();
         itemId = in.readLong();
         title = in.readString();
@@ -74,15 +47,15 @@ public class FavoriteMovie implements Parcelable {
         posterPath = in.readString();
     }
 
-    public static final Creator<FavoriteMovie> CREATOR = new Creator<FavoriteMovie>() {
+    public static final Creator<FavoriteMovieEntity> CREATOR = new Creator<FavoriteMovieEntity>() {
         @Override
-        public FavoriteMovie createFromParcel(Parcel in) {
-            return new FavoriteMovie(in);
+        public FavoriteMovieEntity createFromParcel(Parcel in) {
+            return new FavoriteMovieEntity(in);
         }
 
         @Override
-        public FavoriteMovie[] newArray(int size) {
-            return new FavoriteMovie[size];
+        public FavoriteMovieEntity[] newArray(int size) {
+            return new FavoriteMovieEntity[size];
         }
     };
 

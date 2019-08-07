@@ -4,7 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
-import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
 import com.indramahkota.moviecatalogue.ui.detail.datastate.MovieResponseState;
 
@@ -37,8 +37,8 @@ public class MovieDetailsViewModel extends ViewModel {
                         this::onError));
     }
 
-    private void onSuccess(MovieResponse movieResponse) {
-        MovieResponseState.SUCCESS_STATE.setData(movieResponse);
+    private void onSuccess(MovieEntity movieEntity) {
+        MovieResponseState.SUCCESS_STATE.setData(movieEntity);
         movieViewState.postValue(MovieResponseState.SUCCESS_STATE);
     }
 

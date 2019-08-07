@@ -3,8 +3,8 @@ package com.indramahkota.moviecatalogue.data.source.locale.repository;
 import androidx.lifecycle.LiveData;
 
 import com.indramahkota.moviecatalogue.data.source.locale.dao.FavoriteDao;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovie;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShow;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
 
 import java.util.List;
 
@@ -25,16 +25,16 @@ public class LocalRepository {
      * Favorite Movie
      * */
 
-    public LiveData<List<FavoriteMovie>> getAllFavoriteMovie() {
+    public LiveData<List<FavoriteMovieEntity>> getAllFavoriteMovie() {
         return dao.selectAllMovie();
     }
 
-    public LiveData<FavoriteMovie> getFavoriteMovie(long itemId) {
+    public LiveData<FavoriteMovieEntity> getFavoriteMovie(long itemId) {
         return dao.selectMovieById(itemId);
     }
 
-    public Long insertFavoriteMovie(FavoriteMovie favoriteMovie) {
-        return dao.insertMovie(favoriteMovie);
+    public Long insertFavoriteMovie(FavoriteMovieEntity favoriteMovieEntity) {
+        return dao.insertMovie(favoriteMovieEntity);
     }
 
     public Integer deleteFavoriteMovie(long itemId) {
@@ -46,16 +46,16 @@ public class LocalRepository {
      * Favorite Tv Show
      * */
 
-    public LiveData<List<FavoriteTvShow>> getAllFavoriteTvShow() {
+    public LiveData<List<FavoriteTvShowEntity>> getAllFavoriteTvShow() {
         return dao.selectAllTvShow();
     }
 
-    public LiveData<FavoriteTvShow> getFavoriteTvShow(long itemId) {
+    public LiveData<FavoriteTvShowEntity> getFavoriteTvShow(long itemId) {
         return dao.selectTvShowById(itemId);
     }
 
-    public Long insertFavoriteTvShow(FavoriteTvShow favoriteTvShow) {
-        return dao.insertTvShow(favoriteTvShow);
+    public Long insertFavoriteTvShow(FavoriteTvShowEntity favoriteTvShowEntity) {
+        return dao.insertTvShow(favoriteTvShowEntity);
     }
 
     public Integer deleteFavoriteTvShow(long itemId) {

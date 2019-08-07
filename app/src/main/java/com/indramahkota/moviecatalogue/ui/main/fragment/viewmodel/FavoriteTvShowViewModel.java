@@ -7,7 +7,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShow;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.repository.LocalRepository;
 import com.indramahkota.moviecatalogue.ui.detail.interfaces.LoadLocalDbCallback;
 
@@ -18,7 +18,7 @@ import javax.inject.Inject;
 
 public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCallback  {
     private final LocalRepository localRepository;
-    private LiveData<List<FavoriteTvShow>> listFavoriteTvShow;
+    private LiveData<List<FavoriteTvShowEntity>> listFavoriteTvShow;
 
     @Inject
     FavoriteTvShowViewModel(@NonNull LocalRepository localRepository) {
@@ -29,7 +29,7 @@ public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCal
      * Get List Favorite Tv Show
      * */
 
-    public LiveData<List<FavoriteTvShow>> getListFavoriteTvShow() {
+    public LiveData<List<FavoriteTvShowEntity>> getListFavoriteTvShow() {
         return listFavoriteTvShow;
     }
 
@@ -37,7 +37,7 @@ public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCal
      * Get Favorite Tv Show
      * */
 
-    public LiveData<FavoriteTvShow> getFavoriteTvShow(Long ln) {
+    public LiveData<FavoriteTvShowEntity> getFavoriteTvShow(Long ln) {
         return localRepository.getFavoriteTvShow(ln);
     }
 
@@ -45,11 +45,11 @@ public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCal
      * Insert Favorite Tv Show
      * */
 
-    public void insertFavoriteTvShow(FavoriteTvShow favoriteTvShow) {
-        new InsertFavoriteTvShowAsyncTask(localRepository, this).execute(favoriteTvShow);
+    public void insertFavoriteTvShow(FavoriteTvShowEntity favoriteTvShowEntity) {
+        new InsertFavoriteTvShowAsyncTask(localRepository, this).execute(favoriteTvShowEntity);
     }
 
-    private static class InsertFavoriteTvShowAsyncTask extends AsyncTask<FavoriteTvShow, Void, Long> {
+    private static class InsertFavoriteTvShowAsyncTask extends AsyncTask<FavoriteTvShowEntity, Void, Long> {
         private final WeakReference<LocalRepository> weakRepo;
         private final WeakReference<LoadLocalDbCallback> weakCallback;
 
@@ -59,8 +59,8 @@ public class FavoriteTvShowViewModel extends ViewModel implements LoadLocalDbCal
         }
 
         @Override
-        protected Long doInBackground(FavoriteTvShow... favoriteTvShows) {
-            return weakRepo.get().insertFavoriteTvShow(favoriteTvShows[0]);
+        protected Long doInBackground(FavoriteTvShowEntity... favoriteTvShowEntities) {
+            return weakRepo.get().insertFavoriteTvShow(favoriteTvShowEntities[0]);
         }
 
         @Override

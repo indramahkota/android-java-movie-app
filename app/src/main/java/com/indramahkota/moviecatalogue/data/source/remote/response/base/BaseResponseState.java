@@ -24,11 +24,7 @@ public class BaseResponseState<T> {
     public int getCurrentState() {
         return currentState;
     }
-
-    public void setCurrentState(int currentState) {
-        this.currentState = currentState;
-    }
-
+    
     public enum State {
         LOADING(0), SUCCESS(1),ERROR(-1);
         public int value;
