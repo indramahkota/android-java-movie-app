@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
@@ -40,6 +41,8 @@ public class SearchActivity extends AppCompatActivity {
     private ShimmerFrameLayout mShimmerViewContainer;
     private RelativeLayout relativeLayout;
     private LinearLayoutManager linearLayoutManager;
+
+    private SearchViewModel searchViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +77,9 @@ public class SearchActivity extends AppCompatActivity {
         rvSearch.setLayoutManager(linearLayoutManager);
         rvSearch.setHasFixedSize(true);
 
-        SearchViewModel searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
+        SwipeRefreshLayout swipeRefreshLayout = findViewById(R.id.swipe_to_refresh);
+
+        searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
         searchViewModel.getMovieViewState().observe(this, movieViewState -> {
             switch (movieViewState.getCurrentState()) {
                 case 0:
@@ -84,6 +89,8 @@ public class SearchActivity extends AppCompatActivity {
                     break;
                 case 1:
                     //show data
+                    swipeRefreshLayout.setRefreshing(false);
+                    rvSearch.setVisibility(View.VISIBLE);
                     searchMovies = movieViewState.getData();
                     setMovieAdapter(searchMovies);
 
@@ -93,6 +100,7 @@ public class SearchActivity extends AppCompatActivity {
                     break;
                 case -1:
                     //show error
+                    swipeRefreshLayout.setRefreshing(false);
                     relativeLayout.setVisibility(View.GONE);
                     mShimmerViewContainer.setVisibility(View.VISIBLE);
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
@@ -108,6 +116,8 @@ public class SearchActivity extends AppCompatActivity {
                     break;
                 case 1:
                     //show data
+                    swipeRefreshLayout.setRefreshing(false);
+                    rvSearch.setVisibility(View.VISIBLE);
                     searchTvShows = tvShowListViewState.getData();
                     setTvSowAdapter(searchTvShows);
 
@@ -117,6 +127,7 @@ public class SearchActivity extends AppCompatActivity {
                     break;
                 case -1:
                     //show error
+                    swipeRefreshLayout.setRefreshing(false);
                     relativeLayout.setVisibility(View.GONE);
                     mShimmerViewContainer.setVisibility(View.VISIBLE);
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
@@ -124,18 +135,40 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
 
-        if (searchQuery != null && searchQuery[1] != null && !searchQuery[1].isEmpty()) {
-            if(searchQuery[0].equals("Movie")) {
-                if(searchMovies != null) {
-                    setMovieAdapter(searchMovies);
-                } else {
-                    searchViewModel.searchMovie(searchQuery[1]);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            relativeLayout.setVisibility(View.GONE);
+            mShimmerViewContainer.setVisibility(View.VISIBLE);
+            rvSearch.setVisibility(View.GONE);
+
+            if (searchQuery != null && searchQuery[0] != null && searchQuery[1] != null) {
+                if(searchQuery[0].equals("Movie")) {
+                    if(!searchQuery[1].isEmpty()) {
+                        searchViewModel.searchMovie(searchQuery[1]);
+                    }
+                } else if(searchQuery[0].equals("Tv Show")){
+                    if(!searchQuery[1].isEmpty()) {
+                        searchViewModel.searchTvShow(searchQuery[1]);
+                    }
                 }
-            } else {
-                if(searchTvShows != null) {
-                    setTvSowAdapter(searchTvShows);
-                } else {
-                    searchViewModel.searchTvShow(searchQuery[1]);
+            }
+        });
+
+        if (searchQuery != null && searchQuery[0] != null && searchQuery[1] != null) {
+            if(searchQuery[0].equals("Movie")) {
+                if(!searchQuery[1].isEmpty()) {
+                    if (searchMovies != null) {
+                        setMovieAdapter(searchMovies);
+                    } else {
+                        searchViewModel.searchMovie(searchQuery[1]);
+                    }
+                }
+            } else if(searchQuery[0].equals("Tv Show")){
+                if(!searchQuery[1].isEmpty()) {
+                    if (searchTvShows != null) {
+                        setTvSowAdapter(searchTvShows);
+                    } else {
+                        searchViewModel.searchTvShow(searchQuery[1]);
+                    }
                 }
             }
         }

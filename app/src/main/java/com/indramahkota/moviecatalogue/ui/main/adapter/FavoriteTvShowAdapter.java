@@ -19,6 +19,7 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShow;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.ui.detail.TvShowDetailsActivity;
+import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
 import java.util.List;
@@ -52,7 +53,9 @@ public class FavoriteTvShowAdapter extends RecyclerView.Adapter<FavoriteTvShowAd
         }
 
         if(getListTvShows().get(position).getFirstAirDate() != null && !getListTvShows().get(position).getFirstAirDate().isEmpty()) {
-            holder.txtRelease.setText(getListTvShows().get(position).getFirstAirDate());
+            String date = getListTvShows().get(position).getFirstAirDate();
+            String newDate = CustomDateFormat.formatDateFromString(date);
+            holder.txtRelease.setText(newDate);
         } else {
             holder.txtRelease.setText(mContext.getResources().getString(R.string.no_release_date));
         }
@@ -92,6 +95,7 @@ public class FavoriteTvShowAdapter extends RecyclerView.Adapter<FavoriteTvShowAd
         private final TextView txtRelease;
         private final TextView txtRating;
         private final TextView txtOverview;
+        private final ImageView imgFavorite;
 
         CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,6 +104,8 @@ public class FavoriteTvShowAdapter extends RecyclerView.Adapter<FavoriteTvShowAd
             txtRelease = itemView.findViewById(R.id.txt_release_date);
             txtRating = itemView.findViewById(R.id.txt_rating);
             txtOverview = itemView.findViewById(R.id.txt_overview);
+            imgFavorite = itemView.findViewById(R.id.img_bookmark);
+            imgFavorite.setVisibility(View.VISIBLE);
         }
 
         void addListener(int position) {

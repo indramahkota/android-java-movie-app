@@ -16,7 +16,8 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".ui.setting.SettingsActivity" />
+            android:name=".ui.setting.SettingsActivity"
+            android:label="@string/settings" />
         <activity
             android:name=".ui.search.SearchActivity" />
         <activity

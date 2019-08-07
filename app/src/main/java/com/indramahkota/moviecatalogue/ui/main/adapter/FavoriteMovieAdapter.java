@@ -19,6 +19,7 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovie;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
+import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
 import java.util.List;
@@ -52,7 +53,9 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
         }
 
         if(getListMovies().get(position).getReleaseDate() != null && !getListMovies().get(position).getReleaseDate().isEmpty()) {
-            holder.txtRelease.setText(getListMovies().get(position).getReleaseDate());
+            String date = getListMovies().get(position).getReleaseDate();
+            String newDate = CustomDateFormat.formatDateFromString(date);
+            holder.txtRelease.setText(newDate);
         } else {
             holder.txtRelease.setText(mContext.getResources().getString(R.string.no_release_date));
         }
@@ -92,6 +95,7 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
         private final TextView txtRelease;
         private final TextView txtRating;
         private final TextView txtOverview;
+        private final ImageView imgFavorite;
 
         CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,6 +104,8 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
             txtRelease = itemView.findViewById(R.id.txt_release_date);
             txtRating = itemView.findViewById(R.id.txt_rating);
             txtOverview = itemView.findViewById(R.id.txt_overview);
+            imgFavorite = itemView.findViewById(R.id.img_bookmark);
+            imgFavorite.setVisibility(View.VISIBLE);
         }
 
         void addListener(int position) {

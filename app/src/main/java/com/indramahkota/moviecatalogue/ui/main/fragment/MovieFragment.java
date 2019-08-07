@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
@@ -93,6 +94,8 @@ public class MovieFragment extends Fragment {
             }
         });
 
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_to_refresh);
+
         MovieFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieFragmentViewModel.class);
         viewModel.getMovieViewState().observe(this, movieViewState -> {
             switch (movieViewState.getCurrentState()) {
@@ -103,6 +106,8 @@ public class MovieFragment extends Fragment {
                     break;
                 case 1:
                     //show data
+                    swipeRefreshLayout.setRefreshing(false);
+                    rvFragmentMovies.setVisibility(View.VISIBLE);
                     discoverMovies = movieViewState.getData();
                     setAdapter(discoverMovies);
                     if(discoverMovies.getResults().size() < 1) {
@@ -111,11 +116,19 @@ public class MovieFragment extends Fragment {
                     break;
                 case -1:
                     //show error
+                    swipeRefreshLayout.setRefreshing(false);
                     relativeLayout.setVisibility(View.GONE);
                     mShimmerViewContainer.setVisibility(View.VISIBLE);
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
                     break;
             }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            relativeLayout.setVisibility(View.GONE);
+            rvFragmentMovies.setVisibility(View.GONE);
+            mShimmerViewContainer.setVisibility(View.VISIBLE);
+            viewModel.loadMovie();
         });
 
         if(discoverMovies != null) {

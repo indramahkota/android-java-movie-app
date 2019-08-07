@@ -1,10 +1,10 @@
 package com.indramahkota.moviecatalogue.ui.main;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -17,6 +17,7 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.ui.main.fragment.FavoriteFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.MovieFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.TvShowFragment;
+import com.indramahkota.moviecatalogue.ui.setting.SettingsActivity;
 
 import javax.inject.Inject;
 
@@ -78,7 +79,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.settings) {
-            Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
+            Intent mIntent = new Intent(this, SettingsActivity.class);
+            startActivity(mIntent);
         }
         return true;
     }

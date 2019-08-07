@@ -3,6 +3,7 @@ package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
@@ -20,7 +21,7 @@ public class FavoriteMovieViewModel extends ViewModel implements LoadLocalDbCall
     private LiveData<List<FavoriteMovie>> listFavoriteMovie;
 
     @Inject
-    FavoriteMovieViewModel(LocalRepository localRepository) {
+    FavoriteMovieViewModel(@NonNull LocalRepository localRepository) {
         this.localRepository = localRepository;
         listFavoriteMovie = localRepository.getAllFavoriteMovie();
     }

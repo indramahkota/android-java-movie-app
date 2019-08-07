@@ -19,6 +19,7 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverTvShow;
 import com.indramahkota.moviecatalogue.ui.detail.TvShowDetailsActivity;
+import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
 import java.util.ArrayList;
@@ -52,7 +53,9 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.CategoryVi
         }
 
         if(getListTvShows().get(position).getFirstAirDate() != null && !getListTvShows().get(position).getFirstAirDate().isEmpty()) {
-            holder.txtRelease.setText(getListTvShows().get(position).getFirstAirDate());
+            String date = getListTvShows().get(position).getFirstAirDate();
+            String newDate = CustomDateFormat.formatDateFromString(date);
+            holder.txtRelease.setText(newDate);
         } else {
             holder.txtRelease.setText(mContext.getResources().getString(R.string.no_release_date));
         }

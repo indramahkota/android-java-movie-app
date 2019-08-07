@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
@@ -93,6 +94,8 @@ public class TvShowFragment extends Fragment {
             }
         });
 
+        SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_to_refresh);
+
         TvShowFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowFragmentViewModel.class);
         viewModel.getTvShowViewState().observe(this, tvShowListViewState -> {
             switch (tvShowListViewState.getCurrentState()) {
@@ -103,6 +106,8 @@ public class TvShowFragment extends Fragment {
                     break;
                 case 1:
                     //show data
+                    swipeRefreshLayout.setRefreshing(false);
+                    rvFragmentTvShows.setVisibility(View.VISIBLE);
                     discoverTvShows = tvShowListViewState.getData();
                     setAdapter(discoverTvShows);
                     if(discoverTvShows.getResults().size() < 1) {
@@ -111,11 +116,19 @@ public class TvShowFragment extends Fragment {
                     break;
                 case -1:
                     //show error
+                    swipeRefreshLayout.setRefreshing(false);
                     relativeLayout.setVisibility(View.GONE);
                     mShimmerViewContainer.setVisibility(View.VISIBLE);
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
                     break;
             }
+        });
+
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            relativeLayout.setVisibility(View.GONE);
+            rvFragmentTvShows.setVisibility(View.GONE);
+            mShimmerViewContainer.setVisibility(View.VISIBLE);
+            viewModel.loadTvShow();
         });
 
         if(discoverTvShows != null) {

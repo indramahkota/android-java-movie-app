@@ -19,6 +19,7 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverMovie;
 import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
+import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
 import java.util.ArrayList;
@@ -52,7 +53,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
         }
 
         if(getListMovies().get(position).getReleaseDate() != null && !getListMovies().get(position).getReleaseDate().isEmpty()) {
-            holder.txtRelease.setText(getListMovies().get(position).getReleaseDate());
+            String date = getListMovies().get(position).getReleaseDate();
+            String newDate = CustomDateFormat.formatDateFromString(date);
+            holder.txtRelease.setText(newDate);
         } else {
             holder.txtRelease.setText(mContext.getResources().getString(R.string.no_release_date));
         }
