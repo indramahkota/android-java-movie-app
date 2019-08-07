@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.ui.detail.interfaces.LoadLocalDbCallback;
 
 import java.lang.ref.WeakReference;
@@ -18,50 +18,50 @@ import javax.inject.Inject;
 
 public class FavoriteMovieViewModel extends ViewModel implements LoadLocalDbCallback {
     private final MovieCatalogueRepository repository;
-    private LiveData<List<FavoriteMovieEntity>> listFavoriteMovie;
+    private LiveData<List<MovieEntity>> listMovie;
 
     @Inject
     FavoriteMovieViewModel(@NonNull MovieCatalogueRepository repository) {
         this.repository = repository;
-        listFavoriteMovie = repository.getAllFavoriteMovie();
+        listMovie = repository.getAllMovie();
     }
 
     /*
      * Get List Favorite Movie
      * */
 
-    public LiveData<List<FavoriteMovieEntity>> getListFavoriteMovie() {
-        return listFavoriteMovie;
+    public LiveData<List<MovieEntity>> getListMovie() {
+        return listMovie;
     }
 
     /*
      * Get Favorite Movie
      * */
 
-    public LiveData<FavoriteMovieEntity> getFavoriteMovie(Long ln) {
-        return repository.getFavoriteMovieById(ln);
+    public LiveData<MovieEntity> getMovie(Long ln) {
+        return repository.getMovieById(ln);
     }
 
     /*
      * Insert Favorite Movie
      * */
 
-    public void insertFavoriteMovie(FavoriteMovieEntity favoriteMovieEntity) {
-        new InsertFavoriteMovieAsyncTask(repository, this).execute(favoriteMovieEntity);
+    public void insertMovie(MovieEntity movieEntity) {
+        new InsertMovieAsyncTask(repository, this).execute(movieEntity);
     }
 
-    private static class InsertFavoriteMovieAsyncTask extends AsyncTask<FavoriteMovieEntity, Void, Long> {
+    private static class InsertMovieAsyncTask extends AsyncTask<MovieEntity, Void, Long> {
         private final WeakReference<MovieCatalogueRepository> weakRepo;
         private final WeakReference<LoadLocalDbCallback> weakCallback;
 
-        InsertFavoriteMovieAsyncTask(MovieCatalogueRepository repository, LoadLocalDbCallback loadLocalDbCallback) {
+        InsertMovieAsyncTask(MovieCatalogueRepository repository, LoadLocalDbCallback loadLocalDbCallback) {
             this.weakRepo = new WeakReference<>(repository);
             this.weakCallback = new WeakReference<>(loadLocalDbCallback);
         }
 
         @Override
-        protected Long doInBackground(FavoriteMovieEntity... favoriteMovieEntities) {
-            return weakRepo.get().insertFavoriteMovie(favoriteMovieEntities[0]);
+        protected Long doInBackground(MovieEntity... movieEntities) {
+            return weakRepo.get().insertMovie(movieEntities[0]);
         }
 
         @Override
@@ -80,22 +80,22 @@ public class FavoriteMovieViewModel extends ViewModel implements LoadLocalDbCall
      * Delete Favorite Movie
      * */
 
-    public void deleteFavoriteMovie(Long itemId) {
-        new DeleteFavoriteMovieAsyncTask(repository, this).execute(itemId);
+    public void deleteMovie(Long itemId) {
+        new DeleteMovieAsyncTask(repository, this).execute(itemId);
     }
 
-    private static class DeleteFavoriteMovieAsyncTask extends AsyncTask<Long, Void, Integer> {
+    private static class DeleteMovieAsyncTask extends AsyncTask<Long, Void, Integer> {
         private final WeakReference<MovieCatalogueRepository> weakRepo;
         private final WeakReference<LoadLocalDbCallback> weakCallback;
 
-        DeleteFavoriteMovieAsyncTask(MovieCatalogueRepository repository, LoadLocalDbCallback loadLocalDbCallback) {
+        DeleteMovieAsyncTask(MovieCatalogueRepository repository, LoadLocalDbCallback loadLocalDbCallback) {
             this.weakRepo = new WeakReference<>(repository);
             this.weakCallback = new WeakReference<>(loadLocalDbCallback);
         }
 
         @Override
         protected Integer doInBackground(Long... ln) {
-            return weakRepo.get().deleteFavoriteMovieById(ln[0]);
+            return weakRepo.get().deleteMovieById(ln[0]);
         }
 
         @Override

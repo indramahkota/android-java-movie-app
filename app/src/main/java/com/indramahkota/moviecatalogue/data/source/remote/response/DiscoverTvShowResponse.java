@@ -3,8 +3,10 @@ package com.indramahkota.moviecatalogue.data.source.remote.response;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverTvShow;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
 import java.util.ArrayList;
 
@@ -12,7 +14,7 @@ public class DiscoverTvShowResponse implements Parcelable {
     @SerializedName("page")
     private Integer page;
     @SerializedName("results")
-    private ArrayList<DiscoverTvShow> results;
+    private ArrayList<TvShowEntity> results;
     @SerializedName("total_results")
     private Integer totalResults;
     @SerializedName("total_pages")
@@ -20,13 +22,13 @@ public class DiscoverTvShowResponse implements Parcelable {
 
     public DiscoverTvShowResponse() {}
 
-    private DiscoverTvShowResponse(Parcel in) {
+    private DiscoverTvShowResponse(@NonNull Parcel in) {
         if (in.readByte() == 0) {
             page = null;
         } else {
             page = in.readInt();
         }
-        results = in.createTypedArrayList(DiscoverTvShow.CREATOR);
+        results = in.createTypedArrayList(TvShowEntity.CREATOR);
         if (in.readByte() == 0) {
             totalResults = null;
         } else {
@@ -51,7 +53,7 @@ public class DiscoverTvShowResponse implements Parcelable {
         }
     };
 
-    public ArrayList<DiscoverTvShow> getResults() {
+    public ArrayList<TvShowEntity> getResults() {
         return results;
     }
 

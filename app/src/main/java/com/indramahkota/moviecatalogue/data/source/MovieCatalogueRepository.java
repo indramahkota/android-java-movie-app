@@ -4,8 +4,6 @@ import androidx.lifecycle.LiveData;
 
 import com.indramahkota.moviecatalogue.BuildConfig;
 import com.indramahkota.moviecatalogue.data.source.locale.dao.FavoriteDao;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiEndPoint;
@@ -51,50 +49,50 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //FavoriteMovieViewModel
     @Override
-    public LiveData<List<FavoriteMovieEntity>> getAllFavoriteMovie() {
-        return dao.selectAllFavoriteMovie();
+    public LiveData<List<MovieEntity>> getAllMovie() {
+        return dao.selectAllMovie();
     }
 
     //FavoriteMovieViewModel
     @Override
-    public LiveData<FavoriteMovieEntity> getFavoriteMovieById(Long id) {
-        return dao.selectFavoriteMovieById(id);
+    public LiveData<MovieEntity> getMovieById(Long id) {
+        return dao.selectMovieById(id);
     }
 
     //FavoriteMovieViewModel
     @Override
-    public long insertFavoriteMovie(FavoriteMovieEntity favoriteMovieEntity) {
-        return dao.insertFavoriteMovie(favoriteMovieEntity);
+    public long insertMovie(MovieEntity movieEntity) {
+        return dao.insertMovie(movieEntity);
     }
 
     //FavoriteMovieViewModel
     @Override
-    public int deleteFavoriteMovieById(long id) {
-        return dao.deleteFavoriteMovieById(id);
+    public int deleteMovieById(long id) {
+        return dao.deleteMovieById(id);
     }
 
     //FavoriteTvShowViewModel
     @Override
-    public LiveData<List<FavoriteTvShowEntity>> getAllFavoriteTvShow() {
-        return dao.selectAllFavoriteTvShow();
+    public LiveData<List<TvShowEntity>> getAllTvShow() {
+        return dao.selectAllTvShow();
     }
 
     //FavoriteTvShowViewModel
     @Override
-    public LiveData<FavoriteTvShowEntity> getFavoriteTvShowById(Long id) {
-        return dao.selectFavoriteTvShowById(id);
+    public LiveData<TvShowEntity> getTvShowById(Long id) {
+        return dao.selectTvShowById(id);
     }
 
     //FavoriteTvShowViewModel
     @Override
-    public long insertFavoriteTvShow(FavoriteTvShowEntity favoriteTvShowEntity) {
-        return dao.insertFavoriteTvShow(favoriteTvShowEntity);
+    public long insertTvShow(TvShowEntity tvShowEntity) {
+        return dao.insertTvShow(tvShowEntity);
     }
 
     //FavoriteTvShowViewModel
     @Override
-    public int deleteFavoriteTvShowById(long id) {
-        return dao.deleteFavoriteTvShowById(id);
+    public int deleteTvShowById(long id) {
+        return dao.deleteTvShowById(id);
     }
 
     /*

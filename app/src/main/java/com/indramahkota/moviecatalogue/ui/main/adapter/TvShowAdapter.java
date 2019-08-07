@@ -16,8 +16,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverTvShow;
 import com.indramahkota.moviecatalogue.ui.detail.TvShowDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
@@ -26,13 +26,13 @@ import java.util.ArrayList;
 
 public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.CategoryViewHolder> {
     private final Context mContext;
-    private final ArrayList<DiscoverTvShow> listTvShows;
+    private final ArrayList<TvShowEntity> listTvShows;
 
-    private ArrayList<DiscoverTvShow> getListTvShows() {
+    private ArrayList<TvShowEntity> getListTvShows() {
         return listTvShows;
     }
 
-    public TvShowAdapter(ArrayList<DiscoverTvShow> listTvShows, Context context) {
+    public TvShowAdapter(ArrayList<TvShowEntity> listTvShows, Context context) {
         this.listTvShows = listTvShows;
         this.mContext = context;
     }

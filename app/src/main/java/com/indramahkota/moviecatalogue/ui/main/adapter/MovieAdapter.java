@@ -16,8 +16,8 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverMovie;
 import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
@@ -26,13 +26,13 @@ import java.util.ArrayList;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryViewHolder> {
     private final Context mContext;
-    private final ArrayList<DiscoverMovie> listMovies;
+    private final ArrayList<MovieEntity> listMovies;
 
-    private ArrayList<DiscoverMovie> getListMovies() {
+    private ArrayList<MovieEntity> getListMovies() {
         return listMovies;
     }
 
-    public MovieAdapter(ArrayList<DiscoverMovie> listMovies, Context context) {
+    public MovieAdapter(ArrayList<MovieEntity> listMovies, Context context) {
         this.listMovies = listMovies;
         this.mContext = context;
     }

@@ -3,8 +3,10 @@ package com.indramahkota.moviecatalogue.data.source.remote.response;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.DiscoverMovie;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 
 import java.util.ArrayList;
 
@@ -12,7 +14,7 @@ public class DiscoverMovieResponse implements Parcelable {
     @SerializedName("page")
     private Integer page;
     @SerializedName("results")
-    private ArrayList<DiscoverMovie> results;
+    private ArrayList<MovieEntity> results;
     @SerializedName("total_results")
     private Integer totalResults;
     @SerializedName("total_pages")
@@ -20,13 +22,13 @@ public class DiscoverMovieResponse implements Parcelable {
 
     public DiscoverMovieResponse() {}
 
-    private DiscoverMovieResponse(Parcel in) {
+    private DiscoverMovieResponse(@NonNull Parcel in) {
         if (in.readByte() == 0) {
             page = null;
         } else {
             page = in.readInt();
         }
-        results = in.createTypedArrayList(DiscoverMovie.CREATOR);
+        results = in.createTypedArrayList(MovieEntity.CREATOR);
         if (in.readByte() == 0) {
             totalResults = null;
         } else {
@@ -51,7 +53,7 @@ public class DiscoverMovieResponse implements Parcelable {
         }
     };
 
-    public ArrayList<DiscoverMovie> getResults() {
+    public ArrayList<MovieEntity> getResults() {
         return results;
     }
 

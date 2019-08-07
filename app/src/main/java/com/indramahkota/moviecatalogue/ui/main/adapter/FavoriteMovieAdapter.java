@@ -16,7 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
@@ -26,13 +26,13 @@ import java.util.List;
 
 public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdapter.CategoryViewHolder> {
     private final Context mContext;
-    private final List<FavoriteMovieEntity> listMovies;
+    private final List<MovieEntity> listMovies;
 
-    private List<FavoriteMovieEntity> getListMovies() {
+    private List<MovieEntity> getListMovies() {
         return listMovies;
     }
 
-    public FavoriteMovieAdapter(List<FavoriteMovieEntity> listMovies, Context context) {
+    public FavoriteMovieAdapter(List<MovieEntity> listMovies, Context context) {
         this.listMovies = listMovies;
         this.mContext = context;
     }
@@ -110,7 +110,7 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
 
         void addListener(int position) {
             itemView.setOnClickListener(new CustomOnItemClickListener(position, position1 -> {
-                int id = (int) (long)getListMovies().get(position1).getItemId();
+                Long id = getListMovies().get(position1).getId();
                 Intent moveWithDataIntent = new Intent(mContext, MovieDetailsActivity.class);
                 moveWithDataIntent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, id);
                 mContext.startActivity(moveWithDataIntent);

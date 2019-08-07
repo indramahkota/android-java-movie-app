@@ -2,8 +2,6 @@ package com.indramahkota.moviecatalogue.data.source;
 
 import androidx.lifecycle.LiveData;
 
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
@@ -28,16 +26,16 @@ public interface MovieCatalogueDataSource {
     Single<DiscoverTvShowResponse> loadListTvShow();
 
     //Favorite Movie Fragment
-    LiveData<List<FavoriteMovieEntity>> getAllFavoriteMovie();
-    LiveData<FavoriteMovieEntity> getFavoriteMovieById(Long id);
-    long insertFavoriteMovie(FavoriteMovieEntity favoriteMovieEntity);
-    int deleteFavoriteMovieById(long id);
+    LiveData<List<MovieEntity>> getAllMovie();
+    LiveData<MovieEntity> getMovieById(Long id);
+    long insertMovie(MovieEntity movieEntity);
+    int deleteMovieById(long id);
 
     //Favorite Tv Show Fragment
-    LiveData<List<FavoriteTvShowEntity>> getAllFavoriteTvShow();
-    LiveData<FavoriteTvShowEntity> getFavoriteTvShowById(Long id);
-    long insertFavoriteTvShow(FavoriteTvShowEntity favoriteTvShowEntity);
-    int deleteFavoriteTvShowById(long id);
+    LiveData<List<TvShowEntity>> getAllTvShow();
+    LiveData<TvShowEntity> getTvShowById(Long id);
+    long insertTvShow(TvShowEntity tvShowEntity);
+    int deleteTvShowById(long id);
 
     /*
     * Detail Activity

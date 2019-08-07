@@ -84,13 +84,13 @@ public class FavoriteTvShowFragment extends Fragment {
         relativeLayout.setVisibility(View.GONE);
 
         FavoriteTvShowViewModel favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
-        favoriteTvShowViewModel.getListFavoriteTvShow().observe(this, favoriteTvShows -> {
-            FavoriteTvShowAdapter favoriteTvShowAdapter = new FavoriteTvShowAdapter(favoriteTvShows, getContext());
+        favoriteTvShowViewModel.getListTvShow().observe(this, tvShows -> {
+            FavoriteTvShowAdapter favoriteTvShowAdapter = new FavoriteTvShowAdapter(tvShows, getContext());
             rvTvShows.setAdapter(favoriteTvShowAdapter);
             linearLayoutManager.scrollToPosition(scrollPosition);
             mShimmerViewContainer.setVisibility(View.GONE);
 
-            if(favoriteTvShows.size() > 0) {
+            if(tvShows.size() > 0) {
                 relativeLayout.setVisibility(View.GONE);
             } else {
                 relativeLayout.setVisibility(View.VISIBLE);

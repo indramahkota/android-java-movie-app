@@ -84,13 +84,13 @@ public class FavoriteMovieFragment extends Fragment {
         relativeLayout.setVisibility(View.GONE);
 
         FavoriteMovieViewModel favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
-        favoriteMovieViewModel.getListFavoriteMovie().observe(this, favMovies -> {
-            FavoriteMovieAdapter favoriteMovieAdapter = new FavoriteMovieAdapter(favMovies, getContext());
+        favoriteMovieViewModel.getListMovie().observe(this, movies -> {
+            FavoriteMovieAdapter favoriteMovieAdapter = new FavoriteMovieAdapter(movies, getContext());
             rvMovies.setAdapter(favoriteMovieAdapter);
             linearLayoutManager.scrollToPosition(scrollPosition);
             mShimmerViewContainer.setVisibility(View.GONE);
 
-            if(favMovies.size() > 0) {
+            if(movies.size() > 0) {
                 relativeLayout.setVisibility(View.GONE);
             } else {
                 relativeLayout.setVisibility(View.VISIBLE);

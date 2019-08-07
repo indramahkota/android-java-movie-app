@@ -20,10 +20,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteMovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
@@ -62,8 +61,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
 
-    private FavoriteMovieEntity favoriteMovieEntity;
+    private MovieEntity favoriteMovieEntity;
     private FavoriteMovieViewModel favoriteMovieViewModel;
+    private LanguageViewModel languageViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,8 +92,26 @@ public class MovieDetailsActivity extends AppCompatActivity {
         txtLanguage = findViewById(R.id.txt_language);
 
         favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
+        favoriteMovieViewModel.getMovie(movieId).observe(this, movie -> {
+            favoriteMovieEntity = movie;
+            if(favoriteMovieEntity != null) {
+                movieEntity = movie;
+                initializeUi(movieEntity);
+                mShimmerViewContainer.setVisibility(View.GONE);
+                detailsContainer.setVisibility(View.VISIBLE);
+            } else {
+                testLanjut();
+            }
+        });
 
-        LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
+        if (savedInstanceState != null) {
+            movieEntity = savedInstanceState.getParcelable(STATE_MOVIE_RESPONSE);
+            languageResponse = savedInstanceState.getParcelable(STATE_LANGUAGE_RESPONSE);
+        }
+    }
+
+    private void testLanjut() {
+        languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
         languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
             if(languageResponseState.getCurrentState() == 1) {
                 languageResponse = languageResponseState.getData();
@@ -126,11 +144,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
             }
         });
 
-        if (savedInstanceState != null) {
-            movieEntity = savedInstanceState.getParcelable(STATE_MOVIE_RESPONSE);
-            languageResponse = savedInstanceState.getParcelable(STATE_LANGUAGE_RESPONSE);
-        }
-
         if (languageResponse == null) {
             languageViewModel.loadLanguages();
         }
@@ -148,8 +161,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
         inflater.inflate(R.menu.favorite_menu, menu);
         this.menu = menu;
 
-        favoriteMovieViewModel.getFavoriteMovie(movieId).observe(this, favMovie -> {
-            favoriteMovieEntity = favMovie;
+        favoriteMovieViewModel.getMovie(movieId).observe(this, movie -> {
+            favoriteMovieEntity = movie;
             if(favoriteMovieEntity != null) {
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
             }
@@ -163,17 +176,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
             finish();
         } else if(item.getItemId() == R.id.favorites && movieEntity != null) {
             if(favoriteMovieEntity != null) {
-                favoriteMovieViewModel.deleteFavoriteMovie(movieId);
+                favoriteMovieViewModel.deleteMovie(movieId);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_border_white_24dp);
             } else {
-                FavoriteMovieEntity favMovie = new FavoriteMovieEntity();
-                favMovie.setItemId(movieEntity.getId());
-                favMovie.setTitle(movieEntity.getTitle());
-                favMovie.setOverview(movieEntity.getOverview());
-                favMovie.setPosterPath(movieEntity.getPosterPath());
-                favMovie.setReleaseDate(movieEntity.getReleaseDate());
-                favMovie.setVoteAverage(String.valueOf(movieEntity.getVoteAverage()));
-                favoriteMovieViewModel.insertFavoriteMovie(favMovie);
+                favoriteMovieViewModel.insertMovie(movieEntity);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
             }
         }

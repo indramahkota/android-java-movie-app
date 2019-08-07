@@ -20,10 +20,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
@@ -57,12 +56,12 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     private TextView txtLanguage;
 
     private Long tvShowId;
-    private FavoriteTvShowEntity favoriteTvShowEntity;
     private TvShowEntity tvShowEntity;
     private LanguageResponse languageResponse;
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
 
+    private TvShowEntity favoriteTvShowEntity;
     private FavoriteTvShowViewModel favoriteTvShowViewModel;
 
     @Override
@@ -148,8 +147,8 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         inflater.inflate(R.menu.favorite_menu, menu);
         this.menu = menu;
 
-        favoriteTvShowViewModel.getFavoriteTvShow(tvShowId).observe(this, favTvShow -> {
-            favoriteTvShowEntity = favTvShow;
+        favoriteTvShowViewModel.getTvShow(tvShowId).observe(this, tvShow -> {
+            favoriteTvShowEntity = tvShow;
             if(favoriteTvShowEntity != null) {
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
             }
@@ -163,17 +162,10 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             finish();
         } else if(item.getItemId() == R.id.favorites && tvShowEntity != null) {
             if(favoriteTvShowEntity != null) {
-                favoriteTvShowViewModel.deleteFavoriteMovie(tvShowId);
+                favoriteTvShowViewModel.deleteTvShow(tvShowId);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_border_white_24dp);
             } else {
-                FavoriteTvShowEntity favTvShow = new FavoriteTvShowEntity();
-                favTvShow.setItemId(tvShowEntity.getId());
-                favTvShow.setName(tvShowEntity.getName());
-                favTvShow.setOverview(tvShowEntity.getOverview());
-                favTvShow.setPosterPath(tvShowEntity.getPosterPath());
-                favTvShow.setFirstAirDate(tvShowEntity.getFirstAirDate());
-                favTvShow.setVoteAverage(String.valueOf(tvShowEntity.getVoteAverage()));
-                favoriteTvShowViewModel.insertFavoriteTvShow(favTvShow);
+                favoriteTvShowViewModel.insertTvShow(tvShowEntity);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
             }
         }

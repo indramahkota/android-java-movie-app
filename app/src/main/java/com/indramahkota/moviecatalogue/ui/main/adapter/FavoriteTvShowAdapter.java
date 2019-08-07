@@ -16,7 +16,7 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.FavoriteTvShowEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.ui.detail.TvShowDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
@@ -26,13 +26,13 @@ import java.util.List;
 
 public class FavoriteTvShowAdapter extends RecyclerView.Adapter<FavoriteTvShowAdapter.CategoryViewHolder> {
     private final Context mContext;
-    private final List<FavoriteTvShowEntity> listTvShows;
+    private final List<TvShowEntity> listTvShows;
 
-    private List<FavoriteTvShowEntity> getListTvShows() {
+    private List<TvShowEntity> getListTvShows() {
         return listTvShows;
     }
 
-    public FavoriteTvShowAdapter(List<FavoriteTvShowEntity> listTvShow, Context context) {
+    public FavoriteTvShowAdapter(List<TvShowEntity> listTvShow, Context context) {
         this.listTvShows = listTvShow;
         this.mContext = context;
     }
@@ -110,7 +110,7 @@ public class FavoriteTvShowAdapter extends RecyclerView.Adapter<FavoriteTvShowAd
 
         void addListener(int position) {
             itemView.setOnClickListener(new CustomOnItemClickListener(position, position1 -> {
-                int id = (int) (long)getListTvShows().get(position1).getItemId();
+                Long id = getListTvShows().get(position1).getId();
                 Intent moveWithDataIntent = new Intent(mContext, TvShowDetailsActivity.class);
                 moveWithDataIntent.putExtra(TvShowDetailsActivity.EXTRA_TV_SHOW_ID, id);
                 mContext.startActivity(moveWithDataIntent);
