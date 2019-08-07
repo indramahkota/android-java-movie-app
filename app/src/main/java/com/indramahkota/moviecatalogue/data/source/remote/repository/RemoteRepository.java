@@ -21,7 +21,7 @@ public class RemoteRepository {
     private final ApiEndPoint api;
 
     @Inject
-    public RemoteRepository(ApiEndPoint api) {
+    RemoteRepository(ApiEndPoint api) {
         this.api = api;
     }
 

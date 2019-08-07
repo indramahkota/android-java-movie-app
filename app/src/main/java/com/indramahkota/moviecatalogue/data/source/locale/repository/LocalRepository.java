@@ -16,7 +16,7 @@ public class LocalRepository {
     private final FavoriteDao dao;
 
     @Inject
-    public LocalRepository(FavoriteDao dao) {
+    LocalRepository(FavoriteDao dao) {
         this.dao = dao;
     }
 
@@ -33,20 +33,12 @@ public class LocalRepository {
         return dao.selectMovieById(itemId);
     }
 
-    public void insertFavoriteMovies(List<FavoriteMovie> favoriteMovies) {
-        dao.insertMovies(favoriteMovies);
-    }
-
     public Long insertFavoriteMovie(FavoriteMovie favoriteMovie) {
         return dao.insertMovie(favoriteMovie);
     }
 
     public Integer deleteFavoriteMovie(long itemId) {
         return dao.deleteMovieById(itemId);
-    }
-
-    public void updateFavoriteMovie(FavoriteMovie favoriteMovie) {
-        dao.updateMovie(favoriteMovie);
     }
 
     /*
@@ -62,19 +54,11 @@ public class LocalRepository {
         return dao.selectTvShowById(itemId);
     }
 
-    public void insertFavoriteTvShows(List<FavoriteTvShow> favoriteTvShows) {
-        dao.insertTvShows(favoriteTvShows);
-    }
-
     public Long insertFavoriteTvShow(FavoriteTvShow favoriteTvShow) {
         return dao.insertTvShow(favoriteTvShow);
     }
 
     public Integer deleteFavoriteTvShow(long itemId) {
         return dao.deleteTvShowById(itemId);
-    }
-
-    public void updateFavoriteTvShow(FavoriteTvShow favoriteTvShow) {
-        dao.updateTvShow(favoriteTvShow);
     }
 }
