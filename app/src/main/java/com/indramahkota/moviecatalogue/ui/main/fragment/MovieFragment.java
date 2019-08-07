@@ -133,6 +133,7 @@ public class MovieFragment extends Fragment {
 
         if(discoverMovies != null) {
             setAdapter(discoverMovies);
+            linearLayoutManager.scrollToPosition(scrollPosition);
         } else {
             viewModel.loadMovie();
         }
@@ -142,7 +143,6 @@ public class MovieFragment extends Fragment {
         MovieAdapter listMovieAdapter = new MovieAdapter(disMovies.getResults(), getContext());
         listMovieAdapter.notifyDataSetChanged();
         rvFragmentMovies.setAdapter(listMovieAdapter);
-        linearLayoutManager.scrollToPosition(scrollPosition);
         mShimmerViewContainer.setVisibility(View.GONE);
     }
 

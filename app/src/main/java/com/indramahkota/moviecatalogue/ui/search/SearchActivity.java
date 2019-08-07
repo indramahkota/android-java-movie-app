@@ -158,6 +158,7 @@ public class SearchActivity extends AppCompatActivity {
                 if(!searchQuery[1].isEmpty()) {
                     if (searchMovies != null) {
                         setMovieAdapter(searchMovies);
+                        linearLayoutManager.scrollToPosition(scrollPosition);
                     } else {
                         searchViewModel.searchMovie(searchQuery[1]);
                     }
@@ -166,6 +167,7 @@ public class SearchActivity extends AppCompatActivity {
                 if(!searchQuery[1].isEmpty()) {
                     if (searchTvShows != null) {
                         setTvSowAdapter(searchTvShows);
+                        linearLayoutManager.scrollToPosition(scrollPosition);
                     } else {
                         searchViewModel.searchTvShow(searchQuery[1]);
                     }
@@ -177,7 +179,6 @@ public class SearchActivity extends AppCompatActivity {
     private void setMovieAdapter(@NonNull DiscoverMovieResponse disMovies) {
         MovieAdapter listMovieAdapter = new MovieAdapter(disMovies.getResults(), this);
         listMovieAdapter.notifyDataSetChanged();
-        linearLayoutManager.scrollToPosition(scrollPosition);
         rvSearch.setAdapter(listMovieAdapter);
         mShimmerViewContainer.setVisibility(View.GONE);
     }
@@ -185,7 +186,6 @@ public class SearchActivity extends AppCompatActivity {
     private void setTvSowAdapter(@NonNull DiscoverTvShowResponse disTvShows) {
         TvShowAdapter listTvShowAdapter = new TvShowAdapter(disTvShows.getResults(), this);
         listTvShowAdapter.notifyDataSetChanged();
-        linearLayoutManager.scrollToPosition(scrollPosition);
         rvSearch.setAdapter(listTvShowAdapter);
         mShimmerViewContainer.setVisibility(View.GONE);
     }

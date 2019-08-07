@@ -133,6 +133,7 @@ public class TvShowFragment extends Fragment {
 
         if(discoverTvShows != null) {
             setAdapter(discoverTvShows);
+            linearLayoutManager.scrollToPosition(scrollPosition);
         } else {
             viewModel.loadTvShow();
         }
@@ -142,7 +143,6 @@ public class TvShowFragment extends Fragment {
         TvShowAdapter listTvShowAdapter = new TvShowAdapter(disTvShows.getResults(), getContext());
         listTvShowAdapter.notifyDataSetChanged();
         rvFragmentTvShows.setAdapter(listTvShowAdapter);
-        linearLayoutManager.scrollToPosition(scrollPosition);
         mShimmerViewContainer.setVisibility(View.GONE);
     }
 
