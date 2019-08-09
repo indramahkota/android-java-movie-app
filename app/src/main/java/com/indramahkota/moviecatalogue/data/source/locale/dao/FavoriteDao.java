@@ -24,13 +24,13 @@ public interface FavoriteDao {
     LiveData<List<MovieEntity>> selectAllMovie();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insertMovie(MovieEntity movieEntity);
+    void insertMovie(MovieEntity movieEntity);
 
     @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
     LiveData<MovieEntity> selectMovieById(long id);
 
     @Query("DELETE FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
-    int deleteMovieById(long id);
+    void deleteMovieById(long id);
 
     /*
      *
@@ -42,11 +42,11 @@ public interface FavoriteDao {
     LiveData<List<TvShowEntity>> selectAllTvShow();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    long insertTvShow(TvShowEntity tvShowEntity);
+    void insertTvShow(TvShowEntity tvShowEntity);
 
     @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE itemId = :id")
     LiveData<TvShowEntity> selectTvShowById(long id);
 
     @Query("DELETE FROM " + TvShowEntity.TABLE_NAME + " WHERE itemId = :id")
-    int deleteTvShowById(long id);
+    void deleteTvShowById(long id);
 }

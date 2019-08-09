@@ -24,13 +24,13 @@ public interface MovieCatalogueDataSource {
     //Favorite Movie Fragment
     LiveData<List<MovieEntity>> getAllMovie();
     LiveData<MovieEntity> getMovieById(Long id);
-    long insertMovie(MovieEntity movieEntity);
-    int deleteMovieById(long id);
+    void insertMovie(MovieEntity movieEntity);
+    void deleteMovieById(long id);
     //Favorite Tv Show Fragment
     LiveData<List<TvShowEntity>> getAllTvShow();
     LiveData<TvShowEntity> getTvShowById(Long id);
-    long insertTvShow(TvShowEntity tvShowEntity);
-    int deleteTvShowById(long id);
+    void insertTvShow(TvShowEntity tvShowEntity);
+    void deleteTvShowById(long id);
 
     /*
     * Detail Activity

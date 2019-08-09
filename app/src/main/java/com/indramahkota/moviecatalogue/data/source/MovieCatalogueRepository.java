@@ -60,14 +60,14 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //FavoriteMovieViewModel
     @Override
-    public long insertMovie(MovieEntity movieEntity) {
-        return dao.insertMovie(movieEntity);
+    public void insertMovie(MovieEntity movieEntity) {
+        dao.insertMovie(movieEntity);
     }
 
     //FavoriteMovieViewModel
     @Override
-    public int deleteMovieById(long id) {
-        return dao.deleteMovieById(id);
+    public void deleteMovieById(long id) {
+        dao.deleteMovieById(id);
     }
 
     //FavoriteTvShowViewModel
@@ -84,14 +84,14 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //FavoriteTvShowViewModel
     @Override
-    public long insertTvShow(TvShowEntity tvShowEntity) {
-        return dao.insertTvShow(tvShowEntity);
+    public void insertTvShow(TvShowEntity tvShowEntity) {
+        dao.insertTvShow(tvShowEntity);
     }
 
     //FavoriteTvShowViewModel
     @Override
-    public int deleteTvShowById(long id) {
-        return dao.deleteTvShowById(id);
+    public void deleteTvShowById(long id) {
+        dao.deleteTvShowById(id);
     }
 
     /*
