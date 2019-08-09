@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModel;
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
+import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
 import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverMovieResponseState;
 import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverTvShowResponseState;
 
@@ -17,14 +17,14 @@ import io.reactivex.disposables.CompositeDisposable;
 public class SearchViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private final MovieCatalogueRepository repository;
-    private final SingleSchedulers singleSchedulers;
+    private final ObservableSchedulers observableSchedulers;
     private final MutableLiveData<DiscoverMovieResponseState> movieViewState = new MutableLiveData<>();
     private final MutableLiveData<DiscoverTvShowResponseState> tvShowViewState = new MutableLiveData<>();
 
     @Inject
-    SearchViewModel(MovieCatalogueRepository repository, SingleSchedulers singleSchedulers) {
+    SearchViewModel(MovieCatalogueRepository repository, ObservableSchedulers observableSchedulers) {
         this.repository = repository;
-        this.singleSchedulers = singleSchedulers;
+        this.observableSchedulers = observableSchedulers;
         disposable = new CompositeDisposable();
     }
 
@@ -37,17 +37,17 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void searchMovie(String query) {
+        movieViewState.postValue(DiscoverMovieResponseState.LOADING_STATE);
         disposable.add(repository.searchListMovie(query)
-                .doOnEvent((movieResponse, throwable) -> onSearchMovieLoading())
-                .compose(singleSchedulers.applySchedulers())
+                .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSearchMovieSuccess,
                         this::onSearchMovieError));
     }
 
     public void searchTvShow(String query) {
+        tvShowViewState.postValue(DiscoverTvShowResponseState.LOADING_STATE);
         disposable.add(repository.searchListTvShow(query)
-                .doOnEvent((tvShowResponse, throwable) -> onSearchTvShowLoading())
-                .compose(singleSchedulers.applySchedulers())
+                .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSearchTvShowSuccess,
                         this::onSearchTvShowError));
     }
@@ -62,10 +62,6 @@ public class SearchViewModel extends ViewModel {
         movieViewState.postValue(DiscoverMovieResponseState.ERROR_STATE);
     }
 
-    private void onSearchMovieLoading() {
-        movieViewState.postValue(DiscoverMovieResponseState.LOADING_STATE);
-    }
-
     private void onSearchTvShowSuccess(DiscoverTvShowResponse discoverTvShowResponse) {
         DiscoverTvShowResponseState.SUCCESS_STATE.setData(discoverTvShowResponse);
         tvShowViewState.postValue(DiscoverTvShowResponseState.SUCCESS_STATE);
@@ -74,10 +70,6 @@ public class SearchViewModel extends ViewModel {
     private void onSearchTvShowError(Throwable error) {
         DiscoverTvShowResponseState.ERROR_STATE.setError(error);
         tvShowViewState.postValue(DiscoverTvShowResponseState.ERROR_STATE);
-    }
-
-    private void onSearchTvShowLoading() {
-        tvShowViewState.postValue(DiscoverTvShowResponseState.LOADING_STATE);
     }
 
     @Override

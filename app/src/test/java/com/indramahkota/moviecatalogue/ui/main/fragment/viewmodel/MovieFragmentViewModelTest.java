@@ -5,7 +5,6 @@ import androidx.lifecycle.Observer;
 
 import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
 import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverMovieResponseState;
 
 import org.junit.After;

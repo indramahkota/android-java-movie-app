@@ -12,25 +12,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 public interface MovieCatalogueDataSource {
     /*
     * Main Activity
     * */
-
     //Movie Fragment
-    Single<DiscoverMovieResponse> loadListMovie();
-
+    Observable<DiscoverMovieResponse> loadListMovie();
     //Tv Show Fragment
-    Single<DiscoverTvShowResponse> loadListTvShow();
-
+    Observable<DiscoverTvShowResponse> loadListTvShow();
     //Favorite Movie Fragment
     LiveData<List<MovieEntity>> getAllMovie();
     LiveData<MovieEntity> getMovieById(Long id);
     long insertMovie(MovieEntity movieEntity);
     int deleteMovieById(long id);
-
     //Favorite Tv Show Fragment
     LiveData<List<TvShowEntity>> getAllTvShow();
     LiveData<TvShowEntity> getTvShowById(Long id);
@@ -40,23 +35,18 @@ public interface MovieCatalogueDataSource {
     /*
     * Detail Activity
     * */
-
     //Movie Detail Activity
-    Single<MovieEntity> loadMovieDetails(Long movieId);
-
+    Observable<MovieEntity> loadMovieDetails(Long movieId);
     //Tv Show Detail Activity
-    Single<TvShowEntity> loadTvShowDetails(Long tvShowId);
-
-    //Language
+    Observable<TvShowEntity> loadTvShowDetails(Long tvShowId);
+    //Languages
     Observable<ArrayList<Language>> loadLanguages();
 
     /*
      * Search Activity
      * */
-
     //Search Activity
-    Single<DiscoverMovieResponse> searchListMovie(String query);
-
+    Observable<DiscoverMovieResponse> searchListMovie(String query);
     //Search Activity
-    Single<DiscoverTvShowResponse> searchListTvShow(String query);
+    Observable<DiscoverTvShowResponse> searchListTvShow(String query);
 }

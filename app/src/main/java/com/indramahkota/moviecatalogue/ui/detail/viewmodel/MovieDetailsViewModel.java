@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
-import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
+import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
 import com.indramahkota.moviecatalogue.ui.detail.datastate.MovieResponseState;
 
 import javax.inject.Inject;
@@ -15,13 +15,13 @@ import io.reactivex.disposables.CompositeDisposable;
 public class MovieDetailsViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private final MovieCatalogueRepository repository;
-    private final SingleSchedulers singleSchedulers;
+    private final ObservableSchedulers observableSchedulers;
     private final MutableLiveData<MovieResponseState> movieViewState = new MutableLiveData<>();
 
     @Inject
-    MovieDetailsViewModel(MovieCatalogueRepository repository, SingleSchedulers singleSchedulers) {
+    MovieDetailsViewModel(MovieCatalogueRepository repository, ObservableSchedulers observableSchedulers) {
         this.repository = repository;
-        this.singleSchedulers = singleSchedulers;
+        this.observableSchedulers = observableSchedulers;
         disposable = new CompositeDisposable();
     }
 
@@ -30,9 +30,9 @@ public class MovieDetailsViewModel extends ViewModel {
     }
 
     public void loadMovieDetails(Long movieId) {
+        movieViewState.postValue(MovieResponseState.LOADING_STATE);
         disposable.add(repository.loadMovieDetails(movieId)
-                .doOnEvent((movieResponse, throwable) -> onLoading())
-                .compose(singleSchedulers.applySchedulers())
+                .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,
                         this::onError));
     }
@@ -45,10 +45,6 @@ public class MovieDetailsViewModel extends ViewModel {
     private void onError(Throwable error) {
         MovieResponseState.ERROR_STATE.setError(error);
         movieViewState.postValue(MovieResponseState.ERROR_STATE);
-    }
-
-    private void onLoading() {
-        movieViewState.postValue(MovieResponseState.LOADING_STATE);
     }
 
     @Override

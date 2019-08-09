@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
+import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
 import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverTvShowResponseState;
 
 import javax.inject.Inject;
@@ -15,13 +15,13 @@ import io.reactivex.disposables.CompositeDisposable;
 public class TvShowFragmentViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private final MovieCatalogueRepository repository;
-    private final SingleSchedulers singleSchedulers;
+    private final ObservableSchedulers observableSchedulers;
     private final MutableLiveData<DiscoverTvShowResponseState> tvShowViewState = new MutableLiveData<>();
 
     @Inject
-    TvShowFragmentViewModel(MovieCatalogueRepository repository, SingleSchedulers singleSchedulers) {
+    TvShowFragmentViewModel(MovieCatalogueRepository repository, ObservableSchedulers observableSchedulers) {
         this.repository = repository;
-        this.singleSchedulers = singleSchedulers;
+        this.observableSchedulers = observableSchedulers;
         disposable = new CompositeDisposable();
     }
 
@@ -30,9 +30,9 @@ public class TvShowFragmentViewModel extends ViewModel {
     }
 
     public void loadTvShow() {
+        tvShowViewState.postValue(DiscoverTvShowResponseState.LOADING_STATE);
         disposable.add(repository.loadListTvShow()
-                .doOnEvent((tvShowResponse, throwable) -> onLoading())
-                .compose(singleSchedulers.applySchedulers())
+                .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,
                         this::onError));
     }
@@ -45,10 +45,6 @@ public class TvShowFragmentViewModel extends ViewModel {
     private void onError(Throwable error) {
         DiscoverTvShowResponseState.ERROR_STATE.setError(error);
         tvShowViewState.postValue(DiscoverTvShowResponseState.ERROR_STATE);
-    }
-
-    private void onLoading() {
-        tvShowViewState.postValue(DiscoverTvShowResponseState.LOADING_STATE);
     }
 
     @Override

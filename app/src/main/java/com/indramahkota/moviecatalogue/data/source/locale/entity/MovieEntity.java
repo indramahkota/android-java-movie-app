@@ -32,6 +32,7 @@ public class MovieEntity implements Parcelable {
     private static final String CREDITS = "credits";
     private static final String GENRES = "genres";
     private static final String ORIGINAL_LANGUAGE = "original_language";
+    private static final String FAVORITE = "favorite";
 
     @PrimaryKey()
     @ColumnInfo(name = ITEM_ID)
@@ -77,6 +78,9 @@ public class MovieEntity implements Parcelable {
     @SerializedName("original_language")
     private String originalLanguage;
 
+    @ColumnInfo(name = FAVORITE)
+    private Boolean favorite;
+
     public MovieEntity() {}
 
     private MovieEntity(@NonNull Parcel in) {
@@ -98,6 +102,8 @@ public class MovieEntity implements Parcelable {
         credits = in.readParcelable(Credits.class.getClassLoader());
         genres = in.createTypedArrayList(Genres.CREATOR);
         originalLanguage = in.readString();
+        byte tmpFavorite = in.readByte();
+        favorite = tmpFavorite == 0 ? null : tmpFavorite == 1;
     }
 
     public static final Creator<MovieEntity> CREATOR = new Creator<MovieEntity>() {
@@ -192,6 +198,14 @@ public class MovieEntity implements Parcelable {
         this.originalLanguage = originalLanguage;
     }
 
+    public Boolean getFavorite() {
+        return favorite;
+    }
+
+    public void setFavorite(Boolean favorite) {
+        this.favorite = favorite;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -219,5 +233,6 @@ public class MovieEntity implements Parcelable {
         parcel.writeParcelable(credits, i);
         parcel.writeTypedList(genres);
         parcel.writeString(originalLanguage);
+        parcel.writeByte((byte) (favorite == null ? 0 : favorite ? 1 : 2));
     }
 }

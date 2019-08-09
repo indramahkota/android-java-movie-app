@@ -18,7 +18,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import io.reactivex.Observable;
-import io.reactivex.Single;
 
 @Singleton
 public class MovieCatalogueRepository implements MovieCatalogueDataSource {
@@ -37,13 +36,13 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //MovieFragmentViewModel
     @Override
-    public Single<DiscoverMovieResponse> loadListMovie() {
+    public Observable<DiscoverMovieResponse> loadListMovie() {
         return api.getDiscoverMovies(BuildConfig.TMDB_API_KEY);
     }
 
     //TvShowFragmentViewModel
     @Override
-    public Single<DiscoverTvShowResponse> loadListTvShow() {
+    public Observable<DiscoverTvShowResponse> loadListTvShow() {
         return api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY);
     }
 
@@ -100,12 +99,12 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
      * */
 
     @Override
-    public Single<MovieEntity> loadMovieDetails(Long movieId) {
+    public Observable<MovieEntity> loadMovieDetails(Long movieId) {
         return api.getMovie(movieId, BuildConfig.TMDB_API_KEY, "credits");
     }
 
     @Override
-    public Single<TvShowEntity> loadTvShowDetails(Long tvShowId) {
+    public Observable<TvShowEntity> loadTvShowDetails(Long tvShowId) {
         return api.getTvShow(tvShowId, BuildConfig.TMDB_API_KEY, "credits");
     }
 
@@ -119,12 +118,12 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
      * */
 
     @Override
-    public Single<DiscoverMovieResponse> searchListMovie(String query) {
+    public Observable<DiscoverMovieResponse> searchListMovie(String query) {
         return api.searchMovies(BuildConfig.TMDB_API_KEY, query);
     }
 
     @Override
-    public Single<DiscoverTvShowResponse> searchListTvShow(String query) {
+    public Observable<DiscoverTvShowResponse> searchListTvShow(String query) {
         return api.searchTvShows(BuildConfig.TMDB_API_KEY, query);
     }
 }

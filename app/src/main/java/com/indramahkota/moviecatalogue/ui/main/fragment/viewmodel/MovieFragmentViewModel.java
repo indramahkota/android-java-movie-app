@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.SingleSchedulers;
+import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
 import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverMovieResponseState;
 
 import javax.inject.Inject;
@@ -15,13 +15,13 @@ import io.reactivex.disposables.CompositeDisposable;
 public class MovieFragmentViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private final MovieCatalogueRepository repository;
-    private final SingleSchedulers singleSchedulers;
+    private final ObservableSchedulers observableSchedulers;
     private final MutableLiveData<DiscoverMovieResponseState> movieViewState = new MutableLiveData<>();
 
     @Inject
-    MovieFragmentViewModel(MovieCatalogueRepository repository, SingleSchedulers singleSchedulers) {
+    MovieFragmentViewModel(MovieCatalogueRepository repository, ObservableSchedulers observableSchedulers) {
         this.repository = repository;
-        this.singleSchedulers = singleSchedulers;
+        this.observableSchedulers = observableSchedulers;
         disposable = new CompositeDisposable();
     }
 
@@ -30,9 +30,9 @@ public class MovieFragmentViewModel extends ViewModel {
     }
 
     public void loadMovie() {
+        movieViewState.postValue(DiscoverMovieResponseState.LOADING_STATE);
         disposable.add(repository.loadListMovie()
-                .doOnEvent((movieResponse, throwable) -> onLoading())
-                .compose(singleSchedulers.applySchedulers())
+                .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,
                         this::onError));
     }
@@ -45,10 +45,6 @@ public class MovieFragmentViewModel extends ViewModel {
     private void onError(Throwable error) {
         DiscoverMovieResponseState.ERROR_STATE.setError(error);
         movieViewState.postValue(DiscoverMovieResponseState.ERROR_STATE);
-    }
-
-    private void onLoading() {
-        movieViewState.postValue(DiscoverMovieResponseState.LOADING_STATE);
     }
 
     @Override
