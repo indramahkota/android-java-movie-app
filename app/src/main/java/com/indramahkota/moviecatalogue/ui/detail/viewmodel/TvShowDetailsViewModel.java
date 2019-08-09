@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
+import com.indramahkota.moviecatalogue.data.source.Resource;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
-import com.indramahkota.moviecatalogue.ui.detail.datastate.TvShowResponseState;
 
 import javax.inject.Inject;
 
@@ -16,7 +16,7 @@ public class TvShowDetailsViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private final MovieCatalogueRepository repository;
     private final ObservableSchedulers observableSchedulers;
-    private final MutableLiveData<TvShowResponseState> tvShowViewState = new MutableLiveData<>();
+    private final MutableLiveData<Resource<TvShowEntity>> tvShowViewState = new MutableLiveData<>();
 
     @Inject
     TvShowDetailsViewModel(MovieCatalogueRepository repository, ObservableSchedulers observableSchedulers) {
@@ -25,12 +25,12 @@ public class TvShowDetailsViewModel extends ViewModel {
         disposable = new CompositeDisposable();
     }
 
-    public MutableLiveData<TvShowResponseState> getTvShowViewState() {
+    public MutableLiveData<Resource<TvShowEntity>> getTvShowViewState() {
         return tvShowViewState;
     }
 
     public void loadTvShowDetails(Long tvShowId) {
-        tvShowViewState.postValue(TvShowResponseState.LOADING_STATE);
+        tvShowViewState.postValue(Resource.loading(new TvShowEntity()));
         disposable.add(repository.loadTvShowDetails(tvShowId)
                 .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,
@@ -38,13 +38,11 @@ public class TvShowDetailsViewModel extends ViewModel {
     }
 
     private void onSuccess(TvShowEntity tvShowEntity) {
-        TvShowResponseState.SUCCESS_STATE.setData(tvShowEntity);
-        tvShowViewState.postValue(TvShowResponseState.SUCCESS_STATE);
+        tvShowViewState.postValue(Resource.success(tvShowEntity));
     }
 
     private void onError(Throwable error) {
-        TvShowResponseState.ERROR_STATE.setError(error);
-        tvShowViewState.postValue(TvShowResponseState.ERROR_STATE);
+        tvShowViewState.postValue(Resource.error(String.valueOf(error), new TvShowEntity()));
     }
 
     @Override

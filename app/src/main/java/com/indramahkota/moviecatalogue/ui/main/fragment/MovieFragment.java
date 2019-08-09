@@ -98,23 +98,26 @@ public class MovieFragment extends Fragment {
 
         MovieFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieFragmentViewModel.class);
         viewModel.getMovieViewState().observe(this, movieViewState -> {
-            switch (movieViewState.getCurrentState()) {
-                case 0:
+            switch (movieViewState.status) {
+                case LOADING:
                     //show loading
                     relativeLayout.setVisibility(View.GONE);
                     mShimmerViewContainer.setVisibility(View.VISIBLE);
                     break;
-                case 1:
+                case SUCCESS:
                     //show data
                     swipeRefreshLayout.setRefreshing(false);
                     rvFragmentMovies.setVisibility(View.VISIBLE);
-                    discoverMovies = movieViewState.getData();
-                    setAdapter(discoverMovies);
-                    if(discoverMovies.getResults().size() < 1) {
-                        relativeLayout.setVisibility(View.VISIBLE);
+                    discoverMovies = movieViewState.data;
+                    if (discoverMovies != null) {
+                        setAdapter(discoverMovies);
+                        if(discoverMovies.getResults().size() < 1) {
+                            relativeLayout.setVisibility(View.VISIBLE);
+                        }
                     }
+
                     break;
-                case -1:
+                case ERROR:
                     //show error
                     swipeRefreshLayout.setRefreshing(false);
                     relativeLayout.setVisibility(View.GONE);

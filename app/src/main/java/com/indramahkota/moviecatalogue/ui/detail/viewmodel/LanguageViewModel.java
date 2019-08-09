@@ -4,10 +4,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
+import com.indramahkota.moviecatalogue.data.source.Resource;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
-import com.indramahkota.moviecatalogue.ui.detail.datastate.LanguageResponseState;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public class LanguageViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private final MovieCatalogueRepository repository;
     private final ObservableSchedulers observableSchedulers;
-    private final MutableLiveData<LanguageResponseState> languageViewState = new MutableLiveData<>();
+    private final MutableLiveData<Resource<LanguageResponse>> languageViewState = new MutableLiveData<>();
 
     @Inject
     LanguageViewModel(MovieCatalogueRepository repository, ObservableSchedulers observableSchedulers) {
@@ -28,12 +28,12 @@ public class LanguageViewModel extends ViewModel {
         disposable = new CompositeDisposable();
     }
 
-    public MutableLiveData<LanguageResponseState> getLanguageViewState() {
+    public MutableLiveData<Resource<LanguageResponse>> getLanguageViewState() {
         return languageViewState;
     }
 
     public void loadLanguages() {
-        languageViewState.postValue(LanguageResponseState.LOADING_STATE);
+        languageViewState.postValue(Resource.loading(new LanguageResponse()));
         disposable.add(repository.loadLanguages()
                 .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,
@@ -44,13 +44,11 @@ public class LanguageViewModel extends ViewModel {
         LanguageResponse languageResponse = new LanguageResponse();
         languageResponse.setResults(language);
 
-        LanguageResponseState.SUCCESS_STATE.setData(languageResponse);
-        languageViewState.postValue(LanguageResponseState.SUCCESS_STATE);
+        languageViewState.postValue(Resource.success(languageResponse));
     }
 
     private void onError(Throwable error) {
-        LanguageResponseState.ERROR_STATE.setError(error);
-        languageViewState.postValue(LanguageResponseState.ERROR_STATE);
+        languageViewState.postValue(Resource.error(String.valueOf(error), new LanguageResponse()));
     }
 
     @Override

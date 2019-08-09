@@ -4,9 +4,9 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
+import com.indramahkota.moviecatalogue.data.source.Resource;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
-import com.indramahkota.moviecatalogue.ui.detail.datastate.MovieResponseState;
 
 import javax.inject.Inject;
 
@@ -16,7 +16,7 @@ public class MovieDetailsViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private final MovieCatalogueRepository repository;
     private final ObservableSchedulers observableSchedulers;
-    private final MutableLiveData<MovieResponseState> movieViewState = new MutableLiveData<>();
+    private final MutableLiveData<Resource<MovieEntity>> movieViewState = new MutableLiveData<>();
 
     @Inject
     MovieDetailsViewModel(MovieCatalogueRepository repository, ObservableSchedulers observableSchedulers) {
@@ -25,12 +25,12 @@ public class MovieDetailsViewModel extends ViewModel {
         disposable = new CompositeDisposable();
     }
 
-    public MutableLiveData<MovieResponseState> getMovieViewState() {
+    public MutableLiveData<Resource<MovieEntity>> getMovieViewState() {
         return movieViewState;
     }
 
     public void loadMovieDetails(Long movieId) {
-        movieViewState.postValue(MovieResponseState.LOADING_STATE);
+        movieViewState.postValue(Resource.loading(new MovieEntity()));
         disposable.add(repository.loadMovieDetails(movieId)
                 .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,
@@ -38,13 +38,11 @@ public class MovieDetailsViewModel extends ViewModel {
     }
 
     private void onSuccess(MovieEntity movieEntity) {
-        MovieResponseState.SUCCESS_STATE.setData(movieEntity);
-        movieViewState.postValue(MovieResponseState.SUCCESS_STATE);
+        movieViewState.postValue(Resource.success(movieEntity));
     }
 
     private void onError(Throwable error) {
-        MovieResponseState.ERROR_STATE.setError(error);
-        movieViewState.postValue(MovieResponseState.ERROR_STATE);
+        movieViewState.postValue(Resource.error(String.valueOf(error), new MovieEntity()));
     }
 
     @Override

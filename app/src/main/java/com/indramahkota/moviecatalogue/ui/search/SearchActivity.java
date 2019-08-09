@@ -81,24 +81,25 @@ public class SearchActivity extends AppCompatActivity {
 
         searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
         searchViewModel.getMovieViewState().observe(this, movieViewState -> {
-            switch (movieViewState.getCurrentState()) {
-                case 0:
+            switch (movieViewState.status) {
+                case LOADING:
                     //show loading
                     relativeLayout.setVisibility(View.GONE);
                     mShimmerViewContainer.setVisibility(View.VISIBLE);
                     break;
-                case 1:
+                case SUCCESS:
                     //show data
                     swipeRefreshLayout.setRefreshing(false);
                     rvSearch.setVisibility(View.VISIBLE);
-                    searchMovies = movieViewState.getData();
-                    setMovieAdapter(searchMovies);
-
-                    if(searchMovies.getResults().size() < 1) {
-                        relativeLayout.setVisibility(View.VISIBLE);
+                    searchMovies = movieViewState.data;
+                    if (searchMovies != null) {
+                        setMovieAdapter(searchMovies);
+                        if(searchMovies.getResults().size() < 1) {
+                            relativeLayout.setVisibility(View.VISIBLE);
+                        }
                     }
                     break;
-                case -1:
+                case ERROR:
                     //show error
                     swipeRefreshLayout.setRefreshing(false);
                     relativeLayout.setVisibility(View.GONE);
@@ -108,24 +109,25 @@ public class SearchActivity extends AppCompatActivity {
             }
         });
         searchViewModel.getTvShowViewState().observe(this, tvShowListViewState -> {
-            switch (tvShowListViewState.getCurrentState()) {
-                case 0:
+            switch (tvShowListViewState.status) {
+                case LOADING:
                     //show loading
                     relativeLayout.setVisibility(View.GONE);
                     mShimmerViewContainer.setVisibility(View.VISIBLE);
                     break;
-                case 1:
+                case SUCCESS:
                     //show data
                     swipeRefreshLayout.setRefreshing(false);
                     rvSearch.setVisibility(View.VISIBLE);
-                    searchTvShows = tvShowListViewState.getData();
-                    setTvSowAdapter(searchTvShows);
-
-                    if(searchTvShows.getResults().size() < 1) {
-                        relativeLayout.setVisibility(View.VISIBLE);
+                    searchTvShows = tvShowListViewState.data;
+                    if (searchTvShows != null) {
+                        setTvSowAdapter(searchTvShows);
+                        if(searchTvShows.getResults().size() < 1) {
+                            relativeLayout.setVisibility(View.VISIBLE);
+                        }
                     }
                     break;
-                case -1:
+                case ERROR:
                     //show error
                     swipeRefreshLayout.setRefreshing(false);
                     relativeLayout.setVisibility(View.GONE);

@@ -94,8 +94,8 @@ public class TvShowDetailsActivity extends AppCompatActivity {
 
         LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
         languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
-            if(languageResponseState.getCurrentState() == 1) {
-                languageResponse = languageResponseState.getData();
+            if(languageResponseState.isSuccess()) {
+                languageResponse = languageResponseState.data;
                 if(tvShowEntity != null) {
                     setTxtLanguage();
                 }
@@ -104,20 +104,22 @@ public class TvShowDetailsActivity extends AppCompatActivity {
 
         TvShowDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowDetailsViewModel.class);
         viewModel.getTvShowViewState().observe(this, tvShowResponseState -> {
-            switch (tvShowResponseState.getCurrentState()) {
-                case 0:
+            switch (tvShowResponseState.status) {
+                case LOADING:
                     //show loading
                     mShimmerViewContainer.setVisibility(View.VISIBLE);
                     detailsContainer.setVisibility(View.GONE);
                     break;
-                case 1:
+                case SUCCESS:
                     //show data
-                    tvShowEntity = tvShowResponseState.getData();
-                    initializeUi(tvShowEntity);
-                    mShimmerViewContainer.setVisibility(View.GONE);
-                    detailsContainer.setVisibility(View.VISIBLE);
+                    tvShowEntity = tvShowResponseState.data;
+                    if (tvShowEntity != null) {
+                        initializeUi(tvShowEntity);
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        detailsContainer.setVisibility(View.VISIBLE);
+                    }
                     break;
-                case -1:
+                case ERROR:
                     //show error
                     detailsContainer.setVisibility(View.GONE);
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();

@@ -4,11 +4,10 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
+import com.indramahkota.moviecatalogue.data.source.Resource;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
-import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverMovieResponseState;
-import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverTvShowResponseState;
 
 import javax.inject.Inject;
 
@@ -18,8 +17,8 @@ public class SearchViewModel extends ViewModel {
     private CompositeDisposable disposable;
     private final MovieCatalogueRepository repository;
     private final ObservableSchedulers observableSchedulers;
-    private final MutableLiveData<DiscoverMovieResponseState> movieViewState = new MutableLiveData<>();
-    private final MutableLiveData<DiscoverTvShowResponseState> tvShowViewState = new MutableLiveData<>();
+    private final MutableLiveData<Resource<DiscoverMovieResponse>> movieViewState = new MutableLiveData<>();
+    private final MutableLiveData<Resource<DiscoverTvShowResponse>> tvShowViewState = new MutableLiveData<>();
 
     @Inject
     SearchViewModel(MovieCatalogueRepository repository, ObservableSchedulers observableSchedulers) {
@@ -28,16 +27,16 @@ public class SearchViewModel extends ViewModel {
         disposable = new CompositeDisposable();
     }
 
-    public MutableLiveData<DiscoverMovieResponseState> getMovieViewState() {
+    public MutableLiveData<Resource<DiscoverMovieResponse>> getMovieViewState() {
         return movieViewState;
     }
 
-    public MutableLiveData<DiscoverTvShowResponseState> getTvShowViewState() {
+    public MutableLiveData<Resource<DiscoverTvShowResponse>> getTvShowViewState() {
         return tvShowViewState;
     }
 
     public void searchMovie(String query) {
-        movieViewState.postValue(DiscoverMovieResponseState.LOADING_STATE);
+        movieViewState.postValue(Resource.loading(new DiscoverMovieResponse()));
         disposable.add(repository.searchListMovie(query)
                 .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSearchMovieSuccess,
@@ -45,7 +44,7 @@ public class SearchViewModel extends ViewModel {
     }
 
     public void searchTvShow(String query) {
-        tvShowViewState.postValue(DiscoverTvShowResponseState.LOADING_STATE);
+        tvShowViewState.postValue(Resource.loading(new DiscoverTvShowResponse()));
         disposable.add(repository.searchListTvShow(query)
                 .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSearchTvShowSuccess,
@@ -53,23 +52,19 @@ public class SearchViewModel extends ViewModel {
     }
 
     private void onSearchMovieSuccess(DiscoverMovieResponse discoverMovieResponse) {
-        DiscoverMovieResponseState.SUCCESS_STATE.setData(discoverMovieResponse);
-        movieViewState.postValue(DiscoverMovieResponseState.SUCCESS_STATE);
+        movieViewState.postValue(Resource.success(discoverMovieResponse));
     }
 
     private void onSearchMovieError(Throwable error) {
-        DiscoverMovieResponseState.ERROR_STATE.setError(error);
-        movieViewState.postValue(DiscoverMovieResponseState.ERROR_STATE);
+        movieViewState.postValue(Resource.error(String.valueOf(error), new DiscoverMovieResponse()));
     }
 
     private void onSearchTvShowSuccess(DiscoverTvShowResponse discoverTvShowResponse) {
-        DiscoverTvShowResponseState.SUCCESS_STATE.setData(discoverTvShowResponse);
-        tvShowViewState.postValue(DiscoverTvShowResponseState.SUCCESS_STATE);
+        tvShowViewState.postValue(Resource.success(discoverTvShowResponse));
     }
 
     private void onSearchTvShowError(Throwable error) {
-        DiscoverTvShowResponseState.ERROR_STATE.setError(error);
-        tvShowViewState.postValue(DiscoverTvShowResponseState.ERROR_STATE);
+        tvShowViewState.postValue(Resource.error(String.valueOf(error), new DiscoverTvShowResponse()));
     }
 
     @Override

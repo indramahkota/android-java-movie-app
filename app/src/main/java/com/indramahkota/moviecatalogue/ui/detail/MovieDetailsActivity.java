@@ -100,7 +100,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 mShimmerViewContainer.setVisibility(View.GONE);
                 detailsContainer.setVisibility(View.VISIBLE);
             } else {
-                testLanjut();
+                testNext();
             }
         });
 
@@ -110,11 +110,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
     }
 
-    private void testLanjut() {
+    private void testNext() {
         languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
         languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
-            if(languageResponseState.getCurrentState() == 1) {
-                languageResponse = languageResponseState.getData();
+            if(languageResponseState.isSuccess()) {
+                languageResponse = languageResponseState.data;
                 if(movieEntity != null) {
                     setTxtLanguage();
                 }
@@ -123,20 +123,22 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         MovieDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieDetailsViewModel.class);
         viewModel.getMovieViewState().observe(this, movieResponseState -> {
-            switch (movieResponseState.getCurrentState()) {
-                case 0:
+            switch (movieResponseState.status) {
+                case LOADING:
                     //show loading
                     mShimmerViewContainer.setVisibility(View.VISIBLE);
                     detailsContainer.setVisibility(View.GONE);
                     break;
-                case 1:
+                case SUCCESS:
                     //show data
-                    movieEntity = movieResponseState.getData();
-                    initializeUi(movieEntity);
-                    mShimmerViewContainer.setVisibility(View.GONE);
-                    detailsContainer.setVisibility(View.VISIBLE);
+                    movieEntity = movieResponseState.data;
+                    if (movieEntity != null) {
+                        initializeUi(movieEntity);
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        detailsContainer.setVisibility(View.VISIBLE);
+                    }
                     break;
-                case -1:
+                case ERROR:
                     //show error
                     detailsContainer.setVisibility(View.GONE);
                     Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();

@@ -98,23 +98,25 @@ public class TvShowFragment extends Fragment {
 
         TvShowFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowFragmentViewModel.class);
         viewModel.getTvShowViewState().observe(this, tvShowListViewState -> {
-            switch (tvShowListViewState.getCurrentState()) {
-                case 0:
+            switch (tvShowListViewState.status) {
+                case LOADING:
                     //show loading
                     relativeLayout.setVisibility(View.GONE);
                     mShimmerViewContainer.setVisibility(View.VISIBLE);
                     break;
-                case 1:
+                case SUCCESS:
                     //show data
                     swipeRefreshLayout.setRefreshing(false);
                     rvFragmentTvShows.setVisibility(View.VISIBLE);
-                    discoverTvShows = tvShowListViewState.getData();
-                    setAdapter(discoverTvShows);
-                    if(discoverTvShows.getResults().size() < 1) {
-                        relativeLayout.setVisibility(View.VISIBLE);
+                    discoverTvShows = tvShowListViewState.data;
+                    if (discoverTvShows != null) {
+                        setAdapter(discoverTvShows);
+                        if(discoverTvShows.getResults().size() < 1) {
+                            relativeLayout.setVisibility(View.VISIBLE);
+                        }
                     }
                     break;
-                case -1:
+                case ERROR:
                     //show error
                     swipeRefreshLayout.setRefreshing(false);
                     relativeLayout.setVisibility(View.GONE);
