@@ -44,6 +44,9 @@ public interface AppDao {
     @Query("DELETE FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
     void deleteMovieById(long id);
 
+    /*@Update(onConflict = OnConflictStrategy.REPLACE)
+    int updateMovie(MovieEntity movieEntity);*/
+
     /*
      *
      * Tv Shows
@@ -61,4 +64,7 @@ public interface AppDao {
 
     @Query("DELETE FROM " + TvShowEntity.TABLE_NAME + " WHERE itemId = :id")
     void deleteTvShowById(long id);
+
+    /*@Update(onConflict = OnConflictStrategy.REPLACE)
+    int updateTvShow(TvShowEntity tvShowEntity);*/
 }

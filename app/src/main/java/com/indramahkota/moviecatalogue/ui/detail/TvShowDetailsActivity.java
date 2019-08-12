@@ -77,11 +77,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         tvShowId = getIntent().getLongExtra(EXTRA_TV_SHOW_ID, 0);
 
         detailsContainer = findViewById(R.id.layout_details);
-        detailsContainer.setVisibility(View.GONE);
-
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
-        mShimmerViewContainer.setVisibility(View.VISIBLE);
-
         imgPoster = findViewById(R.id.img_poster);
         txtTitle = findViewById(R.id.txt_title);
         txtRating = findViewById(R.id.txt_rating);
@@ -89,25 +85,35 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         txtOverview = findViewById(R.id.txt_overview);
         background = findViewById(R.id.img_background);
         txtLanguage = findViewById(R.id.txt_language);
+        txtLanguage.setText(getResources().getString(R.string.no_language));
 
         favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
 
-        LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
-        languageViewModel.getLanguages().observe(this, languageResponseState -> {
-            if(languageResponseState.isSuccess()) {
-                languages = languageResponseState.data;
-                if(tvShowEntity != null) {
-                    setTxtLanguage();
+        if(languages != null)
+            setTxtLanguage();
+        else {
+            LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
+            languageViewModel.getLanguages().observe(this, languageResponseState -> {
+                if (languageResponseState.isSuccess()) {
+                    languages = languageResponseState.data;
+                    if (tvShowEntity != null) {
+                        setTxtLanguage();
+                    }
                 }
-            }
-        });
+            });
+        }
 
         TvShowDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowDetailsViewModel.class);
         viewModel.getTvShowDetails(tvShowId).observe(this, tvShowResponseState -> {
             switch (tvShowResponseState.status) {
+                case LOADING:
+                    //show loading
+                    mShimmerViewContainer.setVisibility(View.VISIBLE);
+                    detailsContainer.setVisibility(View.GONE);
+                    break;
                 case SUCCESS:
                     //show data
-                    tvShowEntity = tvShowResponseState.body;
+                    tvShowEntity = tvShowResponseState.data;
                     if (tvShowEntity != null) {
                         initializeUi(tvShowEntity);
                         mShimmerViewContainer.setVisibility(View.GONE);
@@ -162,13 +168,12 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+
         ArrayList<LanguageEntity> helper = new ArrayList<>();
         int len = languages.size();
-
         for(int i = 0; i<len; ++i) {
             helper.add(languages.get(i));
         }
-
         outState.putParcelableArrayList(STATE_LANGUAGE_RESPONSE, helper);
         outState.putParcelable(STATE_TV_SHOW_RESPONSE, tvShowEntity);
     }
@@ -237,11 +242,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         for (int i = 0; i<len; ++i) {
             LanguageEntity lang = languages.get(i);
             if(lang.getIso().equals(tvShowEntity.getOriginalLanguage())){
-                if(lang.getIso() != null && !lang.getIso().isEmpty()) {
-                    txtLanguage.setText(lang.getEnglishName());
-                } else {
-                    txtLanguage.setText(getResources().getString(R.string.no_language));
-                }
+                txtLanguage.setText(lang.getEnglishName());
                 break;
             }
         }

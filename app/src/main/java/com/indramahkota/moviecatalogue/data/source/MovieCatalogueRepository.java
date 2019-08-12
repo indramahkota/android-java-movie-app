@@ -21,7 +21,6 @@ import java.util.Objects;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
-import io.reactivex.disposables.CompositeDisposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,8 +30,6 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
     private final AppDao dao;
     private final ApiEndPoint api;
     private final AppExecutors exec;
-
-    private CompositeDisposable disposable;
 
     @Inject
     public MovieCatalogueRepository(AppDao appDao, ApiEndPoint apiEndPoint, AppExecutors exec){
@@ -47,19 +44,22 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //MovieFragmentViewModel
     @Override
-    public LiveData<ApiResponse<DiscoverMovieResponse>> loadListMovie() {
-        MutableLiveData<ApiResponse<DiscoverMovieResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<DiscoverMovieResponse>> loadListMovie(String refresh) {
+        MutableLiveData<Resource<DiscoverMovieResponse>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading(new DiscoverMovieResponse()));
+
         Call<DiscoverMovieResponse> call = api.getDiscoverMovies(BuildConfig.TMDB_API_KEY);
         call.enqueue(new Callback<DiscoverMovieResponse>() {
             @Override
             public void onResponse(@NonNull Call<DiscoverMovieResponse> call, @NonNull Response<DiscoverMovieResponse> response) {
                 Objects.requireNonNull(response.body(), "Must not be null");
-                result.setValue(ApiResponse.success(response.body()));
+                result.setValue(Resource.success(response.body()));
             }
 
             @Override
             public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
                 Objects.requireNonNull(t.getMessage(), "Must not be null");
+                result.setValue(Resource.error(t.getMessage(), new DiscoverMovieResponse()));
             }
         });
         return result;
@@ -67,19 +67,22 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //TvShowFragmentViewModel
     @Override
-    public LiveData<ApiResponse<DiscoverTvShowResponse>> loadListTvShow() {
-        MutableLiveData<ApiResponse<DiscoverTvShowResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<DiscoverTvShowResponse>> loadListTvShow(String refresh) {
+        MutableLiveData<Resource<DiscoverTvShowResponse>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading(new DiscoverTvShowResponse()));
+
         Call<DiscoverTvShowResponse> call = api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY);
         call.enqueue(new Callback<DiscoverTvShowResponse>() {
             @Override
             public void onResponse(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Response<DiscoverTvShowResponse> response) {
                 Objects.requireNonNull(response.body(), "Must not be null");
-                result.setValue(ApiResponse.success(response.body()));
+                result.setValue(Resource.success(response.body()));
             }
 
             @Override
             public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
                 Objects.requireNonNull(t.getMessage(), "Must not be null");
+                result.setValue(Resource.error(t.getMessage(), new DiscoverTvShowResponse()));
             }
         });
         return result;
@@ -138,38 +141,44 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
      * */
 
     @Override
-    public LiveData<ApiResponse<MovieEntity>> loadMovieDetails(Long movieId) {
-        MutableLiveData<ApiResponse<MovieEntity>> result = new MutableLiveData<>();
+    public LiveData<Resource<MovieEntity>> loadMovieDetails(Long movieId) {
+        MutableLiveData<Resource<MovieEntity>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading(new MovieEntity()));
+
         Call<MovieEntity> call = api.getMovie(movieId, BuildConfig.TMDB_API_KEY, "credits");
         call.enqueue(new Callback<MovieEntity>() {
             @Override
             public void onResponse(@NonNull Call<MovieEntity> call, @NonNull Response<MovieEntity> response) {
                 Objects.requireNonNull(response.body(), "Must not be null");
-                result.setValue(ApiResponse.success(response.body()));
+                result.setValue(Resource.success(response.body()));
             }
 
             @Override
             public void onFailure(@NonNull Call<MovieEntity> call, @NonNull Throwable t) {
                 Objects.requireNonNull(t.getMessage(), "Must not be null");
+                result.setValue(Resource.error(t.getMessage(), new MovieEntity()));
             }
         });
         return result;
     }
 
     @Override
-    public LiveData<ApiResponse<TvShowEntity>> loadTvShowDetails(Long tvShowId) {
-        MutableLiveData<ApiResponse<TvShowEntity>> result = new MutableLiveData<>();
+    public LiveData<Resource<TvShowEntity>> loadTvShowDetails(Long tvShowId) {
+        MutableLiveData<Resource<TvShowEntity>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading(new TvShowEntity()));
+
         Call<TvShowEntity> call = api.getTvShow(tvShowId, BuildConfig.TMDB_API_KEY, "credits");
         call.enqueue(new Callback<TvShowEntity>() {
             @Override
             public void onResponse(@NonNull Call<TvShowEntity> call, @NonNull Response<TvShowEntity> response) {
                 Objects.requireNonNull(response.body(), "Must not be null");
-                result.setValue(ApiResponse.success(response.body()));
+                result.setValue(Resource.success(response.body()));
             }
 
             @Override
             public void onFailure(@NonNull Call<TvShowEntity> call, @NonNull Throwable t) {
                 Objects.requireNonNull(t.getMessage(), "Must not be null");
+                result.setValue(Resource.error(t.getMessage(), new TvShowEntity()));
             }
         });
         return result;
@@ -185,38 +194,44 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
      * */
 
     @Override
-    public LiveData<ApiResponse<DiscoverMovieResponse>> searchListMovie(String query) {
-        MutableLiveData<ApiResponse<DiscoverMovieResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<DiscoverMovieResponse>> searchListMovie(String query) {
+        MutableLiveData<Resource<DiscoverMovieResponse>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading(new DiscoverMovieResponse()));
+
         Call<DiscoverMovieResponse> call = api.searchMovies(BuildConfig.TMDB_API_KEY, query);
         call.enqueue(new Callback<DiscoverMovieResponse>() {
             @Override
             public void onResponse(@NonNull Call<DiscoverMovieResponse> call, @NonNull Response<DiscoverMovieResponse> response) {
                 Objects.requireNonNull(response.body(), "Must not be null");
-                result.setValue(ApiResponse.success(response.body()));
+                result.setValue(Resource.success(response.body()));
             }
 
             @Override
             public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
                 Objects.requireNonNull(t.getMessage(), "Must not be null");
+                result.setValue(Resource.error(t.getMessage(), new DiscoverMovieResponse()));
             }
         });
         return result;
     }
 
     @Override
-    public LiveData<ApiResponse<DiscoverTvShowResponse>> searchListTvShow(String query) {
-        MutableLiveData<ApiResponse<DiscoverTvShowResponse>> result = new MutableLiveData<>();
+    public LiveData<Resource<DiscoverTvShowResponse>> searchListTvShow(String query) {
+        MutableLiveData<Resource<DiscoverTvShowResponse>> result = new MutableLiveData<>();
+        result.setValue(Resource.loading(new DiscoverTvShowResponse()));
+
         Call<DiscoverTvShowResponse> call = api.searchTvShows(BuildConfig.TMDB_API_KEY, query);
         call.enqueue(new Callback<DiscoverTvShowResponse>() {
             @Override
             public void onResponse(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Response<DiscoverTvShowResponse> response) {
                 Objects.requireNonNull(response.body(), "Must not be null");
-                result.setValue(ApiResponse.success(response.body()));
+                result.setValue(Resource.success(response.body()));
             }
 
             @Override
             public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
                 Objects.requireNonNull(t.getMessage(), "Must not be null");
+                result.setValue(Resource.error(t.getMessage(), new DiscoverTvShowResponse()));
             }
         });
         return result;

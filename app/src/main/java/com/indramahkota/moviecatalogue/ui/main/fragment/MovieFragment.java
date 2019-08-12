@@ -97,20 +97,24 @@ public class MovieFragment extends Fragment {
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_to_refresh);
 
         MovieFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieFragmentViewModel.class);
-        viewModel.getDiscoverMovies().observe(this, movieViewState -> {
+        viewModel.listDiscoverMovie.observe(this, movieViewState -> {
             switch (movieViewState.status) {
+                case LOADING:
+                    //show loading
+                    relativeLayout.setVisibility(View.GONE);
+                    mShimmerViewContainer.setVisibility(View.VISIBLE);
+                    break;
                 case SUCCESS:
                     //show data
                     swipeRefreshLayout.setRefreshing(false);
                     rvFragmentMovies.setVisibility(View.VISIBLE);
-                    discoverMovies = movieViewState.body;
+                    discoverMovies = movieViewState.data;
                     if (discoverMovies != null) {
                         setAdapter(discoverMovies);
                         if(discoverMovies.getResults().size() < 1) {
                             relativeLayout.setVisibility(View.VISIBLE);
                         }
                     }
-
                     break;
                 case ERROR:
                     //show error
@@ -126,8 +130,15 @@ public class MovieFragment extends Fragment {
             relativeLayout.setVisibility(View.GONE);
             rvFragmentMovies.setVisibility(View.GONE);
             mShimmerViewContainer.setVisibility(View.VISIBLE);
-            swipeRefreshLayout.setRefreshing(false);//
+            viewModel.setRefreshId("refresh");
         });
+
+        if(discoverMovies != null) {
+            setAdapter(discoverMovies);
+            linearLayoutManager.scrollToPosition(scrollPosition);
+        } else {
+            viewModel.setRefreshId("start");
+        }
     }
 
     private void setAdapter(@NonNull DiscoverMovieResponse disMovies) {

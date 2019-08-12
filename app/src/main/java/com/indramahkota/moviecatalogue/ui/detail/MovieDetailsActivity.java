@@ -40,7 +40,6 @@ import dagger.android.AndroidInjection;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE_ID = "extra_movie_id";
-    public static final String EXTRA_MOVIE_ISO = "extra_movie_iso";
     public static final String STATE_MOVIE_RESPONSE = "state_movie_response";
     public static final String STATE_LANGUAGE_RESPONSE = "state_language_response";
 
@@ -78,11 +77,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         movieId = getIntent().getLongExtra(EXTRA_MOVIE_ID, 0);
 
         detailsContainer = findViewById(R.id.layout_details);
-        detailsContainer.setVisibility(View.GONE);
-
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
-        mShimmerViewContainer.setVisibility(View.VISIBLE);
-
         imgPoster = findViewById(R.id.img_poster);
         txtTitle = findViewById(R.id.txt_title);
         txtRating = findViewById(R.id.txt_rating);
@@ -90,43 +85,40 @@ public class MovieDetailsActivity extends AppCompatActivity {
         txtOverview = findViewById(R.id.txt_overview);
         background = findViewById(R.id.img_background);
         txtLanguage = findViewById(R.id.txt_language);
-
-        LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
-        languageViewModel.getLanguages().observe(this, languageResponseState -> {
-            if(languageResponseState.isSuccess()) {
-                languages = languageResponseState.data;
-                if(movieEntity != null) {
-                    setTxtLanguage();
-                }
-            }
-        });
-
-        favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
-        favoriteMovieViewModel.getMovie(movieId).observe(this, movie -> {
-            favoriteMovieEntity = movie;
-            if(favoriteMovieEntity != null) {
-                movieEntity = movie;
-                initializeUi(movieEntity);
-                mShimmerViewContainer.setVisibility(View.GONE);
-                detailsContainer.setVisibility(View.VISIBLE);
-            } else {
-                testNext();
-            }
-        });
+        txtLanguage.setText(getResources().getString(R.string.no_language));
 
         if (savedInstanceState != null) {
             movieEntity = savedInstanceState.getParcelable(STATE_MOVIE_RESPONSE);
             languages = savedInstanceState.getParcelableArrayList(STATE_LANGUAGE_RESPONSE);
         }
-    }
 
-    private void testNext() {
+        favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
+
+        if(languages != null)
+            setTxtLanguage();
+        else {
+            LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
+            languageViewModel.getLanguages().observe(this, languageResponseState -> {
+                if (languageResponseState.isSuccess()) {
+                    languages = languageResponseState.data;
+                    if (movieEntity != null) {
+                        setTxtLanguage();
+                    }
+                }
+            });
+        }
+
         MovieDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieDetailsViewModel.class);
-        viewModel.getMovieDetails(movieId).observe(this, movieResponseState -> {
+        viewModel.movieDetail.observe(this, movieResponseState -> {
             switch (movieResponseState.status) {
+                case LOADING:
+                    //show loading
+                    mShimmerViewContainer.setVisibility(View.VISIBLE);
+                    detailsContainer.setVisibility(View.GONE);
+                    break;
                 case SUCCESS:
                     //show data
-                    movieEntity = movieResponseState.body;
+                    movieEntity = movieResponseState.data;
                     if (movieEntity != null) {
                         initializeUi(movieEntity);
                         mShimmerViewContainer.setVisibility(View.GONE);
@@ -140,6 +132,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     break;
             }
         });
+
+        if (movieEntity != null) {
+            initializeUi(movieEntity);
+        } else {
+            viewModel.setMovieId(movieId);
+        }
     }
 
     @Override
@@ -179,11 +177,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         ArrayList<LanguageEntity> helper = new ArrayList<>();
         int len = languages.size();
-
         for(int i = 0; i<len; ++i) {
             helper.add(languages.get(i));
         }
-
         outState.putParcelableArrayList(STATE_LANGUAGE_RESPONSE, helper);
         outState.putParcelable(STATE_MOVIE_RESPONSE, movieEntity);
     }
@@ -252,11 +248,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         for (int i = 0; i<len; ++i) {
             LanguageEntity lang = languages.get(i);
             if(lang.getIso().equals(movieEntity.getOriginalLanguage())){
-                if(lang.getIso() != null && !lang.getIso().isEmpty()) {
-                    txtLanguage.setText(lang.getEnglishName());
-                } else {
-                    txtLanguage.setText(getResources().getString(R.string.no_language));
-                }
+                txtLanguage.setText(lang.getEnglishName());
                 break;
             }
         }

@@ -114,7 +114,6 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
                 String iso = getListMovies().get(position1).getOriginalLanguage();
                 Intent moveWithDataIntent = new Intent(mContext, MovieDetailsActivity.class);
                 moveWithDataIntent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, id);
-                moveWithDataIntent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ISO, iso);
                 mContext.startActivity(moveWithDataIntent);
             }));
         }

@@ -5,7 +5,6 @@ import androidx.lifecycle.LiveData;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
-import com.indramahkota.moviecatalogue.data.source.remote.response.ApiResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 
@@ -16,9 +15,9 @@ public interface MovieCatalogueDataSource {
     * Main Activity
     * */
     //Movie Fragment
-    LiveData<ApiResponse<DiscoverMovieResponse>> loadListMovie();
+    LiveData<Resource<DiscoverMovieResponse>> loadListMovie(String refresh);
     //Tv Show Fragment
-    LiveData<ApiResponse<DiscoverTvShowResponse>> loadListTvShow();
+    LiveData<Resource<DiscoverTvShowResponse>> loadListTvShow(String refresh);
     //Favorite Movie Fragment
     LiveData<List<MovieEntity>> getAllMovie();
     LiveData<MovieEntity> getMovieById(Long id);
@@ -34,9 +33,9 @@ public interface MovieCatalogueDataSource {
     * Detail Activity
     * */
     //Movie Detail Activity
-    LiveData<ApiResponse<MovieEntity>> loadMovieDetails(Long movieId);
+    LiveData<Resource<MovieEntity>> loadMovieDetails(Long movieId);
     //Tv Show Detail Activity
-    LiveData<ApiResponse<TvShowEntity>> loadTvShowDetails(Long tvShowId);
+    LiveData<Resource<TvShowEntity>> loadTvShowDetails(Long tvShowId);
     //Languages
     /*LiveData<List<LanguageEntity>> loadLanguages();*/
 
@@ -44,9 +43,9 @@ public interface MovieCatalogueDataSource {
      * Search Activity
      * */
     //Search Activity
-    LiveData<ApiResponse<DiscoverMovieResponse>> searchListMovie(String query);
+    LiveData<Resource<DiscoverMovieResponse>> searchListMovie(String query);
     //Search Activity
-    LiveData<ApiResponse<DiscoverTvShowResponse>> searchListTvShow(String query);
+    LiveData<Resource<DiscoverTvShowResponse>> searchListTvShow(String query);
 
 
     LiveData<Resource<List<LanguageEntity>>> loadLanguage();

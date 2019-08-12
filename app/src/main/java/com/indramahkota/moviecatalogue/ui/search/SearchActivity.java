@@ -79,15 +79,20 @@ public class SearchActivity extends AppCompatActivity {
 
         SearchViewModel searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
 
-        if (searchQuery != null && searchQuery[0] != null && searchQuery[1] != null) {
+        if (searchQuery != null && searchQuery[0] != null) {
             if(searchQuery[0].equals("Movie")) {
-                searchViewModel.getSearchMovies(searchQuery[1]).observe(this, movieViewState -> {
+                searchViewModel.searchMovie.observe(this, movieViewState -> {
                     switch (movieViewState.status) {
+                        case LOADING:
+                            //show loading
+                            relativeLayout.setVisibility(View.GONE);
+                            mShimmerViewContainer.setVisibility(View.VISIBLE);
+                            break;
                         case SUCCESS:
                             //show data
                             swipeRefreshLayout.setRefreshing(false);
                             rvSearch.setVisibility(View.VISIBLE);
-                            searchMovies = movieViewState.body;
+                            searchMovies = movieViewState.data;
                             if (searchMovies != null) {
                                 setMovieAdapter(searchMovies);
                                 if(searchMovies.getResults().size() < 1) {
@@ -105,13 +110,18 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 });
             } else if(searchQuery[0].equals("Tv Show")){
-                searchViewModel.getSearchTvShows(searchQuery[1]).observe(this, tvShowListViewState -> {
+                searchViewModel.searchTvShow.observe(this, tvShowListViewState -> {
                     switch (tvShowListViewState.status) {
+                        case LOADING:
+                            //show loading
+                            relativeLayout.setVisibility(View.GONE);
+                            mShimmerViewContainer.setVisibility(View.VISIBLE);
+                            break;
                         case SUCCESS:
                             //show data
                             swipeRefreshLayout.setRefreshing(false);
                             rvSearch.setVisibility(View.VISIBLE);
-                            searchTvShows = tvShowListViewState.body;
+                            searchTvShows = tvShowListViewState.data;
                             if (searchTvShows != null) {
                                 setTvSowAdapter(searchTvShows);
                                 if(searchTvShows.getResults().size() < 1) {
@@ -136,29 +146,19 @@ public class SearchActivity extends AppCompatActivity {
             mShimmerViewContainer.setVisibility(View.VISIBLE);
             rvSearch.setVisibility(View.GONE);
 
-            swipeRefreshLayout.setRefreshing(false);//
-
-            /*if (searchQuery != null && searchQuery[0] != null && searchQuery[1] != null) {
-                if(searchQuery[0].equals("Movie")) {
-                    if(!searchQuery[1].isEmpty()) {
-                        searchViewModel.searchMovie(searchQuery[1]);
-                    }
-                } else if(searchQuery[0].equals("Tv Show")){
-                    if(!searchQuery[1].isEmpty()) {
-                        searchViewModel.searchTvShow(searchQuery[1]);
-                    }
-                }
-            }*/
+            if (searchQuery != null && searchQuery[1] != null) {
+                searchViewModel.setQuery(searchQuery[1]);
+            }
         });
 
-        /*if (searchQuery != null && searchQuery[0] != null && searchQuery[1] != null) {
+        if (searchQuery != null && searchQuery[0] != null && searchQuery[1] != null) {
             if(searchQuery[0].equals("Movie")) {
                 if(!searchQuery[1].isEmpty()) {
                     if (searchMovies != null) {
                         setMovieAdapter(searchMovies);
                         linearLayoutManager.scrollToPosition(scrollPosition);
                     } else {
-                        searchViewModel.searchMovie(searchQuery[1]);
+                        searchViewModel.setQuery(searchQuery[1]);
                     }
                 }
             } else if(searchQuery[0].equals("Tv Show")){
@@ -167,11 +167,11 @@ public class SearchActivity extends AppCompatActivity {
                         setTvSowAdapter(searchTvShows);
                         linearLayoutManager.scrollToPosition(scrollPosition);
                     } else {
-                        searchViewModel.searchTvShow(searchQuery[1]);
+                        searchViewModel.setQuery(searchQuery[1]);
                     }
                 }
             }
-        }*/
+        }
     }
 
     private void setMovieAdapter(@NonNull DiscoverMovieResponse disMovies) {
