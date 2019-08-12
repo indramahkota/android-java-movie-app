@@ -12,17 +12,18 @@ import com.indramahkota.moviecatalogue.data.source.locale.converter.CastsTypeCon
 import com.indramahkota.moviecatalogue.data.source.locale.converter.CreditsTypeConverter;
 import com.indramahkota.moviecatalogue.data.source.locale.converter.DoubleTypeConverter;
 import com.indramahkota.moviecatalogue.data.source.locale.converter.GenresTypeConverter;
-import com.indramahkota.moviecatalogue.data.source.locale.dao.FavoriteDao;
+import com.indramahkota.moviecatalogue.data.source.locale.dao.AppDao;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
-@Database(entities = {MovieEntity.class, TvShowEntity.class}, version = 1, exportSchema = false)
+@Database(entities = {MovieEntity.class, TvShowEntity.class, LanguageEntity.class}, version = 1, exportSchema = false)
 @TypeConverters({CastsTypeConverter.class, GenresTypeConverter.class, CreditsTypeConverter.class, DoubleTypeConverter.class})
 public abstract class FavoriteDatabase extends RoomDatabase {
     public static final String DATABASE_NAME = "my_movie_catalogue_database.db";
     private static FavoriteDatabase INSTANCE;
 
-    public abstract FavoriteDao favoriteDao();
+    public abstract AppDao favoriteDao();
 
     public static synchronized FavoriteDatabase getInstance(Context context) {
         if(INSTANCE == null) {

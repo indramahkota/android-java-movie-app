@@ -2,13 +2,13 @@ package com.indramahkota.moviecatalogue.data.source;
 
 import androidx.lifecycle.LiveData;
 
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
+import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.Observable;
@@ -40,7 +40,7 @@ public interface MovieCatalogueDataSource {
     //Tv Show Detail Activity
     Observable<TvShowEntity> loadTvShowDetails(Long tvShowId);
     //Languages
-    Observable<ArrayList<Language>> loadLanguages();
+    Observable<List<LanguageEntity>> loadLanguages();
 
     /*
      * Search Activity
@@ -49,4 +49,7 @@ public interface MovieCatalogueDataSource {
     Observable<DiscoverMovieResponse> searchListMovie(String query);
     //Search Activity
     Observable<DiscoverTvShowResponse> searchListTvShow(String query);
+
+
+    Observable<Resource<LanguageResponse>> loadLanguage(String iso);
 }

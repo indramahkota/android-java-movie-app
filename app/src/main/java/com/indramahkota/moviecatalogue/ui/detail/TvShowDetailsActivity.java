@@ -23,7 +23,7 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.GenreAdapter;
@@ -241,11 +241,11 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     }
 
     private void setTxtLanguage() {
-        List<Language> languages = languageResponse.getResults();
+        List<LanguageEntity> languages = languageResponse.getResults();
         int len = languages.size();
 
         for (int i = 0; i<len; ++i) {
-            Language lang = languages.get(i);
+            LanguageEntity lang = languages.get(i);
             if(lang.getIso().equals(tvShowEntity.getOriginalLanguage())){
                 if(lang.getIso() != null && !lang.getIso().isEmpty()) {
                     txtLanguage.setText(lang.getEnglishName());

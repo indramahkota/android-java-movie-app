@@ -1,15 +1,17 @@
 package com.indramahkota.moviecatalogue.data.source;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
 import com.indramahkota.moviecatalogue.BuildConfig;
-import com.indramahkota.moviecatalogue.data.source.locale.dao.FavoriteDao;
+import com.indramahkota.moviecatalogue.data.source.locale.dao.AppDao;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiEndPoint;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
+import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,16 +19,20 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import io.reactivex.Flowable;
 import io.reactivex.Observable;
+import io.reactivex.disposables.CompositeDisposable;
 
 @Singleton
 public class MovieCatalogueRepository implements MovieCatalogueDataSource {
-    private final FavoriteDao dao;
+    private final AppDao dao;
     private final ApiEndPoint api;
 
+    private CompositeDisposable disposable;
+
     @Inject
-    public MovieCatalogueRepository(FavoriteDao favoriteDao, ApiEndPoint apiEndPoint){
-        this.dao = favoriteDao;
+    public MovieCatalogueRepository(AppDao appDao, ApiEndPoint apiEndPoint){
+        this.dao = appDao;
         this.api = apiEndPoint;
     }
 
@@ -109,7 +115,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
     }
 
     @Override
-    public Observable<ArrayList<Language>> loadLanguages() {
+    public Observable<List<LanguageEntity>> loadLanguages() {
         return api.getLanguages(BuildConfig.TMDB_API_KEY);
     }
 
@@ -125,5 +131,41 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
     @Override
     public Observable<DiscoverTvShowResponse> searchListTvShow(String query) {
         return api.searchTvShows(BuildConfig.TMDB_API_KEY, query);
+    }
+
+    @Override
+    public Observable<Resource<LanguageResponse>> loadLanguage(String iso) {
+        return new NetworkBoundResource<LanguageResponse, LanguageResponse>() {
+            @Override
+            protected void saveCallResult(@NonNull LanguageResponse item) {
+                dao.insertLanguages(item.getResults());
+            }
+
+            @Override
+            protected boolean shouldFetch(LanguageResponse data) {
+                return data == null;
+            }
+
+            @NonNull
+            @Override
+            protected Flowable<LanguageResponse> loadFromDb() {
+                List<LanguageEntity> languages = dao.selectAllLanguage();
+                if(languages == null || languages.isEmpty()) {
+                    return Flowable.empty();
+                }
+                return Flowable.just(new LanguageResponse(languages));
+            }
+
+            @NonNull
+            @Override
+            protected Observable<Resource<LanguageResponse>> createCall() {
+                return api.getLanguages(BuildConfig.TMDB_API_KEY)
+                        .flatMap(languageEntities -> Observable.just(
+                                languageEntities == null ?
+                                        Resource.error("", new LanguageResponse(new ArrayList<>())) :
+                                        Resource.success(new LanguageResponse(languageEntities))
+                        ));
+            }
+        }.getAsObservable();
     }
 }

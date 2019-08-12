@@ -111,8 +111,10 @@ public class FavoriteMovieAdapter extends RecyclerView.Adapter<FavoriteMovieAdap
         void addListener(int position) {
             itemView.setOnClickListener(new CustomOnItemClickListener(position, position1 -> {
                 Long id = getListMovies().get(position1).getId();
+                String iso = getListMovies().get(position1).getOriginalLanguage();
                 Intent moveWithDataIntent = new Intent(mContext, MovieDetailsActivity.class);
                 moveWithDataIntent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, id);
+                moveWithDataIntent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ISO, iso);
                 mContext.startActivity(moveWithDataIntent);
             }));
         }

@@ -6,9 +6,10 @@ import androidx.lifecycle.ViewModel;
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,6 +21,7 @@ public class LanguageViewModel extends ViewModel {
     private final MovieCatalogueRepository repository;
     private final ObservableSchedulers observableSchedulers;
     private final MutableLiveData<Resource<LanguageResponse>> languageViewState = new MutableLiveData<>();
+    private final MutableLiveData<Resource<LanguageResponse>> languageData = new MutableLiveData<>();
 
     @Inject
     LanguageViewModel(MovieCatalogueRepository repository, ObservableSchedulers observableSchedulers) {
@@ -33,22 +35,38 @@ public class LanguageViewModel extends ViewModel {
     }
 
     public void loadLanguages() {
-        languageViewState.postValue(Resource.loading(new LanguageResponse()));
+        languageViewState.postValue(Resource.loading(new LanguageResponse(new ArrayList<>())));
         disposable.add(repository.loadLanguages()
                 .compose(observableSchedulers.applySchedulers())
                 .subscribe(this::onSuccess,
                         this::onError));
     }
 
-    private void onSuccess(List<Language> language) {
-        LanguageResponse languageResponse = new LanguageResponse();
+    private void onSuccess(List<LanguageEntity> language) {
+        LanguageResponse languageResponse = new LanguageResponse(new ArrayList<>());
         languageResponse.setResults(language);
 
         languageViewState.postValue(Resource.success(languageResponse));
     }
 
     private void onError(Throwable error) {
-        languageViewState.postValue(Resource.error(String.valueOf(error), new LanguageResponse()));
+        languageViewState.postValue(Resource.error(String.valueOf(error), new LanguageResponse(new ArrayList<>())));
+    }
+
+    public MutableLiveData<Resource<LanguageResponse>> getLanguageData() {
+        return languageData;
+    }
+
+    public void fetchLanguage(String iso) {
+        disposable.add(repository.loadLanguage(iso)
+                .compose(observableSchedulers.applySchedulers())
+                .subscribe(resource -> {
+                            if(resource.isLoading()) {
+                                languageData.postValue(Resource.loading(new LanguageResponse(new ArrayList<>())));
+                            } else if(resource.isSuccess()){
+                                languageData.postValue(resource);
+                            }
+                        }));
     }
 
     @Override

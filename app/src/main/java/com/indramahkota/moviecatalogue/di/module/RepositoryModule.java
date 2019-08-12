@@ -1,8 +1,9 @@
 package com.indramahkota.moviecatalogue.di.module;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
-import com.indramahkota.moviecatalogue.data.source.locale.dao.FavoriteDao;
+import com.indramahkota.moviecatalogue.data.source.locale.dao.AppDao;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiEndPoint;
+import com.indramahkota.moviecatalogue.data.source.remote.rxscheduler.ObservableSchedulers;
 
 import javax.inject.Singleton;
 
@@ -13,7 +14,7 @@ import dagger.Provides;
 public class RepositoryModule {
     @Provides
     @Singleton
-    MovieCatalogueRepository provideMovieCatalogueRepository(FavoriteDao favoriteDao, ApiEndPoint apiEndPoint) {
-        return new MovieCatalogueRepository(favoriteDao, apiEndPoint);
+    MovieCatalogueRepository provideMovieCatalogueRepository(AppDao appDao, ApiEndPoint apiEndPoint, ObservableSchedulers observableSchedulers) {
+        return new MovieCatalogueRepository(appDao, apiEndPoint, observableSchedulers);
     }
 }

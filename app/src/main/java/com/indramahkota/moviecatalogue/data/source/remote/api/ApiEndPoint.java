@@ -1,12 +1,12 @@
 package com.indramahkota.moviecatalogue.data.source.remote.api;
 
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
 
-import java.util.ArrayList;
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
@@ -43,5 +43,5 @@ public interface ApiEndPoint {
             @Query("query") String query);
 
     @GET("configuration/languages")
-    Observable<ArrayList<Language>> getLanguages(@Query("api_key") String apiKey);
+    Observable<List<LanguageEntity>> getLanguages(@Query("api_key") String apiKey);
 }

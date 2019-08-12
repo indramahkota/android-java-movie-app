@@ -7,16 +7,36 @@ import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
 import java.util.List;
 
+import io.reactivex.Flowable;
+
 @Dao
-public interface FavoriteDao {
+public interface AppDao {
     /*
      *
-     * Movie
+     * Languages
+     * */
+
+    @Query("SELECT * FROM " + LanguageEntity.TABLE_NAME)
+    List<LanguageEntity> selectAllLanguage();
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertLanguages(List<LanguageEntity> languages);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertLanguage(LanguageEntity languages);
+
+    @Query("SELECT * FROM " + LanguageEntity.TABLE_NAME + " WHERE iso = :iso")
+    Flowable<LanguageEntity> selectLanguageByIso(String iso);
+
+    /*
+     *
+     * Movies
      * */
 
     @WorkerThread
@@ -34,7 +54,7 @@ public interface FavoriteDao {
 
     /*
      *
-     * Tv Show
+     * Tv Shows
      * */
 
     @WorkerThread

@@ -5,7 +5,7 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.room.Room;
 
-import com.indramahkota.moviecatalogue.data.source.locale.dao.FavoriteDao;
+import com.indramahkota.moviecatalogue.data.source.locale.dao.AppDao;
 import com.indramahkota.moviecatalogue.data.source.locale.database.FavoriteDatabase;
 
 import javax.inject.Singleton;
@@ -27,7 +27,7 @@ public class DbModule {
 
     @Provides
     @Singleton
-    FavoriteDao provideFavoriteDao(@NonNull FavoriteDatabase favoriteDatabase) {
+    AppDao provideFavoriteDao(@NonNull FavoriteDatabase favoriteDatabase) {
         return favoriteDatabase.favoriteDao();
     }
 }

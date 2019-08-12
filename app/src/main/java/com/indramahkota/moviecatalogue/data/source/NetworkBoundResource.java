@@ -10,11 +10,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
 public abstract class NetworkBoundResource<ResultType, RequestType> {
-
     private Observable<Resource<ResultType>> result;
 
     @MainThread
-    protected NetworkBoundResource() {
+    NetworkBoundResource() {
         Observable<Resource<ResultType>> source;
         if (shouldFetch()) {
             source = createCall()
@@ -47,20 +46,20 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     @MainThread
     protected abstract Observable<Resource<RequestType>> createCall();
 
-    protected void onFetchFailed() {}
+    private void onFetchFailed() {}
 
     @WorkerThread
-    protected RequestType processResponse(Resource<RequestType> response) {return response.data;}
+    private RequestType processResponse(@NonNull Resource<RequestType> response) {return response.data;}
 
     @WorkerThread
     protected abstract void saveCallResult(@NonNull RequestType item);
 
     @MainThread
-    protected abstract boolean shouldFetch();
+    protected abstract boolean shouldFetch(ResultType data);
 
     @NonNull
     @MainThread
     protected abstract Flowable<ResultType> loadFromDb();
 
-    public Observable<Resource<ResultType>> getAsObservable() {return result;}
+    Observable<Resource<ResultType>> getAsObservable() {return result;}
 }

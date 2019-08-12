@@ -19,7 +19,7 @@ import java.util.List;
 
 @Entity(tableName = TvShowEntity.TABLE_NAME)
 public class TvShowEntity implements Parcelable {
-    public static final String TABLE_NAME = "tv_show";
+    public static final String TABLE_NAME = "tv_shows";
 
     private static final String ITEM_ID = "itemId";
     private static final String NAME = "name";

@@ -3,25 +3,29 @@ package com.indramahkota.moviecatalogue.data.source.remote.response;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
+import androidx.annotation.NonNull;
+
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 
 import java.util.List;
 
 public class LanguageResponse implements Parcelable {
-    private List<Language> results;
+    private List<LanguageEntity> results;
 
-    public LanguageResponse() {}
-
-    public List<Language> getResults() {
-        return results;
-    }
-
-    public void setResults(List<Language> results) {
+    public LanguageResponse(List<LanguageEntity> results) {
         this.results = results;
     }
 
-    private LanguageResponse(Parcel in) {
-        results = in.createTypedArrayList(Language.CREATOR);
+    public List<LanguageEntity> getResults() {
+        return results;
+    }
+
+    public void setResults(List<LanguageEntity> results) {
+        this.results = results;
+    }
+
+    private LanguageResponse(@NonNull Parcel in) {
+        results = in.createTypedArrayList(LanguageEntity.CREATOR);
     }
 
     public static final Creator<LanguageResponse> CREATOR = new Creator<LanguageResponse>() {

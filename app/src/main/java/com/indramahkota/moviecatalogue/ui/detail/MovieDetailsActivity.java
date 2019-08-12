@@ -23,7 +23,7 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.others.Language;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.GenreAdapter;
@@ -40,6 +40,7 @@ import dagger.android.AndroidInjection;
 
 public class MovieDetailsActivity extends AppCompatActivity {
     public static final String EXTRA_MOVIE_ID = "extra_movie_id";
+    public static final String EXTRA_MOVIE_ISO = "extra_movie_iso";
     public static final String STATE_MOVIE_RESPONSE = "state_movie_response";
     public static final String STATE_LANGUAGE_RESPONSE = "state_language_response";
 
@@ -55,6 +56,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private ImageView background;
     private TextView txtLanguage;
 
+    private String iso;
     private Long movieId;
     private MovieEntity movieEntity;
     private LanguageResponse languageResponse;
@@ -76,6 +78,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         movieId = getIntent().getLongExtra(EXTRA_MOVIE_ID, 0);
+        iso = getIntent().getStringExtra(EXTRA_MOVIE_ISO);
 
         detailsContainer = findViewById(R.id.layout_details);
         detailsContainer.setVisibility(View.GONE);
@@ -112,7 +115,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
     private void testNext() {
         languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
-        languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
+        languageViewModel.getLanguageData().observe(this, languageResponseState -> {
             if(languageResponseState.isSuccess()) {
                 languageResponse = languageResponseState.data;
                 if(movieEntity != null) {
@@ -120,6 +123,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
                 }
             }
         });
+
+        languageViewModel.fetchLanguage(iso);
 
         MovieDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieDetailsViewModel.class);
         viewModel.getMovieViewState().observe(this, movieResponseState -> {
@@ -255,11 +260,11 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void setTxtLanguage() {
-        List<Language> languages = languageResponse.getResults();
+        List<LanguageEntity> languages = languageResponse.getResults();
         int len = languages.size();
 
         for (int i = 0; i<len; ++i) {
-            Language lang = languages.get(i);
+            LanguageEntity lang = languages.get(i);
             if(lang.getIso().equals(movieEntity.getOriginalLanguage())){
                 if(lang.getIso() != null && !lang.getIso().isEmpty()) {
                     txtLanguage.setText(lang.getEnglishName());
