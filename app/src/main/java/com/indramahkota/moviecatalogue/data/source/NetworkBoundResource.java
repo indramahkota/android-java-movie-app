@@ -1,65 +1,87 @@
 package com.indramahkota.moviecatalogue.data.source;
 
-import androidx.annotation.MainThread;
-import androidx.annotation.NonNull;
-import androidx.annotation.WorkerThread;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MediatorLiveData;
 
-import io.reactivex.Flowable;
-import io.reactivex.Observable;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.schedulers.Schedulers;
+import com.indramahkota.moviecatalogue.data.source.remote.response.ApiResponse;
+import com.indramahkota.moviecatalogue.ui.utils.AppExecutors;
 
 public abstract class NetworkBoundResource<ResultType, RequestType> {
-    private Observable<Resource<ResultType>> result;
 
-    @MainThread
-    NetworkBoundResource() {
-        Observable<Resource<ResultType>> source;
-        if (shouldFetch()) {
-            source = createCall()
-                    .subscribeOn(Schedulers.io())
-                    .doOnNext(apiResponse -> saveCallResult(processResponse(apiResponse)))
-                    .flatMap(apiResponse -> loadFromDb().toObservable().map(Resource::success))
-                    .doOnError(t -> onFetchFailed())
-                    .onErrorResumeNext(t -> {
-                        return loadFromDb()
-                                .toObservable()
-                                .map(data -> Resource.error(t.getMessage(), data));
-                    })
-                    .observeOn(AndroidSchedulers.mainThread());
-        } else {
-            source = loadFromDb()
-                    .toObservable()
-                    .map(Resource::success);
-        }
+    private MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
 
-        result = Observable.concat(
-                loadFromDb()
-                        .toObservable()
-                        .map(Resource::loading)
-                        .take(1),
-                source
-        );
+    private AppExecutors mExecutors;
+
+    NetworkBoundResource(AppExecutors appExecutors) {
+
+        this.mExecutors = appExecutors;
+        result.setValue(Resource.loading(null));
+
+        LiveData<ResultType> dbSource = loadFromDB();
+
+        result.addSource(dbSource, data -> {
+            result.removeSource(dbSource);
+            if (shouldFetch(data)) {
+                fetchFromNetwork(dbSource);
+            } else {
+                result.addSource(dbSource, newData -> result.setValue(Resource.success(newData)));
+            }
+        });
     }
 
-    @NonNull
-    @MainThread
-    protected abstract Observable<Resource<RequestType>> createCall();
+    private void onFetchFailed() {
+    }
 
-    private void onFetchFailed() {}
+    protected abstract LiveData<ResultType> loadFromDB();
 
-    @WorkerThread
-    private RequestType processResponse(@NonNull Resource<RequestType> response) {return response.data;}
+    protected abstract Boolean shouldFetch(ResultType data);
 
-    @WorkerThread
-    protected abstract void saveCallResult(@NonNull RequestType item);
+    protected abstract LiveData<ApiResponse<RequestType>> createCall();
 
-    @MainThread
-    protected abstract boolean shouldFetch(ResultType data);
+    protected abstract void saveCallResult(RequestType data);
 
-    @NonNull
-    @MainThread
-    protected abstract Flowable<ResultType> loadFromDb();
+    private void fetchFromNetwork(LiveData<ResultType> dbSource) {
 
-    Observable<Resource<ResultType>> getAsObservable() {return result;}
+        LiveData<ApiResponse<RequestType>> apiResponse = createCall();
+
+        result.addSource(dbSource, newData ->
+                result.setValue(Resource.loading(newData))
+        );
+
+        result.addSource(apiResponse, response -> {
+
+            result.removeSource(apiResponse);
+            result.removeSource(dbSource);
+
+            switch (response.status) {
+                case SUCCESS:
+                    mExecutors.diskIO().execute(() -> {
+
+                        saveCallResult(response.body);
+
+                        mExecutors.mainThread().execute(() ->
+                                result.addSource(loadFromDB(),
+                                        newData -> result.setValue(Resource.success(newData))));
+
+                    });
+                    break;
+
+                case EMPTY:
+                    mExecutors.mainThread().execute(() ->
+                            result.addSource(loadFromDB(),
+                                    newData -> result.setValue(Resource.success(newData))));
+
+                    break;
+                case ERROR:
+                    onFetchFailed();
+                    result.addSource(dbSource, newData ->
+                            result.setValue(Resource.error(response.message, newData)));
+                    break;
+            }
+        });
+    }
+
+    LiveData<Resource<ResultType>> asLiveData() {
+        return result;
+    }
 }

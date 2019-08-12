@@ -7,9 +7,9 @@ import com.indramahkota.moviecatalogue.di.module.ActivityModule;
 import com.indramahkota.moviecatalogue.di.module.ApiModule;
 import com.indramahkota.moviecatalogue.di.module.AppModule;
 import com.indramahkota.moviecatalogue.di.module.DbModule;
+import com.indramahkota.moviecatalogue.di.module.ExecutorModule;
 import com.indramahkota.moviecatalogue.di.module.FragmentModule;
 import com.indramahkota.moviecatalogue.di.module.RepositoryModule;
-import com.indramahkota.moviecatalogue.di.module.RxModule;
 import com.indramahkota.moviecatalogue.di.module.ViewModelModule;
 
 import javax.inject.Singleton;
@@ -28,7 +28,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
             AndroidSupportInjectionModule.class,
             ActivityModule.class,
             FragmentModule.class,
-            RxModule.class
+            ExecutorModule.class
     }
 )
 

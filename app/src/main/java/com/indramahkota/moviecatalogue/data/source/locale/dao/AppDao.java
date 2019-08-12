@@ -13,8 +13,6 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
 import java.util.List;
 
-import io.reactivex.Flowable;
-
 @Dao
 public interface AppDao {
     /*
@@ -23,16 +21,10 @@ public interface AppDao {
      * */
 
     @Query("SELECT * FROM " + LanguageEntity.TABLE_NAME)
-    List<LanguageEntity> selectAllLanguage();
+    LiveData<List<LanguageEntity>> selectAllLanguage();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertLanguages(List<LanguageEntity> languages);
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertLanguage(LanguageEntity languages);
-
-    @Query("SELECT * FROM " + LanguageEntity.TABLE_NAME + " WHERE iso = :iso")
-    Flowable<LanguageEntity> selectLanguageByIso(String iso);
 
     /*
      *

@@ -20,10 +20,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
-import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.GenreAdapter;
@@ -32,6 +31,7 @@ import com.indramahkota.moviecatalogue.ui.detail.viewmodel.MovieDetailsViewModel
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteMovieViewModel;
 import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -56,16 +56,14 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private ImageView background;
     private TextView txtLanguage;
 
-    private String iso;
     private Long movieId;
     private MovieEntity movieEntity;
-    private LanguageResponse languageResponse;
+    private List<LanguageEntity> languages;
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
 
     private MovieEntity favoriteMovieEntity;
     private FavoriteMovieViewModel favoriteMovieViewModel;
-    private LanguageViewModel languageViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +76,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         }
 
         movieId = getIntent().getLongExtra(EXTRA_MOVIE_ID, 0);
-        iso = getIntent().getStringExtra(EXTRA_MOVIE_ISO);
 
         detailsContainer = findViewById(R.id.layout_details);
         detailsContainer.setVisibility(View.GONE);
@@ -93,6 +90,16 @@ public class MovieDetailsActivity extends AppCompatActivity {
         txtOverview = findViewById(R.id.txt_overview);
         background = findViewById(R.id.img_background);
         txtLanguage = findViewById(R.id.txt_language);
+
+        LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
+        languageViewModel.getLanguages().observe(this, languageResponseState -> {
+            if(languageResponseState.isSuccess()) {
+                languages = languageResponseState.data;
+                if(movieEntity != null) {
+                    setTxtLanguage();
+                }
+            }
+        });
 
         favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
         favoriteMovieViewModel.getMovie(movieId).observe(this, movie -> {
@@ -109,34 +116,17 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             movieEntity = savedInstanceState.getParcelable(STATE_MOVIE_RESPONSE);
-            languageResponse = savedInstanceState.getParcelable(STATE_LANGUAGE_RESPONSE);
+            languages = savedInstanceState.getParcelableArrayList(STATE_LANGUAGE_RESPONSE);
         }
     }
 
     private void testNext() {
-        languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
-        languageViewModel.getLanguageData().observe(this, languageResponseState -> {
-            if(languageResponseState.isSuccess()) {
-                languageResponse = languageResponseState.data;
-                if(movieEntity != null) {
-                    setTxtLanguage();
-                }
-            }
-        });
-
-        languageViewModel.fetchLanguage(iso);
-
         MovieDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieDetailsViewModel.class);
-        viewModel.getMovieViewState().observe(this, movieResponseState -> {
+        viewModel.getMovieDetails(movieId).observe(this, movieResponseState -> {
             switch (movieResponseState.status) {
-                case LOADING:
-                    //show loading
-                    mShimmerViewContainer.setVisibility(View.VISIBLE);
-                    detailsContainer.setVisibility(View.GONE);
-                    break;
                 case SUCCESS:
                     //show data
-                    movieEntity = movieResponseState.data;
+                    movieEntity = movieResponseState.body;
                     if (movieEntity != null) {
                         initializeUi(movieEntity);
                         mShimmerViewContainer.setVisibility(View.GONE);
@@ -150,16 +140,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     break;
             }
         });
-
-        if (languageResponse == null) {
-            languageViewModel.loadLanguages();
-        }
-
-        if (movieEntity != null) {
-            initializeUi(movieEntity);
-        } else {
-            viewModel.loadMovieDetails(movieId);
-        }
     }
 
     @Override
@@ -196,7 +176,15 @@ public class MovieDetailsActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(STATE_LANGUAGE_RESPONSE, languageResponse);
+
+        ArrayList<LanguageEntity> helper = new ArrayList<>();
+        int len = languages.size();
+
+        for(int i = 0; i<len; ++i) {
+            helper.add(languages.get(i));
+        }
+
+        outState.putParcelableArrayList(STATE_LANGUAGE_RESPONSE, helper);
         outState.putParcelable(STATE_MOVIE_RESPONSE, movieEntity);
     }
 
@@ -244,7 +232,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             txtOverview.setText(getResources().getString(R.string.availability_overview));
         }
 
-        if(languageResponse != null) {
+        if(languages != null) {
             setTxtLanguage();
         }
 
@@ -260,9 +248,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void setTxtLanguage() {
-        List<LanguageEntity> languages = languageResponse.getResults();
         int len = languages.size();
-
         for (int i = 0; i<len; ++i) {
             LanguageEntity lang = languages.get(i);
             if(lang.getIso().equals(movieEntity.getOriginalLanguage())){

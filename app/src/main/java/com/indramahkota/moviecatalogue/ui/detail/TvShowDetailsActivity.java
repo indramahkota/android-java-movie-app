@@ -20,10 +20,9 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
-import com.indramahkota.moviecatalogue.data.source.remote.response.LanguageResponse;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.GenreAdapter;
@@ -32,6 +31,7 @@ import com.indramahkota.moviecatalogue.ui.detail.viewmodel.TvShowDetailsViewMode
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteTvShowViewModel;
 import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -57,7 +57,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
 
     private Long tvShowId;
     private TvShowEntity tvShowEntity;
-    private LanguageResponse languageResponse;
+    private List<LanguageEntity> languages;
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
 
@@ -93,9 +93,9 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
 
         LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
-        languageViewModel.getLanguageViewState().observe(this, languageResponseState -> {
+        languageViewModel.getLanguages().observe(this, languageResponseState -> {
             if(languageResponseState.isSuccess()) {
-                languageResponse = languageResponseState.data;
+                languages = languageResponseState.data;
                 if(tvShowEntity != null) {
                     setTxtLanguage();
                 }
@@ -103,16 +103,11 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         });
 
         TvShowDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowDetailsViewModel.class);
-        viewModel.getTvShowViewState().observe(this, tvShowResponseState -> {
+        viewModel.getTvShowDetails(tvShowId).observe(this, tvShowResponseState -> {
             switch (tvShowResponseState.status) {
-                case LOADING:
-                    //show loading
-                    mShimmerViewContainer.setVisibility(View.VISIBLE);
-                    detailsContainer.setVisibility(View.GONE);
-                    break;
                 case SUCCESS:
                     //show data
-                    tvShowEntity = tvShowResponseState.data;
+                    tvShowEntity = tvShowResponseState.body;
                     if (tvShowEntity != null) {
                         initializeUi(tvShowEntity);
                         mShimmerViewContainer.setVisibility(View.GONE);
@@ -129,17 +124,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             tvShowEntity = savedInstanceState.getParcelable(STATE_TV_SHOW_RESPONSE);
-            languageResponse = savedInstanceState.getParcelable(STATE_LANGUAGE_RESPONSE);
-        }
-
-        if (languageResponse == null) {
-            languageViewModel.loadLanguages();
-        }
-
-        if (tvShowEntity != null) {
-            initializeUi(tvShowEntity);
-        } else {
-            viewModel.loadTvShowDetails(tvShowId);
+            languages = savedInstanceState.getParcelable(STATE_LANGUAGE_RESPONSE);
         }
     }
 
@@ -177,7 +162,14 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(STATE_LANGUAGE_RESPONSE, languageResponse);
+        ArrayList<LanguageEntity> helper = new ArrayList<>();
+        int len = languages.size();
+
+        for(int i = 0; i<len; ++i) {
+            helper.add(languages.get(i));
+        }
+
+        outState.putParcelableArrayList(STATE_LANGUAGE_RESPONSE, helper);
         outState.putParcelable(STATE_TV_SHOW_RESPONSE, tvShowEntity);
     }
 
@@ -225,7 +217,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             txtOverview.setText(getResources().getString(R.string.availability_overview));
         }
 
-        if(languageResponse != null) {
+        if(languages != null) {
             setTxtLanguage();
         }
 
@@ -241,9 +233,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     }
 
     private void setTxtLanguage() {
-        List<LanguageEntity> languages = languageResponse.getResults();
         int len = languages.size();
-
         for (int i = 0; i<len; ++i) {
             LanguageEntity lang = languages.get(i);
             if(lang.getIso().equals(tvShowEntity.getOriginalLanguage())){

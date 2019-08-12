@@ -97,18 +97,13 @@ public class MovieFragment extends Fragment {
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_to_refresh);
 
         MovieFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieFragmentViewModel.class);
-        viewModel.getMovieViewState().observe(this, movieViewState -> {
+        viewModel.getDiscoverMovies().observe(this, movieViewState -> {
             switch (movieViewState.status) {
-                case LOADING:
-                    //show loading
-                    relativeLayout.setVisibility(View.GONE);
-                    mShimmerViewContainer.setVisibility(View.VISIBLE);
-                    break;
                 case SUCCESS:
                     //show data
                     swipeRefreshLayout.setRefreshing(false);
                     rvFragmentMovies.setVisibility(View.VISIBLE);
-                    discoverMovies = movieViewState.data;
+                    discoverMovies = movieViewState.body;
                     if (discoverMovies != null) {
                         setAdapter(discoverMovies);
                         if(discoverMovies.getResults().size() < 1) {
@@ -131,15 +126,8 @@ public class MovieFragment extends Fragment {
             relativeLayout.setVisibility(View.GONE);
             rvFragmentMovies.setVisibility(View.GONE);
             mShimmerViewContainer.setVisibility(View.VISIBLE);
-            viewModel.loadMovie();
+            swipeRefreshLayout.setRefreshing(false);//
         });
-
-        if(discoverMovies != null) {
-            setAdapter(discoverMovies);
-            linearLayoutManager.scrollToPosition(scrollPosition);
-        } else {
-            viewModel.loadMovie();
-        }
     }
 
     private void setAdapter(@NonNull DiscoverMovieResponse disMovies) {

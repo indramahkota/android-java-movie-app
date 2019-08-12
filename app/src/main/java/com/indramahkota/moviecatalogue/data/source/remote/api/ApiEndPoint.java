@@ -8,40 +8,40 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvSho
 
 import java.util.List;
 
-import io.reactivex.Observable;
+import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface ApiEndPoint {
     @GET("discover/movie")
-    Observable<DiscoverMovieResponse> getDiscoverMovies(@Query("api_key") String apiKey);
+    Call<DiscoverMovieResponse> getDiscoverMovies(@Query("api_key") String apiKey);
 
     @GET("discover/tv")
-    Observable<DiscoverTvShowResponse> getDiscoverTvShows(@Query("api_key") String apiKey);
+    Call<DiscoverTvShowResponse> getDiscoverTvShows(@Query("api_key") String apiKey);
 
     @GET("movie/{movie_id}")
-    Observable<MovieEntity> getMovie(
+    Call<MovieEntity> getMovie(
             @Path("movie_id") Long id,
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse);
 
     @GET("tv/{tv_id}")
-    Observable<TvShowEntity> getTvShow(
+    Call<TvShowEntity> getTvShow(
             @Path("tv_id") Long id,
             @Query("api_key") String apiKey,
             @Query("append_to_response") String appendToResponse);
 
     @GET("search/movie")
-    Observable<DiscoverMovieResponse> searchMovies(
+    Call<DiscoverMovieResponse> searchMovies(
             @Query("api_key") String apiKey,
             @Query("query") String query);
 
     @GET("search/tv")
-    Observable<DiscoverTvShowResponse> searchTvShows(
+    Call<DiscoverTvShowResponse> searchTvShows(
             @Query("api_key") String apiKey,
             @Query("query") String query);
 
     @GET("configuration/languages")
-    Observable<List<LanguageEntity>> getLanguages(@Query("api_key") String apiKey);
+    Call<List<LanguageEntity>> getLanguages(@Query("api_key") String apiKey);
 }
