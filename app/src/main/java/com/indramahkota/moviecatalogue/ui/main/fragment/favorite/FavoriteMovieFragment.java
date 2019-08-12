@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
-import com.indramahkota.moviecatalogue.ui.main.adapter.FavoriteMovieAdapter;
+import com.indramahkota.moviecatalogue.ui.main.fragment.pagedlist.MoviePagedListAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteMovieViewModel;
 
 import javax.inject.Inject;
@@ -85,10 +85,11 @@ public class FavoriteMovieFragment extends Fragment {
 
         FavoriteMovieViewModel favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
         favoriteMovieViewModel.getListMovie().observe(this, movies -> {
-            FavoriteMovieAdapter favoriteMovieAdapter = new FavoriteMovieAdapter(movies, getContext());
+            MoviePagedListAdapter favoriteMovieAdapter = new MoviePagedListAdapter(getContext());
+            favoriteMovieAdapter.submitList(movies);
+
             rvMovies.setAdapter(favoriteMovieAdapter);
             linearLayoutManager.scrollToPosition(scrollPosition);
-            mShimmerViewContainer.setVisibility(View.GONE);
 
             if(movies.size() > 0) {
                 relativeLayout.setVisibility(View.GONE);

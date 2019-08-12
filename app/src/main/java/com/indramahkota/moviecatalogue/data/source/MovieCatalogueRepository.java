@@ -3,6 +3,7 @@ package com.indramahkota.moviecatalogue.data.source;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.paging.DataSource;
 
 import com.indramahkota.moviecatalogue.BuildConfig;
 import com.indramahkota.moviecatalogue.data.source.locale.dao.AppDao;
@@ -90,7 +91,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //FavoriteMovieViewModel
     @Override
-    public LiveData<List<MovieEntity>> getAllMovie() {
+    public DataSource.Factory<Integer, MovieEntity> getAllMovie() {
         return dao.selectAllMovie();
     }
 
@@ -114,7 +115,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //FavoriteTvShowViewModel
     @Override
-    public LiveData<List<TvShowEntity>> getAllTvShow() {
+    public DataSource.Factory<Integer, TvShowEntity> getAllTvShow() {
         return dao.selectAllTvShow();
     }
 
@@ -183,11 +184,6 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
         });
         return result;
     }
-
-    /*@Override
-    public LiveData<List<LanguageEntity>> loadLanguages() {
-        return api.getLanguages(BuildConfig.TMDB_API_KEY);
-    }*/
 
     /*
      * Search Activity

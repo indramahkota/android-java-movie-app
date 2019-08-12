@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
-import com.indramahkota.moviecatalogue.ui.main.adapter.FavoriteTvShowAdapter;
+import com.indramahkota.moviecatalogue.ui.main.fragment.pagedlist.TvShowPagedListAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteTvShowViewModel;
 
 import javax.inject.Inject;
@@ -85,10 +85,11 @@ public class FavoriteTvShowFragment extends Fragment {
 
         FavoriteTvShowViewModel favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
         favoriteTvShowViewModel.getListTvShow().observe(this, tvShows -> {
-            FavoriteTvShowAdapter favoriteTvShowAdapter = new FavoriteTvShowAdapter(tvShows, getContext());
+            TvShowPagedListAdapter favoriteTvShowAdapter = new TvShowPagedListAdapter(getContext());
+            favoriteTvShowAdapter.submitList(tvShows);
+
             rvTvShows.setAdapter(favoriteTvShowAdapter);
             linearLayoutManager.scrollToPosition(scrollPosition);
-            mShimmerViewContainer.setVisibility(View.GONE);
 
             if(tvShows.size() > 0) {
                 relativeLayout.setVisibility(View.GONE);

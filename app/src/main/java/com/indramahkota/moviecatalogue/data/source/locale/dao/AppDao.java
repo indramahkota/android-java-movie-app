@@ -2,6 +2,7 @@ package com.indramahkota.moviecatalogue.data.source.locale.dao;
 
 import androidx.annotation.WorkerThread;
 import androidx.lifecycle.LiveData;
+import androidx.paging.DataSource;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
@@ -33,7 +34,7 @@ public interface AppDao {
 
     @WorkerThread
     @Query("SELECT * FROM " + MovieEntity.TABLE_NAME)
-    LiveData<List<MovieEntity>> selectAllMovie();
+    DataSource.Factory<Integer, MovieEntity> selectAllMovie();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMovie(MovieEntity movieEntity);
@@ -54,7 +55,7 @@ public interface AppDao {
 
     @WorkerThread
     @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME)
-    LiveData<List<TvShowEntity>> selectAllTvShow();
+    DataSource.Factory<Integer, TvShowEntity> selectAllTvShow();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTvShow(TvShowEntity tvShowEntity);

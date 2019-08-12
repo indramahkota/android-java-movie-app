@@ -1,6 +1,7 @@
 package com.indramahkota.moviecatalogue.data.source;
 
 import androidx.lifecycle.LiveData;
+import androidx.paging.DataSource;
 
 import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
@@ -19,12 +20,12 @@ public interface MovieCatalogueDataSource {
     //Tv Show Fragment
     LiveData<Resource<DiscoverTvShowResponse>> loadListTvShow(String refresh);
     //Favorite Movie Fragment
-    LiveData<List<MovieEntity>> getAllMovie();
+    DataSource.Factory<Integer, MovieEntity> getAllMovie();
     LiveData<MovieEntity> getMovieById(Long id);
     void insertMovie(MovieEntity movieEntity);
     void deleteMovieById(long id);
     //Favorite Tv Show Fragment
-    LiveData<List<TvShowEntity>> getAllTvShow();
+    DataSource.Factory<Integer, TvShowEntity> getAllTvShow();
     LiveData<TvShowEntity> getTvShowById(Long id);
     void insertTvShow(TvShowEntity tvShowEntity);
     void deleteTvShowById(long id);
