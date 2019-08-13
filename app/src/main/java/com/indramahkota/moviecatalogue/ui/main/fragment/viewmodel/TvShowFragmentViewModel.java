@@ -28,8 +28,13 @@ public class TvShowFragmentViewModel extends ViewModel {
     }
 
     public boolean isLastPage() {
-        return (listDiscoverTvShow.getValue() != null &&
-                listDiscoverTvShow.getValue().data != null) &&
-                listDiscoverTvShow.getValue().data.getPage() >= listDiscoverTvShow.getValue().data.getTotalPages();
+        boolean lastPage = false;
+        if(listDiscoverTvShow.getValue() != null &&
+                listDiscoverTvShow.getValue().data != null &&
+                listDiscoverTvShow.getValue().data.getPage() != null &&
+                listDiscoverTvShow.getValue().data.getTotalPages() != null) {
+            lastPage = listDiscoverTvShow.getValue().data.getPage() >= listDiscoverTvShow.getValue().data.getTotalPages();
+        }
+        return lastPage;
     }
 }

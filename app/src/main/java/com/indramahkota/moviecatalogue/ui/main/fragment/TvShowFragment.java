@@ -50,6 +50,8 @@ public class TvShowFragment extends Fragment {
     private SearchView searchView;
     private View rootView;
 
+    private Toast mToast;
+
     public TvShowFragment() { }
 
     @Override
@@ -96,7 +98,7 @@ public class TvShowFragment extends Fragment {
                 currentPage++;
                 isLoading = true;
                 viewModel.loadMoreTvShows(currentPage);
-                Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
+                showToast("Page: " + currentPage);
             }
 
             @Override
@@ -131,7 +133,7 @@ public class TvShowFragment extends Fragment {
             listTvShowAdapter.clear();
             viewModel.loadMoreTvShows(currentPage);
             mShimmerViewContainer.setVisibility(View.VISIBLE);
-            Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
+            showToast("Reset to Page: " + currentPage);
         });
 
         viewModel.listDiscoverTvShow.observe(this, discoverTvShowResponseResource -> {
@@ -154,7 +156,7 @@ public class TvShowFragment extends Fragment {
                 case ERROR:
                     //show error
                     swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                    showToast("Error");
                     break;
             }
         });
@@ -165,12 +167,20 @@ public class TvShowFragment extends Fragment {
             mShimmerViewContainer.setVisibility(View.GONE);
         } else {
             viewModel.loadMoreTvShows(currentPage);
-            Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
+            showToast("Page: " + currentPage);
         }
     }
 
     public void scrollToTop() {
         rvFragmentTvShows.smoothScrollToPosition(0);
+    }
+
+    private void showToast(String message) {
+        if(mToast != null)
+            mToast.cancel();
+
+        mToast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+        mToast.show();
     }
 
     @Override

@@ -28,8 +28,13 @@ public class MovieFragmentViewModel extends ViewModel {
     }
 
     public boolean isLastPage() {
-        return (listDiscoverMovie.getValue() != null &&
-                listDiscoverMovie.getValue().data != null) &&
-                listDiscoverMovie.getValue().data.getPage() >= listDiscoverMovie.getValue().data.getTotalPages();
+        boolean lastPage = false;
+        if(listDiscoverMovie.getValue() != null &&
+                listDiscoverMovie.getValue().data != null &&
+                    listDiscoverMovie.getValue().data.getPage() != null &&
+                        listDiscoverMovie.getValue().data.getTotalPages() != null) {
+            lastPage = listDiscoverMovie.getValue().data.getPage() >= listDiscoverMovie.getValue().data.getTotalPages();
+        }
+        return lastPage;
     }
 }

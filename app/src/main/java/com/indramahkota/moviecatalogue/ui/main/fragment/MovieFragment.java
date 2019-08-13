@@ -50,6 +50,8 @@ public class MovieFragment extends Fragment {
     private SearchView searchView;
     private View rootView;
 
+    private Toast mToast;
+
     public MovieFragment() { }
 
     @Override
@@ -100,7 +102,7 @@ public class MovieFragment extends Fragment {
                 currentPage++;
                 isLoading = true;
                 viewModel.loadMoreMovies(currentPage);
-                Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
+                showToast("Page: " + currentPage);
             }
 
             @Override
@@ -131,7 +133,7 @@ public class MovieFragment extends Fragment {
             listMovieAdapter.clear();
             viewModel.loadMoreMovies(currentPage);
             mShimmerViewContainer.setVisibility(View.VISIBLE);
-            Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
+            showToast("Reset to Page: " + currentPage);
         });
 
         viewModel.listDiscoverMovie.observe(this, discoverMovieResponseResource -> {
@@ -154,7 +156,7 @@ public class MovieFragment extends Fragment {
                 case ERROR:
                     //show error
                     swipeRefreshLayout.setRefreshing(false);
-                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                    showToast("Error");
                     break;
             }
         });
@@ -165,12 +167,20 @@ public class MovieFragment extends Fragment {
             mShimmerViewContainer.setVisibility(View.GONE);
         } else {
             viewModel.loadMoreMovies(currentPage);
-            Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
+            showToast("Page: " + currentPage);
         }
     }
 
     public void scrollToTop() {
         rvFragmentMovies.smoothScrollToPosition(0);
+    }
+
+    private void showToast(String message) {
+        if(mToast != null)
+            mToast.cancel();
+
+        mToast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
+        mToast.show();
     }
 
     @Override

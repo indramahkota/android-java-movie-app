@@ -28,6 +28,8 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private static final String STATE_MODE = "state_mode";
+    private static final String SCROLL_STATE_MOVIE = "scroll_state_movie";
+    private static final String SCROLL_STATE_TV_SHOW = "scroll_state_tv_show";
 
     private int mode;
     private FragmentManager mFragmentManager;
@@ -64,6 +66,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             showMovieFragment();
         } else {
             setMode(savedInstanceState.getInt(STATE_MODE));
+            movieCounter = savedInstanceState.getInt(SCROLL_STATE_MOVIE);
+            tvShowCounter = savedInstanceState.getInt(SCROLL_STATE_TV_SHOW);
         }
     }
 
@@ -71,6 +75,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_MODE, mode);
+        outState.putInt(SCROLL_STATE_MOVIE, movieCounter);
+        outState.putInt(SCROLL_STATE_TV_SHOW, tvShowCounter);
     }
 
     @Override
