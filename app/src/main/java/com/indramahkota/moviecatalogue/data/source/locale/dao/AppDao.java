@@ -51,6 +51,9 @@ public interface AppDao {
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateMovie(MovieEntity movieEntity);
 
+    @Query("DELETE FROM " + MovieEntity.TABLE_NAME + " WHERE favorite = 0")
+    void deleteMovie();
+
     /*
      * Tv Shows
      * */
@@ -74,4 +77,7 @@ public interface AppDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateTvShow(TvShowEntity tvShowEntity);
+
+    @Query("DELETE FROM " + TvShowEntity.TABLE_NAME + " WHERE favorite = 0")
+    void deleteTvShow();
 }

@@ -46,7 +46,43 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
     //MovieFragmentViewModel
     @Override
     public LiveData<Resource<List<MovieEntity>>> loadListMovie(String refresh) {
-        return new NetworkBoundResource<List<MovieEntity>, DiscoverMovieResponse>(exec) {
+        MutableLiveData<Resource<List<MovieEntity>>> resultMovie = new MutableLiveData<>();
+
+        Call<DiscoverMovieResponse> call = api.getDiscoverMovies(BuildConfig.TMDB_API_KEY);
+        call.enqueue(new Callback<DiscoverMovieResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<DiscoverMovieResponse> call, @NonNull Response<DiscoverMovieResponse> response) {
+                if (response.body() != null) {
+                    ArrayList<MovieEntity> helper = new ArrayList<>();
+                    for(MovieEntity movieEntity : response.body().getResults()) {
+                        MovieEntity storedMovieEntity = dao.selectMovieById(movieEntity.getId());
+                        if (storedMovieEntity == null) {
+                            movieEntity.setFavorite(false);
+                        } else {
+                            if(storedMovieEntity.getFavorite()) {
+                                movieEntity.setFavorite(true);
+                            } else {
+                                movieEntity.setFavorite(false);
+                            }
+                        }
+                        helper.add(movieEntity);
+                    }
+                    /*DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
+                    discoverMovieResponse.setResults(helper);*/
+                    resultMovie.postValue(Resource.success(helper));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
+                resultMovie.setValue(Resource.error(t.getMessage(), new ArrayList<>()));
+            }
+        });
+
+        return resultMovie;
+
+
+        /*return new NetworkBoundResource<List<MovieEntity>, DiscoverMovieResponse>(exec) {
             @Override
             protected LiveData<List<MovieEntity>> loadFromDB() {
                 return dao.selectAllMovies();
@@ -98,13 +134,48 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
             protected void saveCallResult(DiscoverMovieResponse data) {
                 dao.insertMovies(data.getResults());
             }
-        }.asLiveData();
+        }.asLiveData();*/
     }
 
     //TvShowFragmentViewModel
     @Override
     public LiveData<Resource<List<TvShowEntity>>> loadListTvShow(String refresh) {
-        return new NetworkBoundResource<List<TvShowEntity>, DiscoverTvShowResponse>(exec) {
+        MutableLiveData<Resource<List<TvShowEntity>>> resultTvShow = new MutableLiveData<>();
+
+        Call<DiscoverTvShowResponse> call = api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY);
+        call.enqueue(new Callback<DiscoverTvShowResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Response<DiscoverTvShowResponse> response) {
+                if (response.body() != null) {
+                    ArrayList<TvShowEntity> helper = new ArrayList<>();
+                    for(TvShowEntity tvShowEntity : response.body().getResults()) {
+                        TvShowEntity storedTvShowEntity = dao.selectTvShowById(tvShowEntity.getId());
+                        if (storedTvShowEntity == null) {
+                            tvShowEntity.setFavorite(false);
+                        } else {
+                            if(storedTvShowEntity.getFavorite()) {
+                                tvShowEntity.setFavorite(true);
+                            } else {
+                                tvShowEntity.setFavorite(false);
+                            }
+                        }
+                        helper.add(tvShowEntity);
+                    }
+                    /*DiscoverTvShowResponse discoverTvShowResponse = new DiscoverTvShowResponse();
+                    discoverTvShowResponse.setResults(helper);*/
+                    resultTvShow.postValue(Resource.success(helper));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
+                resultTvShow.setValue(Resource.error(t.getMessage(), new ArrayList<>()));
+            }
+        });
+
+        return resultTvShow;
+
+        /*return new NetworkBoundResource<List<TvShowEntity>, DiscoverTvShowResponse>(exec) {
             @Override
             protected LiveData<List<TvShowEntity>> loadFromDB() {
                 return dao.selectAllTvShows();
@@ -156,7 +227,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
             protected void saveCallResult(DiscoverTvShowResponse data) {
                 dao.insertTvShows(data.getResults());
             }
-        }.asLiveData();
+        }.asLiveData();*/
     }
 
     //FavoriteMovieViewModel
@@ -310,7 +381,42 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
     //Search Movie
     @Override
     public LiveData<Resource<List<MovieEntity>>> searchListMovie(String query) {
-        return new NetworkBoundResource<List<MovieEntity>, DiscoverMovieResponse>(exec) {
+        MutableLiveData<Resource<List<MovieEntity>>> resultMovie = new MutableLiveData<>();
+
+        Call<DiscoverMovieResponse> call = api.searchMovies(BuildConfig.TMDB_API_KEY, query);
+        call.enqueue(new Callback<DiscoverMovieResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<DiscoverMovieResponse> call, @NonNull Response<DiscoverMovieResponse> response) {
+                if (response.body() != null) {
+                    ArrayList<MovieEntity> helper = new ArrayList<>();
+                    for(MovieEntity movieEntity : response.body().getResults()) {
+                        MovieEntity storedMovieEntity = dao.selectMovieById(movieEntity.getId());
+                        if (storedMovieEntity == null) {
+                            movieEntity.setFavorite(false);
+                        } else {
+                            if(storedMovieEntity.getFavorite()) {
+                                movieEntity.setFavorite(true);
+                            } else {
+                                movieEntity.setFavorite(false);
+                            }
+                        }
+                        helper.add(movieEntity);
+                    }
+                    /*DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
+                    discoverMovieResponse.setResults(helper);*/
+                    resultMovie.postValue(Resource.success(helper));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
+                resultMovie.setValue(Resource.error(t.getMessage(), new ArrayList<>()));
+            }
+        });
+
+        return resultMovie;
+
+        /*return new NetworkBoundResource<List<MovieEntity>, DiscoverMovieResponse>(exec) {
             @Override
             protected LiveData<List<MovieEntity>> loadFromDB() {
                 return dao.selectAllMovies();
@@ -362,13 +468,48 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
             protected void saveCallResult(DiscoverMovieResponse data) {
                 dao.insertMovies(data.getResults());
             }
-        }.asLiveData();
+        }.asLiveData();*/
     }
 
     //Search Tv Show
     @Override
     public LiveData<Resource<List<TvShowEntity>>> searchListTvShow(String query) {
-        return new NetworkBoundResource<List<TvShowEntity>, DiscoverTvShowResponse>(exec) {
+        MutableLiveData<Resource<List<TvShowEntity>>> resultTvShow = new MutableLiveData<>();
+
+        Call<DiscoverTvShowResponse> call = api.searchTvShows(BuildConfig.TMDB_API_KEY, query);
+        call.enqueue(new Callback<DiscoverTvShowResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Response<DiscoverTvShowResponse> response) {
+                if (response.body() != null) {
+                    ArrayList<TvShowEntity> helper = new ArrayList<>();
+                    for(TvShowEntity tvShowEntity : response.body().getResults()) {
+                        TvShowEntity storedTvShowEntity = dao.selectTvShowById(tvShowEntity.getId());
+                        if (storedTvShowEntity == null) {
+                            tvShowEntity.setFavorite(false);
+                        } else {
+                            if(storedTvShowEntity.getFavorite()) {
+                                tvShowEntity.setFavorite(true);
+                            } else {
+                                tvShowEntity.setFavorite(false);
+                            }
+                        }
+                        helper.add(tvShowEntity);
+                    }
+                    /*DiscoverTvShowResponse discoverTvShowResponse = new DiscoverTvShowResponse();
+                    discoverTvShowResponse.setResults(helper);*/
+                    resultTvShow.postValue(Resource.success(helper));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
+                resultTvShow.setValue(Resource.error(t.getMessage(), new ArrayList<>()));
+            }
+        });
+
+        return resultTvShow;
+
+        /*return new NetworkBoundResource<List<TvShowEntity>, DiscoverTvShowResponse>(exec) {
             @Override
             protected LiveData<List<TvShowEntity>> loadFromDB() {
                 return dao.selectAllTvShows();
@@ -420,7 +561,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
             protected void saveCallResult(DiscoverTvShowResponse data) {
                 dao.insertTvShows(data.getResults());
             }
-        }.asLiveData();
+        }.asLiveData();*/
     }
 
     /*
