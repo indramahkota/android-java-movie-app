@@ -57,6 +57,10 @@ public class DiscoverMovieResponse implements Parcelable {
         return results;
     }
 
+    public void setResults(ArrayList<MovieEntity> results) {
+        this.results = results;
+    }
+
     @Override
     public int describeContents() {
         return 0;

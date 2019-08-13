@@ -7,7 +7,9 @@ import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -15,7 +17,7 @@ public class MovieFragmentViewModel extends ViewModel {
     private MovieCatalogueRepository repository;
 
     private MutableLiveData<String> refreshHandler = new MutableLiveData<>();
-    public LiveData<Resource<DiscoverMovieResponse>> listDiscoverMovie = Transformations.switchMap(refreshHandler,
+    public LiveData<Resource<List<MovieEntity>>> listDiscoverMovie = Transformations.switchMap(refreshHandler,
             refreshId -> repository.loadListMovie(refreshId));
 
     @Inject

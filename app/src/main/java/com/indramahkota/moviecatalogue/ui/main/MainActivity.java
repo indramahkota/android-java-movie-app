@@ -79,7 +79,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.settings) {
-            //Toast.makeText(this, "Settings", Toast.LENGTH_SHORT).show();
             Intent mIntent = new Intent(this, SettingsActivity.class);
             startActivity(mIntent);
         }
@@ -103,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                 return true;
             case R.id.navigation_favorite:
                 mode = R.id.navigation_favorite;
-                setTitle(R.string.list_favoritess);
+                setTitle(R.string.list_favorites);
                 showFavoriteFragment();
                 return true;
         }

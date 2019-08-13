@@ -3,9 +3,9 @@ package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
-import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverTvShowResponseState;
+import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
+import com.indramahkota.moviecatalogue.data.source.Resource;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -14,7 +14,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import io.reactivex.Single;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -26,46 +27,46 @@ public class TvShowFragmentViewModelTest {
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
-    RemoteRepository remoteRepository;
+    MovieCatalogueRepository movieCatalogueRepository;
 
     private TvShowFragmentViewModel tvShowFragmentViewModel;
 
     @Mock
-    Observer<DiscoverTvShowResponseState> observer;
+    Observer<Resource<List<TvShowEntity>>> observer;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        tvShowFragmentViewModel = new TvShowFragmentViewModel(remoteRepository, SingleSchedulers.TEST_SCHEDULER);
-        tvShowFragmentViewModel.getTvShowViewState().observeForever(observer);
+        tvShowFragmentViewModel = new TvShowFragmentViewModel(movieCatalogueRepository);
+        tvShowFragmentViewModel.listDiscoverTvShow.observeForever(observer);
     }
 
     @Test
     public void testApiFetchData() {
-        when(remoteRepository.loadListTvShow()).thenReturn(null);
-        assertNotNull(tvShowFragmentViewModel.getTvShowViewState());
-        assertTrue(tvShowFragmentViewModel.getTvShowViewState().hasObservers());
+        when(movieCatalogueRepository.loadListTvShow("")).thenReturn(null);
+        assertNotNull(tvShowFragmentViewModel.listDiscoverTvShow);
+        assertTrue(tvShowFragmentViewModel.listDiscoverTvShow.hasObservers());
     }
 
     @Test
     public void testApiFetchDataSuccess() {
-        when(remoteRepository.loadListTvShow()).thenReturn(Single.just(new DiscoverTvShowResponse()));
-        tvShowFragmentViewModel.loadTvShow();
-        verify(observer).onChanged(DiscoverTvShowResponseState.LOADING_STATE);
-        verify(observer).onChanged(DiscoverTvShowResponseState.SUCCESS_STATE);
+        //when(movieCatalogueRepository.loadListTvShow("")).thenReturn();
+        tvShowFragmentViewModel.setRefreshId("");
+        verify(observer).onChanged(Resource.loading(new ArrayList<>()));
+        verify(observer).onChanged(Resource.success(new ArrayList<>()));
     }
 
     @Test
     public void testApiFetchDataError() {
-        when(remoteRepository.loadListTvShow()).thenReturn(Single.error(new Throwable("Api error")));
-        tvShowFragmentViewModel.loadTvShow();
-        verify(observer).onChanged(DiscoverTvShowResponseState.LOADING_STATE);
-        verify(observer).onChanged(DiscoverTvShowResponseState.ERROR_STATE);
+        //when(movieCatalogueRepository.loadListTvShow("")).thenReturn();
+        tvShowFragmentViewModel.setRefreshId("");
+        verify(observer).onChanged(Resource.loading(new ArrayList<>()));
+        verify(observer).onChanged(Resource.error("", new ArrayList<>()));
     }
 
     @After
     public void tearDown() {
-        remoteRepository = null;
+        movieCatalogueRepository = null;
         tvShowFragmentViewModel = null;
     }
 }

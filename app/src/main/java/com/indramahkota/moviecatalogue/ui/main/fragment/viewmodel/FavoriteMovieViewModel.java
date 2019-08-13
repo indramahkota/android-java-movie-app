@@ -23,15 +23,5 @@ public class FavoriteMovieViewModel extends ViewModel {
         return new LivePagedListBuilder<>(repository.getAllMovie(), 20).build();
     }
 
-    public LiveData<MovieEntity> getMovie(Long ln) {
-        return repository.getMovieById(ln);
-    }
-
-    public void insertMovie(MovieEntity movieEntity) {
-        repository.insertMovie(movieEntity);
-    }
-
-    public void deleteMovie(Long itemId) {
-        repository.deleteMovieById(itemId);
-    }
+    public void updateMovie(MovieEntity movieEntity) {repository.updateMovie(movieEntity);}
 }

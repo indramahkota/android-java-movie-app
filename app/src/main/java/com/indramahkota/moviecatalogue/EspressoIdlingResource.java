@@ -10,11 +10,9 @@ public class EspressoIdlingResource {
     public static void increment() {
         espressoTestIdlingResource.increment();
     }
-
     public static void decrement() {
         espressoTestIdlingResource.decrement();
     }
-
     public static IdlingResource getEspressoIdlingResource() {
         return espressoTestIdlingResource;
     }

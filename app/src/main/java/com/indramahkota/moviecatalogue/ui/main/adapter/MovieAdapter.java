@@ -22,17 +22,17 @@ import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
 import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryViewHolder> {
     private final Context mContext;
-    private final ArrayList<MovieEntity> listMovies;
+    private final List<MovieEntity> listMovies;
 
-    private ArrayList<MovieEntity> getListMovies() {
+    private List<MovieEntity> getListMovies() {
         return listMovies;
     }
 
-    public MovieAdapter(ArrayList<MovieEntity> listMovies, Context context) {
+    public MovieAdapter(List<MovieEntity> listMovies, Context context) {
         this.listMovies = listMovies;
         this.mContext = context;
     }
@@ -72,6 +72,12 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
             holder.txtOverview.setText(mContext.getResources().getString(R.string.availability_overview));
         }
 
+        if(getListMovies().get(position).getFavorite() != null && !getListMovies().get(position).getFavorite())
+            holder.imgFavorite.setVisibility(View.GONE);
+        else {
+            holder.imgFavorite.setVisibility(View.VISIBLE);
+        }
+
         String posterUrl = ApiConstant.BASE_URL_POSTER + getListMovies().get(position).getPosterPath();
         Glide.with(mContext)
                 .load(posterUrl)
@@ -95,6 +101,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
         private final TextView txtRelease;
         private final TextView txtRating;
         private final TextView txtOverview;
+        private final ImageView imgFavorite;
 
         CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -103,6 +110,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
             txtRelease = itemView.findViewById(R.id.txt_release_date);
             txtRating = itemView.findViewById(R.id.txt_rating);
             txtOverview = itemView.findViewById(R.id.txt_overview);
+            imgFavorite = itemView.findViewById(R.id.img_bookmark);
         }
 
         void addListener(int position) {

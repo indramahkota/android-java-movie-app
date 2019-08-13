@@ -3,9 +3,9 @@ package com.indramahkota.moviecatalogue.ui.detail.viewmodel;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 
-import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
+import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
+import com.indramahkota.moviecatalogue.data.source.Resource;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
-import com.indramahkota.moviecatalogue.ui.detail.datastate.MovieResponseState;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,8 +13,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import io.reactivex.Single;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -26,46 +24,46 @@ public class MovieDetailsViewModelTest {
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
-    RemoteRepository remoteRepository;
+    MovieCatalogueRepository movieCatalogueRepository;
 
     private MovieDetailsViewModel movieDetailsViewModel;
 
     @Mock
-    Observer<MovieResponseState> observer;
+    Observer<Resource<MovieEntity>> observer;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        movieDetailsViewModel = new MovieDetailsViewModel(remoteRepository, SingleSchedulers.TEST_SCHEDULER);
-        movieDetailsViewModel.getMovieViewState().observeForever(observer);
+        movieDetailsViewModel = new MovieDetailsViewModel(movieCatalogueRepository);
+        movieDetailsViewModel.movieDetail.observeForever(observer);
     }
 
     @Test
     public void testApiFetchData() {
-        when(remoteRepository.loadMovieDetails(384018)).thenReturn(null);
-        assertNotNull(movieDetailsViewModel.getMovieViewState());
-        assertTrue(movieDetailsViewModel.getMovieViewState().hasObservers());
+        when(movieCatalogueRepository.loadMovieDetails(384018L)).thenReturn(null);
+        assertNotNull(movieDetailsViewModel.movieDetail);
+        assertTrue(movieDetailsViewModel.movieDetail.hasObservers());
     }
 
     @Test
     public void testApiFetchDataSuccess() {
-        when(remoteRepository.loadMovieDetails(384018)).thenReturn(Single.just(new MovieEntity()));
-        movieDetailsViewModel.loadMovieDetails(384018);
-        verify(observer).onChanged(MovieResponseState.LOADING_STATE);
-        verify(observer).onChanged(MovieResponseState.SUCCESS_STATE);
+        //when(movieCatalogueRepository.loadMovieDetails(384018L)).thenReturn();
+        movieDetailsViewModel.setMovieId(384018L);
+        verify(observer).onChanged(Resource.loading(new MovieEntity()));
+        verify(observer).onChanged(Resource.success(new MovieEntity()));
     }
 
     @Test
     public void testApiFetchDataError() {
-        when(remoteRepository.loadMovieDetails(0)).thenReturn(Single.error(new Throwable("Api error")));
-        movieDetailsViewModel.loadMovieDetails(0);
-        verify(observer).onChanged(MovieResponseState.LOADING_STATE);
-        verify(observer).onChanged(MovieResponseState.ERROR_STATE);
+        //when(movieCatalogueRepository.loadMovieDetails(0L)).thenReturn();
+        movieDetailsViewModel.setMovieId(0L);
+        verify(observer).onChanged(Resource.loading(new MovieEntity()));
+        verify(observer).onChanged(Resource.error("", new MovieEntity()));
     }
 
     @After
     public void tearDown() {
-        remoteRepository = null;
+        movieCatalogueRepository = null;
         movieDetailsViewModel = null;
     }
 }

@@ -6,7 +6,6 @@ import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 class DiskIOThreadExecutor implements Executor {
-
     private final Executor mDiskIO;
 
     DiskIOThreadExecutor() {

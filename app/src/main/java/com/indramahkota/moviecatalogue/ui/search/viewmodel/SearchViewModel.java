@@ -7,8 +7,10 @@ import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -17,10 +19,10 @@ public class SearchViewModel extends ViewModel {
 
     private MutableLiveData<String> queryHandler = new MutableLiveData<>();
 
-    public LiveData<Resource<DiscoverMovieResponse>> searchMovie = Transformations.switchMap(queryHandler,
+    public LiveData<Resource<List<MovieEntity>>> searchMovie = Transformations.switchMap(queryHandler,
             searchQuery -> repository.searchListMovie(searchQuery));
 
-    public LiveData<Resource<DiscoverTvShowResponse>> searchTvShow = Transformations.switchMap(queryHandler,
+    public LiveData<Resource<List<TvShowEntity>>> searchTvShow = Transformations.switchMap(queryHandler,
             searchQuery -> repository.searchListTvShow(searchQuery));
 
     @Inject

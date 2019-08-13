@@ -7,6 +7,7 @@ import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
@@ -17,7 +18,6 @@ import java.util.List;
 @Dao
 public interface AppDao {
     /*
-     *
      * Languages
      * */
 
@@ -28,44 +28,50 @@ public interface AppDao {
     void insertLanguages(List<LanguageEntity> languages);
 
     /*
-     *
      * Movies
      * */
 
     @WorkerThread
-    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME)
+    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE favorite = 1")
     DataSource.Factory<Integer, MovieEntity> selectAllMovie();
+
+    @WorkerThread
+    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME)
+    LiveData<List<MovieEntity>> selectAllMovies();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMovie(MovieEntity movieEntity);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertMovies(List<MovieEntity> movieEntities);
+
     @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
-    LiveData<MovieEntity> selectMovieById(long id);
+    MovieEntity selectMovieById(long id);
 
-    @Query("DELETE FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
-    void deleteMovieById(long id);
-
-    /*@Update(onConflict = OnConflictStrategy.REPLACE)
-    int updateMovie(MovieEntity movieEntity);*/
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updateMovie(MovieEntity movieEntity);
 
     /*
-     *
      * Tv Shows
      * */
 
     @WorkerThread
-    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME)
+    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE favorite = 1")
     DataSource.Factory<Integer, TvShowEntity> selectAllTvShow();
+
+    @WorkerThread
+    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME)
+    LiveData<List<TvShowEntity>> selectAllTvShows();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTvShow(TvShowEntity tvShowEntity);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertTvShows(List<TvShowEntity> tvShowEntities);
+
     @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE itemId = :id")
-    LiveData<TvShowEntity> selectTvShowById(long id);
+    TvShowEntity selectTvShowById(long id);
 
-    @Query("DELETE FROM " + TvShowEntity.TABLE_NAME + " WHERE itemId = :id")
-    void deleteTvShowById(long id);
-
-    /*@Update(onConflict = OnConflictStrategy.REPLACE)
-    int updateTvShow(TvShowEntity tvShowEntity);*/
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    void updateTvShow(TvShowEntity tvShowEntity);
 }

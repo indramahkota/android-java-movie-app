@@ -43,9 +43,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
     public static final String STATE_MOVIE_RESPONSE = "state_movie_response";
     public static final String STATE_LANGUAGE_RESPONSE = "state_language_response";
 
-    @Inject
-    ViewModelFactory viewModelFactory;
-
     private Menu menu;
     private ImageView imgPoster;
     private TextView txtTitle;
@@ -55,13 +52,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private ImageView background;
     private TextView txtLanguage;
 
-    private Long movieId;
     private MovieEntity movieEntity;
     private List<LanguageEntity> languages;
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
 
-    private MovieEntity favoriteMovieEntity;
+    @Inject
+    ViewModelFactory viewModelFactory;
     private FavoriteMovieViewModel favoriteMovieViewModel;
 
     @Override
@@ -74,7 +71,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        movieId = getIntent().getLongExtra(EXTRA_MOVIE_ID, 0);
+        Long movieId = getIntent().getLongExtra(EXTRA_MOVIE_ID, 0);
 
         detailsContainer = findViewById(R.id.layout_details);
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
@@ -85,7 +82,6 @@ public class MovieDetailsActivity extends AppCompatActivity {
         txtOverview = findViewById(R.id.txt_overview);
         background = findViewById(R.id.img_background);
         txtLanguage = findViewById(R.id.txt_language);
-        txtLanguage.setText(getResources().getString(R.string.no_language));
 
         if (savedInstanceState != null) {
             movieEntity = savedInstanceState.getParcelable(STATE_MOVIE_RESPONSE);
@@ -146,12 +142,9 @@ public class MovieDetailsActivity extends AppCompatActivity {
         inflater.inflate(R.menu.favorite_menu, menu);
         this.menu = menu;
 
-        favoriteMovieViewModel.getMovie(movieId).observe(this, movie -> {
-            favoriteMovieEntity = movie;
-            if(favoriteMovieEntity != null) {
-                menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
-            }
-        });
+        if(movieEntity != null && movieEntity.getFavorite()) {
+            menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
+        }
         return true;
     }
 
@@ -160,11 +153,13 @@ public class MovieDetailsActivity extends AppCompatActivity {
         if(item.getItemId() == android.R.id.home) {
             finish();
         } else if(item.getItemId() == R.id.favorites && movieEntity != null) {
-            if(favoriteMovieEntity != null) {
-                favoriteMovieViewModel.deleteMovie(movieId);
+            if(movieEntity.getFavorite()) {
+                movieEntity.setFavorite(false);
+                favoriteMovieViewModel.updateMovie(movieEntity);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_border_white_24dp);
             } else {
-                favoriteMovieViewModel.insertMovie(movieEntity);
+                movieEntity.setFavorite(true);
+                favoriteMovieViewModel.updateMovie(movieEntity);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
             }
         }
@@ -185,6 +180,10 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void initializeUi(@NonNull MovieEntity response) {
+        if(menu != null && response.getFavorite()) {
+            menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
+        }
+
         String posterUrl;
         if(response.getPosterPath() != null && !response.getPosterPath().isEmpty()){
             posterUrl = ApiConstant.BASE_URL_POSTER + response.getPosterPath();

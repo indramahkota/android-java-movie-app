@@ -3,11 +3,10 @@ package com.indramahkota.moviecatalogue.ui.search.viewmodel;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 
-import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
-import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverMovieResponseState;
-import com.indramahkota.moviecatalogue.ui.main.fragment.datastate.DiscoverTvShowResponseState;
+import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
+import com.indramahkota.moviecatalogue.data.source.Resource;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
 import org.junit.After;
 import org.junit.Before;
@@ -16,7 +15,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import io.reactivex.Single;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -28,73 +28,73 @@ public class SearchViewModelTest {
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
-    RemoteRepository remoteRepository;
+    MovieCatalogueRepository movieCatalogueRepository;
 
     private SearchViewModel searchViewModel;
 
     @Mock
-    Observer<DiscoverMovieResponseState> movieObserver;
+    Observer<Resource<List<MovieEntity>>> movieObserver;
 
     @Mock
-    Observer<DiscoverTvShowResponseState> tvShowObserver;
+    Observer<Resource<List<TvShowEntity>>> tvShowObserver;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        searchViewModel = new SearchViewModel(remoteRepository, SingleSchedulers.TEST_SCHEDULER);
-        searchViewModel.getMovieViewState().observeForever(movieObserver);
-        searchViewModel.getTvShowViewState().observeForever(tvShowObserver);
+        searchViewModel = new SearchViewModel(movieCatalogueRepository);
+        searchViewModel.searchMovie.observeForever(movieObserver);
+        searchViewModel.searchTvShow.observeForever(tvShowObserver);
     }
 
     @Test
     public void testApiFetchDataMovie() {
-        when(remoteRepository.searchListMovie("Test")).thenReturn(null);
-        assertNotNull(searchViewModel.getMovieViewState());
-        assertTrue(searchViewModel.getMovieViewState().hasObservers());
+        when(movieCatalogueRepository.searchListMovie("Test")).thenReturn(null);
+        assertNotNull(searchViewModel.searchMovie);
+        assertTrue(searchViewModel.searchTvShow.hasObservers());
     }
 
     @Test
     public void testApiFetchDataMovieSuccess() {
-        when(remoteRepository.searchListMovie("Test")).thenReturn(Single.just(new DiscoverMovieResponse()));
-        searchViewModel.searchMovie("Test");
-        verify(movieObserver).onChanged(DiscoverMovieResponseState.LOADING_STATE);
-        verify(movieObserver).onChanged(DiscoverMovieResponseState.SUCCESS_STATE);
+        //when(movieCatalogueRepository.searchListMovie("Test")).thenReturn();
+        searchViewModel.setQuery("Test");
+        verify(movieObserver).onChanged(Resource.loading(new ArrayList<>()));
+        verify(movieObserver).onChanged(Resource.success(new ArrayList<>()));
     }
 
     @Test
     public void testApiFetchDataMovieError() {
-        when(remoteRepository.searchListMovie("Test")).thenReturn(Single.error(new Throwable("Api error")));
-        searchViewModel.searchMovie("Test");
-        verify(movieObserver).onChanged(DiscoverMovieResponseState.LOADING_STATE);
-        verify(movieObserver).onChanged(DiscoverMovieResponseState.ERROR_STATE);
+        //when(movieCatalogueRepository.searchListMovie("Test")).thenReturn();
+        searchViewModel.setQuery("Test");
+        verify(movieObserver).onChanged(Resource.loading(new ArrayList<>()));
+        verify(movieObserver).onChanged(Resource.error("", new ArrayList<>()));
     }
 
     @Test
     public void testApiFetchDataTvShow() {
-        when(remoteRepository.searchListTvShow("Test")).thenReturn(null);
-        assertNotNull(searchViewModel.getMovieViewState());
-        assertTrue(searchViewModel.getMovieViewState().hasObservers());
+        when(movieCatalogueRepository.searchListTvShow("Test")).thenReturn(null);
+        assertNotNull(searchViewModel.searchTvShow);
+        assertTrue(searchViewModel.searchTvShow.hasObservers());
     }
 
     @Test
     public void testApiFetchDataTvShowSuccess() {
-        when(remoteRepository.searchListTvShow("Test")).thenReturn(Single.just(new DiscoverTvShowResponse()));
-        searchViewModel.searchTvShow("Test");
-        verify(tvShowObserver).onChanged(DiscoverTvShowResponseState.LOADING_STATE);
-        verify(tvShowObserver).onChanged(DiscoverTvShowResponseState.SUCCESS_STATE);
+        //when(movieCatalogueRepository.searchListTvShow("Test")).thenReturn();
+        searchViewModel.setQuery("Test");
+        verify(movieObserver).onChanged(Resource.loading(new ArrayList<>()));
+        verify(movieObserver).onChanged(Resource.success(new ArrayList<>()));
     }
 
     @Test
     public void testApiFetchDataTvShowError() {
-        when(remoteRepository.searchListTvShow("Test")).thenReturn(Single.error(new Throwable("Api error")));
-        searchViewModel.searchTvShow("Test");
-        verify(tvShowObserver).onChanged(DiscoverTvShowResponseState.LOADING_STATE);
-        verify(tvShowObserver).onChanged(DiscoverTvShowResponseState.ERROR_STATE);
+        //when(movieCatalogueRepository.searchListTvShow("Test")).thenReturn();
+        searchViewModel.setQuery("Test");
+        verify(movieObserver).onChanged(Resource.loading(new ArrayList<>()));
+        verify(movieObserver).onChanged(Resource.error("", new ArrayList<>()));
     }
 
     @After
     public void tearDown() {
-        remoteRepository = null;
+        movieCatalogueRepository = null;
         searchViewModel = null;
     }
 }

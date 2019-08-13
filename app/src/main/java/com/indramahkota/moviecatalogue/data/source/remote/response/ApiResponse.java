@@ -18,7 +18,7 @@ public class ApiResponse<T> {
     @Nullable
     public final T body;
 
-    public ApiResponse(@NonNull StatusResponse status, @Nullable T body, @Nullable String message) {
+    private ApiResponse(@NonNull StatusResponse status, @Nullable T body, @Nullable String message) {
         this.status = status;
         this.body = body;
         this.message = message;

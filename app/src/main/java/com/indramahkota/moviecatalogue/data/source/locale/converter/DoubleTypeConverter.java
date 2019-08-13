@@ -16,7 +16,7 @@ public class DoubleTypeConverter {
     }
 
     @TypeConverter
-    public String fromList(Double dbl) {
+    public String fromDouble(Double dbl) {
         return new Gson().toJson(dbl);
     }
 }

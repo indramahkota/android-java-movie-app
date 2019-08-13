@@ -10,7 +10,6 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 @Module
@@ -25,8 +24,8 @@ public class ApiModule {
     @Provides
     @Singleton
     Retrofit provideRetrofit(Gson gson) {
-        return new Retrofit.Builder().baseUrl(ApiConstant.BASE_URL_TMDB)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        return new Retrofit.Builder()
+                .baseUrl(ApiConstant.BASE_URL_TMDB)
                 .addConverterFactory(GsonConverterFactory.create(gson))
                 .build();
     }

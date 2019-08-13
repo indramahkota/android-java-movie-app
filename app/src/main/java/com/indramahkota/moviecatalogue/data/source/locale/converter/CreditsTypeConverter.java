@@ -17,7 +17,7 @@ public class CreditsTypeConverter {
     }
 
     @TypeConverter
-    public String fromList(Credits credits) {
+    public String fromCredits(Credits credits) {
         return new Gson().toJson(credits);
     }
 }

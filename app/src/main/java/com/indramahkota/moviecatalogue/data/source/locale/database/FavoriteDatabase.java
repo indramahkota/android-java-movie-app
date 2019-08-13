@@ -8,7 +8,7 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
-import com.indramahkota.moviecatalogue.data.source.locale.converter.CastsTypeConverter;
+import com.indramahkota.moviecatalogue.data.source.locale.converter.CastTypeConverter;
 import com.indramahkota.moviecatalogue.data.source.locale.converter.CreditsTypeConverter;
 import com.indramahkota.moviecatalogue.data.source.locale.converter.DoubleTypeConverter;
 import com.indramahkota.moviecatalogue.data.source.locale.converter.GenresTypeConverter;
@@ -18,7 +18,7 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
 @Database(entities = {MovieEntity.class, TvShowEntity.class, LanguageEntity.class}, version = 1, exportSchema = false)
-@TypeConverters({CastsTypeConverter.class, GenresTypeConverter.class, CreditsTypeConverter.class, DoubleTypeConverter.class})
+@TypeConverters({CastTypeConverter.class, GenresTypeConverter.class, CreditsTypeConverter.class, DoubleTypeConverter.class})
 public abstract class FavoriteDatabase extends RoomDatabase {
     public static final String DATABASE_NAME = "my_movie_catalogue_database.db";
     private static FavoriteDatabase INSTANCE;

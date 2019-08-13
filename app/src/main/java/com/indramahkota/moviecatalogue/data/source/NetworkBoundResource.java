@@ -7,13 +7,10 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.ApiResponse;
 import com.indramahkota.moviecatalogue.ui.utils.AppExecutors;
 
 public abstract class NetworkBoundResource<ResultType, RequestType> {
-
     private MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
-
     private AppExecutors mExecutors;
 
     NetworkBoundResource(AppExecutors appExecutors) {
-
         this.mExecutors = appExecutors;
         result.setValue(Resource.loading(null));
 
@@ -29,8 +26,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
         });
     }
 
-    private void onFetchFailed() {
-    }
+    private void onFetchFailed() { }
 
     protected abstract LiveData<ResultType> loadFromDB();
 
@@ -41,7 +37,6 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
     protected abstract void saveCallResult(RequestType data);
 
     private void fetchFromNetwork(LiveData<ResultType> dbSource) {
-
         LiveData<ApiResponse<RequestType>> apiResponse = createCall();
 
         result.addSource(dbSource, newData ->
@@ -49,20 +44,16 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
         );
 
         result.addSource(apiResponse, response -> {
-
             result.removeSource(apiResponse);
             result.removeSource(dbSource);
 
             switch (response.status) {
                 case SUCCESS:
                     mExecutors.diskIO().execute(() -> {
-
                         saveCallResult(response.body);
-
                         mExecutors.mainThread().execute(() ->
                                 result.addSource(loadFromDB(),
                                         newData -> result.setValue(Resource.success(newData))));
-
                     });
                     break;
 

@@ -3,9 +3,9 @@ package com.indramahkota.moviecatalogue.ui.detail.viewmodel;
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
 
-import com.indramahkota.moviecatalogue.data.source.remote.repository.RemoteRepository;
+import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
+import com.indramahkota.moviecatalogue.data.source.Resource;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
-import com.indramahkota.moviecatalogue.ui.detail.datastate.TvShowResponseState;
 
 import org.junit.After;
 import org.junit.Before;
@@ -13,8 +13,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import io.reactivex.Single;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -26,46 +24,46 @@ public class TvShowDetailsViewModelTest {
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
-    RemoteRepository remoteRepository;
+    MovieCatalogueRepository movieCatalogueRepository;
 
     private TvShowDetailsViewModel tvShowDetailsViewModel;
 
     @Mock
-    Observer<TvShowResponseState> observer;
+    Observer<Resource<TvShowEntity>> observer;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        tvShowDetailsViewModel = new TvShowDetailsViewModel(remoteRepository, SingleSchedulers.TEST_SCHEDULER);
-        tvShowDetailsViewModel.getTvShowViewState().observeForever(observer);
+        tvShowDetailsViewModel = new TvShowDetailsViewModel(movieCatalogueRepository);
+        tvShowDetailsViewModel.tvShowDetail.observeForever(observer);
     }
 
     @Test
     public void testApiFetchData() {
-        when(remoteRepository.loadListTvShow()).thenReturn(null);
-        assertNotNull(tvShowDetailsViewModel.getTvShowViewState());
-        assertTrue(tvShowDetailsViewModel.getTvShowViewState().hasObservers());
+        when(movieCatalogueRepository.loadTvShowDetails(60735L)).thenReturn(null);
+        assertNotNull(tvShowDetailsViewModel.tvShowDetail);
+        assertTrue(tvShowDetailsViewModel.tvShowDetail.hasObservers());
     }
 
     @Test
     public void testApiFetchDataSuccess() {
-        when(remoteRepository.loadTvShowDetails(60735)).thenReturn(Single.just(new TvShowEntity()));
-        tvShowDetailsViewModel.loadTvShowDetails(60735);
-        verify(observer).onChanged(TvShowResponseState.LOADING_STATE);
-        verify(observer).onChanged(TvShowResponseState.SUCCESS_STATE);
+        //when(movieCatalogueRepository.loadTvShowDetails(60735L)).thenReturn();
+        tvShowDetailsViewModel.setTvShowId(60735L);
+        verify(observer).onChanged(Resource.loading(new TvShowEntity()));
+        verify(observer).onChanged(Resource.success(new TvShowEntity()));
     }
 
     @Test
     public void testApiFetchDataError() {
-        when(remoteRepository.loadTvShowDetails(0)).thenReturn(Single.error(new Throwable("Api error")));
-        tvShowDetailsViewModel.loadTvShowDetails(0);
-        verify(observer).onChanged(TvShowResponseState.LOADING_STATE);
-        verify(observer).onChanged(TvShowResponseState.ERROR_STATE);
+        //when(movieCatalogueRepository.loadTvShowDetails(0L)).thenReturn();
+        tvShowDetailsViewModel.setTvShowId(0L);
+        verify(observer).onChanged(Resource.loading(new TvShowEntity()));
+        verify(observer).onChanged(Resource.error("", new TvShowEntity()));
     }
 
     @After
     public void tearDown() {
-        remoteRepository = null;
+        movieCatalogueRepository = null;
         tvShowDetailsViewModel = null;
     }
 }

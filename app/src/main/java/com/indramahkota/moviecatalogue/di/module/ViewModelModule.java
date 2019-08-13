@@ -61,5 +61,5 @@ public abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(FavoriteTvShowViewModel.class)
-    protected abstract ViewModel favoritTvShowViewModel(FavoriteTvShowViewModel favoriteTvShowViewModel);
+    protected abstract ViewModel favoriteTvShowViewModel(FavoriteTvShowViewModel favoriteTvShowViewModel);
 }

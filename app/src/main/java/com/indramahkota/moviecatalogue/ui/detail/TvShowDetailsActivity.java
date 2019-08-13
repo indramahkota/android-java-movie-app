@@ -43,9 +43,6 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     public static final String STATE_TV_SHOW_RESPONSE = "state_tv_show_response";
     public static final String STATE_LANGUAGE_RESPONSE = "state_language_response";
 
-    @Inject
-    ViewModelFactory viewModelFactory;
-
     private Menu menu;
     private ImageView imgPoster;
     private TextView txtTitle;
@@ -55,13 +52,13 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     private ImageView background;
     private TextView txtLanguage;
 
-    private Long tvShowId;
     private TvShowEntity tvShowEntity;
     private List<LanguageEntity> languages;
     private ConstraintLayout detailsContainer;
     private ShimmerFrameLayout mShimmerViewContainer;
 
-    private TvShowEntity favoriteTvShowEntity;
+    @Inject
+    ViewModelFactory viewModelFactory;
     private FavoriteTvShowViewModel favoriteTvShowViewModel;
 
     @Override
@@ -74,7 +71,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
-        tvShowId = getIntent().getLongExtra(EXTRA_TV_SHOW_ID, 0);
+        Long tvShowId = getIntent().getLongExtra(EXTRA_TV_SHOW_ID, 0);
 
         detailsContainer = findViewById(R.id.layout_details);
         mShimmerViewContainer = findViewById(R.id.shimmer_view_container);
@@ -86,6 +83,11 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         background = findViewById(R.id.img_background);
         txtLanguage = findViewById(R.id.txt_language);
         txtLanguage.setText(getResources().getString(R.string.no_language));
+
+        if (savedInstanceState != null) {
+            tvShowEntity = savedInstanceState.getParcelable(STATE_TV_SHOW_RESPONSE);
+            languages = savedInstanceState.getParcelableArrayList(STATE_LANGUAGE_RESPONSE);
+        }
 
         favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
 
@@ -104,7 +106,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         }
 
         TvShowDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowDetailsViewModel.class);
-        viewModel.getTvShowDetails(tvShowId).observe(this, tvShowResponseState -> {
+        viewModel.tvShowDetail.observe(this, tvShowResponseState -> {
             switch (tvShowResponseState.status) {
                 case LOADING:
                     //show loading
@@ -128,9 +130,10 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             }
         });
 
-        if (savedInstanceState != null) {
-            tvShowEntity = savedInstanceState.getParcelable(STATE_TV_SHOW_RESPONSE);
-            languages = savedInstanceState.getParcelable(STATE_LANGUAGE_RESPONSE);
+        if (tvShowEntity != null) {
+            initializeUi(tvShowEntity);
+        } else {
+            viewModel.setTvShowId(tvShowId);
         }
     }
 
@@ -140,12 +143,9 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         inflater.inflate(R.menu.favorite_menu, menu);
         this.menu = menu;
 
-        favoriteTvShowViewModel.getTvShow(tvShowId).observe(this, tvShow -> {
-            favoriteTvShowEntity = tvShow;
-            if(favoriteTvShowEntity != null) {
-                menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
-            }
-        });
+        if(tvShowEntity != null && tvShowEntity.getFavorite()) {
+            menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
+        }
         return true;
     }
 
@@ -154,11 +154,13 @@ public class TvShowDetailsActivity extends AppCompatActivity {
         if(item.getItemId() == android.R.id.home) {
             finish();
         } else if(item.getItemId() == R.id.favorites && tvShowEntity != null) {
-            if(favoriteTvShowEntity != null) {
-                favoriteTvShowViewModel.deleteTvShow(tvShowId);
+            if(tvShowEntity.getFavorite()) {
+                tvShowEntity.setFavorite(false);
+                favoriteTvShowViewModel.updateTvShow(tvShowEntity);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_border_white_24dp);
             } else {
-                favoriteTvShowViewModel.insertTvShow(tvShowEntity);
+                tvShowEntity.setFavorite(true);
+                favoriteTvShowViewModel.updateTvShow(tvShowEntity);
                 menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
             }
         }
@@ -179,6 +181,10 @@ public class TvShowDetailsActivity extends AppCompatActivity {
     }
 
     private void initializeUi(@NonNull TvShowEntity response) {
+        if(menu != null && tvShowEntity.getFavorite()) {
+            menu.findItem(R.id.favorites).setIcon(R.drawable.ic_favorite_pink_24dp);
+        }
+
         String posterUrl;
         if(response.getPosterPath() != null && !response.getPosterPath().isEmpty()){
             posterUrl = ApiConstant.BASE_URL_POSTER + response.getPosterPath();

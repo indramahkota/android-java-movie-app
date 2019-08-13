@@ -5,9 +5,9 @@
 
     <string name="title_movie">Film</string>
     <string name="title_tv_show">Acara Tv</string>
-    <string name="list_movies">DAFTAR FILM</string>
-    <string name="list_tv_shows">DAFTAR ACARA TV</string>
-    <string name="list_favoritess">DAFTAR FAVORIT</string>
+    <string name="list_movies">Daftar Film</string>
+    <string name="list_tv_shows">Daftar Acara Tv</string>
+    <string name="list_favorites">Daftar Favorit</string>
 
     <string name="movies">Film</string>
     <string name="tv_shows">Acara Tv</string>

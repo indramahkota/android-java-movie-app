@@ -112,18 +112,18 @@ public class TvShowPagedListAdapter extends PagedListAdapter<TvShowEntity, TvSho
     }
 
     private static DiffUtil.ItemCallback<TvShowEntity> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<TvShowEntity>() {
-                // Concert details may have changed if reloaded from the database,
-                // but ID is fixed.
-                @Override
-                public boolean areItemsTheSame(TvShowEntity oldTvShow, TvShowEntity newTvShow) {
-                    return oldTvShow.getName().equals(newTvShow.getName());
-                }
+        new DiffUtil.ItemCallback<TvShowEntity>() {
+            // Concert details may have changed if reloaded from the database,
+            // but ID is fixed.
+            @Override
+            public boolean areItemsTheSame(TvShowEntity oldTvShow, TvShowEntity newTvShow) {
+                return oldTvShow.getName().equals(newTvShow.getName());
+            }
 
-                @SuppressLint("DiffUtilEquals")
-                @Override
-                public boolean areContentsTheSame(TvShowEntity oldTvShow, @NonNull TvShowEntity newTvShow) {
-                    return oldTvShow.equals(newTvShow);
-                }
-            };
+            @SuppressLint("DiffUtilEquals")
+            @Override
+            public boolean areContentsTheSame(TvShowEntity oldTvShow, @NonNull TvShowEntity newTvShow) {
+                return oldTvShow.equals(newTvShow);
+            }
+        };
 }

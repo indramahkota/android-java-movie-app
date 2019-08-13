@@ -23,15 +23,5 @@ public class FavoriteTvShowViewModel extends ViewModel {
         return new LivePagedListBuilder<>(repository.getAllTvShow(), 20).build();
     }
 
-    public LiveData<TvShowEntity> getTvShow(Long ln) {
-        return repository.getTvShowById(ln);
-    }
-
-    public void insertTvShow(TvShowEntity tvShowEntity) {
-        repository.insertTvShow(tvShowEntity);
-    }
-
-    public void deleteTvShow(Long itemId) {
-        repository.deleteTvShowById(itemId);
-    }
+    public void updateTvShow(TvShowEntity tvShowEntity) {repository.updateTvShow(tvShowEntity);}
 }
