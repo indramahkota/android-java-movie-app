@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -22,6 +21,7 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.adapter.TvShowAdapter;
+import com.indramahkota.moviecatalogue.ui.main.fragment.pagination.PaginationScrollListener;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.TvShowFragmentViewModel;
 import com.indramahkota.moviecatalogue.ui.search.SearchActivity;
 
@@ -33,17 +33,19 @@ import javax.inject.Inject;
 import dagger.android.support.AndroidSupportInjection;
 
 public class TvShowFragment extends Fragment {
+    private static final String STATE_PAGE = "state_page";
     private static final String STATE_SCROLL = "state_scroll";
     private static final String STATE_DISCOVER_TV_SHOW_RESPONSE = "state_discover_tv_show_response";
 
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private boolean isLoading;
+    private Long currentPage = 1L;
     private Integer scrollPosition = 0;
     private RecyclerView rvFragmentTvShows;
     private List<TvShowEntity> discoverTvShows;
     private ShimmerFrameLayout mShimmerViewContainer;
-    private RelativeLayout relativeLayout;
     private LinearLayoutManager linearLayoutManager;
     private SearchView searchView;
     private View rootView;
@@ -56,6 +58,7 @@ public class TvShowFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
+            currentPage = savedInstanceState.getLong(STATE_PAGE);
             scrollPosition = savedInstanceState.getInt(STATE_SCROLL);
             discoverTvShows = savedInstanceState.getParcelableArrayList(STATE_DISCOVER_TV_SHOW_RESPONSE);
         }
@@ -73,13 +76,38 @@ public class TvShowFragment extends Fragment {
 
         rootView = view.findViewById(R.id.rv_fragment_category_container);
 
-        relativeLayout = view.findViewById(R.id.empty_indicator);
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_fragment_container);
+
+        TvShowFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowFragmentViewModel.class);
 
         linearLayoutManager = new LinearLayoutManager(view.getContext());
         rvFragmentTvShows = view.findViewById(R.id.rv_fragment_category);
         rvFragmentTvShows.setLayoutManager(linearLayoutManager);
         rvFragmentTvShows.setHasFixedSize(true);
+
+        rvFragmentTvShows.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            public boolean isLastPage() {
+                return viewModel.isLastPage();
+            }
+
+            @Override
+            public void loadMore() {
+                currentPage++;
+                isLoading = true;
+                viewModel.loadMoreTvShows(currentPage);
+                Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
+
+        TvShowAdapter listTvShowAdapter = new TvShowAdapter(new ArrayList<>(), getContext());
+        listTvShowAdapter.notifyDataSetChanged();
+        rvFragmentTvShows.setAdapter(listTvShowAdapter);
 
         searchView = view.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -98,63 +126,58 @@ public class TvShowFragment extends Fragment {
         });
 
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_to_refresh);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            currentPage = 1L;
+            listTvShowAdapter.clear();
+            viewModel.loadMoreTvShows(currentPage);
+            mShimmerViewContainer.setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
+        });
 
-        TvShowFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowFragmentViewModel.class);
-        viewModel.listDiscoverTvShow.observe(this, tvShowListViewState -> {
-            switch (tvShowListViewState.status) {
-                case LOADING:
-                    //show loading
-                    relativeLayout.setVisibility(View.GONE);
-                    mShimmerViewContainer.setVisibility(View.VISIBLE);
-                    break;
+        viewModel.listDiscoverTvShow.observe(this, discoverTvShowResponseResource -> {
+            switch (discoverTvShowResponseResource.status) {
                 case SUCCESS:
                     //show data
                     swipeRefreshLayout.setRefreshing(false);
                     rvFragmentTvShows.setVisibility(View.VISIBLE);
-                    discoverTvShows = tvShowListViewState.data;
-                    if (discoverTvShows != null) {
-                        setAdapter(discoverTvShows);
-                        if(discoverTvShows.size() < 1) {
-                            relativeLayout.setVisibility(View.VISIBLE);
+                    mShimmerViewContainer.setVisibility(View.GONE);
+                    if (discoverTvShowResponseResource.data != null) {
+                        if(discoverTvShows == null) {
+                            discoverTvShows = new ArrayList<>(discoverTvShowResponseResource.data.getResults());
+                        } else {
+                            discoverTvShows.addAll(discoverTvShowResponseResource.data.getResults());
                         }
+                        listTvShowAdapter.addAll(discoverTvShowResponseResource.data.getResults());
+                        isLoading = false;
                     }
                     break;
                 case ERROR:
                     //show error
                     swipeRefreshLayout.setRefreshing(false);
-                    relativeLayout.setVisibility(View.GONE);
-                    mShimmerViewContainer.setVisibility(View.VISIBLE);
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
                     break;
             }
         });
 
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            relativeLayout.setVisibility(View.GONE);
-            rvFragmentTvShows.setVisibility(View.GONE);
-            mShimmerViewContainer.setVisibility(View.VISIBLE);
-            viewModel.setRefreshId("refresh");
-        });
-
         if(discoverTvShows != null) {
-            setAdapter(discoverTvShows);
+            listTvShowAdapter.addAll(discoverTvShows);
             linearLayoutManager.scrollToPosition(scrollPosition);
+            mShimmerViewContainer.setVisibility(View.GONE);
         } else {
-            viewModel.setRefreshId("start");
+            viewModel.loadMoreTvShows(currentPage);
+            Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void setAdapter(@NonNull List<TvShowEntity> disTvShows) {
-        TvShowAdapter listTvShowAdapter = new TvShowAdapter(disTvShows, getContext());
-        listTvShowAdapter.notifyDataSetChanged();
-        rvFragmentTvShows.setAdapter(listTvShowAdapter);
-        mShimmerViewContainer.setVisibility(View.GONE);
+    public void scrollToTop() {
+        rvFragmentTvShows.smoothScrollToPosition(0);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         scrollPosition = linearLayoutManager.findFirstVisibleItemPosition();
         outState.putInt(STATE_SCROLL, scrollPosition);
+        outState.putLong(STATE_PAGE, currentPage);
 
         if(discoverTvShows != null) {
             ArrayList<TvShowEntity> helper = new ArrayList<>();

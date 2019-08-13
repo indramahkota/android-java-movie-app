@@ -7,25 +7,29 @@ import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
-import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
-
-import java.util.List;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 
 import javax.inject.Inject;
 
 public class TvShowFragmentViewModel extends ViewModel {
     private MovieCatalogueRepository repository;
 
-    private MutableLiveData<String> refreshHandler = new MutableLiveData<>();
-    public LiveData<Resource<List<TvShowEntity>>> listDiscoverTvShow = Transformations.switchMap(refreshHandler,
-            refreshId -> repository.loadListTvShow(refreshId));
+    private MutableLiveData<Long> pageHandler = new MutableLiveData<>();
+    public LiveData<Resource<DiscoverTvShowResponse>> listDiscoverTvShow = Transformations.switchMap(pageHandler,
+            page -> repository.loadListTvShow(page));
 
     @Inject
     TvShowFragmentViewModel(MovieCatalogueRepository repository) {
         this.repository = repository;
     }
 
-    public void setRefreshId(String refId) {
-        refreshHandler.setValue(refId);
+    public void loadMoreTvShows(Long currentPage) {
+        pageHandler.setValue(currentPage);
+    }
+
+    public boolean isLastPage() {
+        return (listDiscoverTvShow.getValue() != null &&
+                listDiscoverTvShow.getValue().data != null) &&
+                listDiscoverTvShow.getValue().data.getPage() >= listDiscoverTvShow.getValue().data.getTotalPages();
     }
 }

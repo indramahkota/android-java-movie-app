@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 public class MovieFragmentViewModel extends ViewModel {
     private MovieCatalogueRepository repository;
+
     private MutableLiveData<Long> pageHandler = new MutableLiveData<>();
     public LiveData<Resource<DiscoverMovieResponse>> listDiscoverMovie = Transformations.switchMap(pageHandler,
             page -> repository.loadListMovie(page));

@@ -7,6 +7,7 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public interface MovieCatalogueDataSource {
     LiveData<Resource<DiscoverMovieResponse>> loadListMovie(Long page);
 
     //Tv Show Fragment
-    LiveData<Resource<List<TvShowEntity>>> loadListTvShow(String refresh);
+    LiveData<Resource<DiscoverTvShowResponse>> loadListTvShow(Long page);
 
     //Favorite Movie Fragment
     DataSource.Factory<Integer, MovieEntity> getAllMovie();

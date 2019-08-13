@@ -68,9 +68,9 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                         helper.add(movieEntity);
                     }
                     DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
-                    discoverMovieResponse.setResults(helper);
                     discoverMovieResponse.setPage(response.body().getPage());
                     discoverMovieResponse.setTotalPages(response.body().getTotalPages());
+                    discoverMovieResponse.setResults(helper);
                     resultMovie.postValue(Resource.success(discoverMovieResponse));
                 }
             }
@@ -86,10 +86,10 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //TvShowFragmentViewModel
     @Override
-    public LiveData<Resource<List<TvShowEntity>>> loadListTvShow(String refresh) {
-        MutableLiveData<Resource<List<TvShowEntity>>> resultTvShow = new MutableLiveData<>();
+    public LiveData<Resource<DiscoverTvShowResponse>> loadListTvShow(Long page) {
+        MutableLiveData<Resource<DiscoverTvShowResponse>> resultTvShow = new MutableLiveData<>();
 
-        Call<DiscoverTvShowResponse> call = api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY);
+        Call<DiscoverTvShowResponse> call = api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY, page);
         call.enqueue(new Callback<DiscoverTvShowResponse>() {
             @Override
             public void onResponse(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Response<DiscoverTvShowResponse> response) {
@@ -108,13 +108,17 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                         }
                         helper.add(tvShowEntity);
                     }
-                    resultTvShow.postValue(Resource.success(helper));
+                    DiscoverTvShowResponse discoverTvShowResponse = new DiscoverTvShowResponse();
+                    discoverTvShowResponse.setPage(response.body().getPage());
+                    discoverTvShowResponse.setTotalPages(response.body().getTotalPages());
+                    discoverTvShowResponse.setResults(helper);
+                    resultTvShow.postValue(Resource.success(discoverTvShowResponse));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
-                resultTvShow.setValue(Resource.error(t.getMessage(), new ArrayList<>()));
+                resultTvShow.setValue(Resource.error(t.getMessage(), new DiscoverTvShowResponse()));
             }
         });
 

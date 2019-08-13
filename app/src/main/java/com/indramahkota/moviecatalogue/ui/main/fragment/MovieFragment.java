@@ -169,6 +169,10 @@ public class MovieFragment extends Fragment {
         }
     }
 
+    public void scrollToTop() {
+        rvFragmentMovies.smoothScrollToPosition(0);
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         scrollPosition = linearLayoutManager.findFirstVisibleItemPosition();

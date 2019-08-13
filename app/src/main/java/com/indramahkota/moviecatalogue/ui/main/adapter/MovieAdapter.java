@@ -48,7 +48,6 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
         }
     }
 
-
     private void remove(MovieEntity postItems) {
         int position = listMovies.indexOf(postItems);
         if (position > -1) {

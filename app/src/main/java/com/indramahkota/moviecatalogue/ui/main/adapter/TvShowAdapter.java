@@ -37,6 +37,35 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.CategoryVi
         this.mContext = context;
     }
 
+    public void add(TvShowEntity response) {
+        listTvShows.add(response);
+        notifyItemInserted(listTvShows.size() - 1);
+    }
+
+    public void addAll(List<TvShowEntity> postItems) {
+        for (TvShowEntity response : postItems) {
+            add(response);
+        }
+    }
+
+    private void remove(TvShowEntity postItems) {
+        int position = listTvShows.indexOf(postItems);
+        if (position > -1) {
+            listTvShows.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void clear() {
+        while (getItemCount() > 0) {
+            remove(getItem());
+        }
+    }
+
+    private TvShowEntity getItem() {
+        return listTvShows.get(0);
+    }
+
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

@@ -19,7 +19,8 @@ public interface ApiEndPoint {
                                                   @Query("page") long page);
 
     @GET("discover/tv")
-    Call<DiscoverTvShowResponse> getDiscoverTvShows(@Query("api_key") String apiKey);
+    Call<DiscoverTvShowResponse> getDiscoverTvShows(@Query("api_key") String apiKey,
+                                                    @Query("page") long page);
 
     @GET("movie/{movie_id}")
     Call<MovieEntity> getMovie(

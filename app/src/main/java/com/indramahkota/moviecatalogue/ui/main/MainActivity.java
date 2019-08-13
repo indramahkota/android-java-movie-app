@@ -37,6 +37,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private TvShowFragment mTvShowFragment;
     private FavoriteFragment mFavoriteFragment;
 
+    private int movieCounter = 0;
+    private int tvShowCounter = 0;
+
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
@@ -91,11 +94,15 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private boolean setMode(int selectedMode) {
         switch (selectedMode) {
             case R.id.navigation_movie:
+                movieCounter++;
+                tvShowCounter = 0;
                 mode = R.id.navigation_movie;
                 setTitle(R.string.list_movies);
                 showMovieFragment();
                 return true;
             case R.id.navigation_tv_show:
+                tvShowCounter++;
+                movieCounter = 0;
                 mode = R.id.navigation_tv_show;
                 setTitle(R.string.list_tv_shows);
                 showTvShowFragment();
@@ -114,6 +121,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             mMovieFragment = new MovieFragment();
         }
 
+        if(movieCounter > 1) {
+            mMovieFragment.scrollToTop();
+        }
+
         mFragmentTransaction = mFragmentManager.beginTransaction();
         Fragment fragment = mFragmentManager.findFragmentByTag(MovieFragment.class.getSimpleName());
         if (!(fragment instanceof MovieFragment)) {
@@ -125,6 +136,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private void showTvShowFragment() {
         if(mTvShowFragment == null) {
             mTvShowFragment = new TvShowFragment();
+        }
+
+        if(movieCounter > 1) {
+            mTvShowFragment.scrollToTop();
         }
 
         mFragmentTransaction = mFragmentManager.beginTransaction();
