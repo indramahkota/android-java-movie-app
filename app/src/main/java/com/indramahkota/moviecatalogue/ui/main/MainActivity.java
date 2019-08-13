@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             mTvShowFragment = new TvShowFragment();
         }
 
-        if(movieCounter > 1) {
+        if(tvShowCounter > 1) {
             mTvShowFragment.scrollToTop();
         }
 
