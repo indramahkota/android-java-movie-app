@@ -37,6 +37,36 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
         this.mContext = context;
     }
 
+    public void add(MovieEntity response) {
+        listMovies.add(response);
+        notifyItemInserted(listMovies.size() - 1);
+    }
+
+    public void addAll(List<MovieEntity> postItems) {
+        for (MovieEntity response : postItems) {
+            add(response);
+        }
+    }
+
+
+    private void remove(MovieEntity postItems) {
+        int position = listMovies.indexOf(postItems);
+        if (position > -1) {
+            listMovies.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void clear() {
+        while (getItemCount() > 0) {
+            remove(getItem());
+        }
+    }
+
+    private MovieEntity getItem() {
+        return listMovies.get(0);
+    }
+
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {

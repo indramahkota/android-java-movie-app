@@ -15,7 +15,8 @@ import retrofit2.http.Query;
 
 public interface ApiEndPoint {
     @GET("discover/movie")
-    Call<DiscoverMovieResponse> getDiscoverMovies(@Query("api_key") String apiKey);
+    Call<DiscoverMovieResponse> getDiscoverMovies(@Query("api_key") String apiKey,
+                                                  @Query("page") long page);
 
     @GET("discover/tv")
     Call<DiscoverTvShowResponse> getDiscoverTvShows(@Query("api_key") String apiKey);

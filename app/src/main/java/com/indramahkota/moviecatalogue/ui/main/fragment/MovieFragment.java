@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -22,6 +21,7 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.adapter.MovieAdapter;
+import com.indramahkota.moviecatalogue.ui.main.fragment.pagination.PaginationScrollListener;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.MovieFragmentViewModel;
 import com.indramahkota.moviecatalogue.ui.search.SearchActivity;
 
@@ -33,17 +33,19 @@ import javax.inject.Inject;
 import dagger.android.support.AndroidSupportInjection;
 
 public class MovieFragment extends Fragment {
+    private static final String STATE_PAGE = "state_page";
     private static final String STATE_SCROLL = "state_scroll";
     private static final String STATE_DISCOVER_MOVIE_RESPONSE = "state_discover_movie_response";
 
     @Inject
     ViewModelFactory viewModelFactory;
 
+    private boolean isLoading;
+    private Long currentPage = 1L;
     private Integer scrollPosition = 0;
     private RecyclerView rvFragmentMovies;
     private List<MovieEntity> discoverMovies;
     private ShimmerFrameLayout mShimmerViewContainer;
-    private RelativeLayout relativeLayout;
     private LinearLayoutManager linearLayoutManager;
     private SearchView searchView;
     private View rootView;
@@ -56,6 +58,7 @@ public class MovieFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
+            currentPage = savedInstanceState.getLong(STATE_PAGE);
             scrollPosition = savedInstanceState.getInt(STATE_SCROLL);
             discoverMovies = savedInstanceState.getParcelableArrayList(STATE_DISCOVER_MOVIE_RESPONSE);
         }
@@ -73,13 +76,38 @@ public class MovieFragment extends Fragment {
 
         rootView = view.findViewById(R.id.rv_fragment_category_container);
 
-        relativeLayout = view.findViewById(R.id.empty_indicator);
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_fragment_container);
+
+        MovieFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieFragmentViewModel.class);
 
         linearLayoutManager = new LinearLayoutManager(view.getContext());
         rvFragmentMovies = view.findViewById(R.id.rv_fragment_category);
         rvFragmentMovies.setLayoutManager(linearLayoutManager);
         rvFragmentMovies.setHasFixedSize(true);
+
+        MovieAdapter listMovieAdapter = new MovieAdapter(new ArrayList<>(), getContext());
+        listMovieAdapter.notifyDataSetChanged();
+        rvFragmentMovies.setAdapter(listMovieAdapter);
+
+        rvFragmentMovies.addOnScrollListener(new PaginationScrollListener(linearLayoutManager) {
+            @Override
+            public boolean isLastPage() {
+                return viewModel.isLastPage();
+            }
+
+            @Override
+            public void loadMore() {
+                currentPage++;
+                isLoading = true;
+                viewModel.loadMoreMovies(currentPage);
+                Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public boolean isLoading() {
+                return isLoading;
+            }
+        });
 
         searchView = view.findViewById(R.id.searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -98,63 +126,54 @@ public class MovieFragment extends Fragment {
         });
 
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_to_refresh);
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            currentPage = 1L;
+            listMovieAdapter.clear();
+            viewModel.loadMoreMovies(currentPage);
+            mShimmerViewContainer.setVisibility(View.VISIBLE);
+            Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
+        });
 
-        MovieFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieFragmentViewModel.class);
-        viewModel.listDiscoverMovie.observe(this, movieViewState -> {
-            switch (movieViewState.status) {
-                case LOADING:
-                    //show loading
-                    relativeLayout.setVisibility(View.GONE);
-                    mShimmerViewContainer.setVisibility(View.VISIBLE);
-                    break;
+        viewModel.listDiscoverMovie.observe(this, discoverMovieResponseResource -> {
+            switch (discoverMovieResponseResource.status) {
                 case SUCCESS:
                     //show data
                     swipeRefreshLayout.setRefreshing(false);
                     rvFragmentMovies.setVisibility(View.VISIBLE);
-                    discoverMovies = movieViewState.data;
-                    if (discoverMovies != null) {
-                        setAdapter(discoverMovies);
-                        if(discoverMovies.size() < 1) {
-                            relativeLayout.setVisibility(View.VISIBLE);
+                    mShimmerViewContainer.setVisibility(View.GONE);
+                    if (discoverMovieResponseResource.data != null) {
+                        if(discoverMovies == null) {
+                            discoverMovies = new ArrayList<>(discoverMovieResponseResource.data.getResults());
+                        } else {
+                            discoverMovies.addAll(discoverMovieResponseResource.data.getResults());
                         }
+                        listMovieAdapter.addAll(discoverMovieResponseResource.data.getResults());
+                        isLoading = false;
                     }
                     break;
                 case ERROR:
                     //show error
                     swipeRefreshLayout.setRefreshing(false);
-                    relativeLayout.setVisibility(View.GONE);
-                    mShimmerViewContainer.setVisibility(View.VISIBLE);
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
                     break;
             }
         });
 
-        swipeRefreshLayout.setOnRefreshListener(() -> {
-            relativeLayout.setVisibility(View.GONE);
-            rvFragmentMovies.setVisibility(View.GONE);
-            mShimmerViewContainer.setVisibility(View.VISIBLE);
-            viewModel.setRefreshId("refresh");
-        });
-
         if(discoverMovies != null) {
-            setAdapter(discoverMovies);
+            listMovieAdapter.addAll(discoverMovies);
             linearLayoutManager.scrollToPosition(scrollPosition);
+            mShimmerViewContainer.setVisibility(View.GONE);
         } else {
-            viewModel.setRefreshId("start");
+            viewModel.loadMoreMovies(currentPage);
+            Toast.makeText(getContext(), "Page: " + currentPage, Toast.LENGTH_SHORT).show();
         }
-    }
-
-    private void setAdapter(@NonNull List<MovieEntity> disMovies) {
-        MovieAdapter listMovieAdapter = new MovieAdapter(disMovies, getContext());
-        listMovieAdapter.notifyDataSetChanged();
-        rvFragmentMovies.setAdapter(listMovieAdapter);
-        mShimmerViewContainer.setVisibility(View.GONE);
     }
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         scrollPosition = linearLayoutManager.findFirstVisibleItemPosition();
         outState.putInt(STATE_SCROLL, scrollPosition);
+        outState.putLong(STATE_PAGE, currentPage);
 
         if(discoverMovies != null) {
             ArrayList<MovieEntity> helper = new ArrayList<>();

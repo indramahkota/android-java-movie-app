@@ -6,6 +6,7 @@ import androidx.paging.DataSource;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
+import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ public interface MovieCatalogueDataSource {
     * Main Activity
     * */
     //Movie Fragment
-    LiveData<Resource<List<MovieEntity>>> loadListMovie(String refresh);
+    LiveData<Resource<DiscoverMovieResponse>> loadListMovie(Long page);
 
     //Tv Show Fragment
     LiveData<Resource<List<TvShowEntity>>> loadListTvShow(String refresh);

@@ -45,10 +45,10 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //MovieFragmentViewModel
     @Override
-    public LiveData<Resource<List<MovieEntity>>> loadListMovie(String refresh) {
-        MutableLiveData<Resource<List<MovieEntity>>> resultMovie = new MutableLiveData<>();
+    public LiveData<Resource<DiscoverMovieResponse>> loadListMovie(Long page) {
+        MutableLiveData<Resource<DiscoverMovieResponse>> resultMovie = new MutableLiveData<>();
 
-        Call<DiscoverMovieResponse> call = api.getDiscoverMovies(BuildConfig.TMDB_API_KEY);
+        Call<DiscoverMovieResponse> call = api.getDiscoverMovies(BuildConfig.TMDB_API_KEY, page);
         call.enqueue(new Callback<DiscoverMovieResponse>() {
             @Override
             public void onResponse(@NonNull Call<DiscoverMovieResponse> call, @NonNull Response<DiscoverMovieResponse> response) {
@@ -67,13 +67,17 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                         }
                         helper.add(movieEntity);
                     }
-                    resultMovie.postValue(Resource.success(helper));
+                    DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
+                    discoverMovieResponse.setResults(helper);
+                    discoverMovieResponse.setPage(response.body().getPage());
+                    discoverMovieResponse.setTotalPages(response.body().getTotalPages());
+                    resultMovie.postValue(Resource.success(discoverMovieResponse));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
-                resultMovie.setValue(Resource.error(t.getMessage(), new ArrayList<>()));
+                resultMovie.setValue(Resource.error(t.getMessage(), new DiscoverMovieResponse()));
             }
         });
 

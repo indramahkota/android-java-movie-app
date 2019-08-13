@@ -53,12 +53,28 @@ public class DiscoverMovieResponse implements Parcelable {
         }
     };
 
-    public ArrayList<MovieEntity> getResults() {
-        return results;
+    public void setPage(Integer page) {
+        this.page = page;
+    }
+
+    public void setTotalPages(Integer totalPages) {
+        this.totalPages = totalPages;
     }
 
     public void setResults(ArrayList<MovieEntity> results) {
         this.results = results;
+    }
+
+    public Integer getPage() {
+        return page;
+    }
+
+    public ArrayList<MovieEntity> getResults() {
+        return results;
+    }
+
+    public Integer getTotalPages() {
+        return totalPages;
     }
 
     @Override
