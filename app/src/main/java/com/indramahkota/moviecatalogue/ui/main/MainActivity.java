@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         if (savedInstanceState == null) {
             setTitle(R.string.list_movies);
             mode = R.id.navigation_movie;
+            movieCounter++;
             showMovieFragment();
         } else {
             setMode(savedInstanceState.getInt(STATE_MODE));
