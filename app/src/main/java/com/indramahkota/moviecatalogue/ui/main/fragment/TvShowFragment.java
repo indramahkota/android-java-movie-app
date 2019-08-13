@@ -156,13 +156,15 @@ public class TvShowFragment extends Fragment {
         scrollPosition = linearLayoutManager.findFirstVisibleItemPosition();
         outState.putInt(STATE_SCROLL, scrollPosition);
 
-        ArrayList<TvShowEntity> helper = new ArrayList<>();
-        int len = discoverTvShows.size();
-        for(int i = 0; i<len; ++i) {
-            helper.add(discoverTvShows.get(i));
+        if(discoverTvShows != null) {
+            ArrayList<TvShowEntity> helper = new ArrayList<>();
+            int len = discoverTvShows.size();
+            for(int i = 0; i<len; ++i) {
+                helper.add(discoverTvShows.get(i));
+            }
+            outState.putParcelableArrayList(STATE_DISCOVER_TV_SHOW_RESPONSE, helper);
         }
 
-        outState.putParcelableArrayList(STATE_DISCOVER_TV_SHOW_RESPONSE, helper);
         super.onSaveInstanceState(outState);
     }
 

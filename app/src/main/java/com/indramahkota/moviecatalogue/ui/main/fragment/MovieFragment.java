@@ -156,13 +156,15 @@ public class MovieFragment extends Fragment {
         scrollPosition = linearLayoutManager.findFirstVisibleItemPosition();
         outState.putInt(STATE_SCROLL, scrollPosition);
 
-        ArrayList<MovieEntity> helper = new ArrayList<>();
-        int len = discoverMovies.size();
-        for(int i = 0; i<len; ++i) {
-            helper.add(discoverMovies.get(i));
+        if(discoverMovies != null) {
+            ArrayList<MovieEntity> helper = new ArrayList<>();
+            int len = discoverMovies.size();
+            for(int i = 0; i<len; ++i) {
+                helper.add(discoverMovies.get(i));
+            }
+            outState.putParcelableArrayList(STATE_DISCOVER_MOVIE_RESPONSE, helper);
         }
 
-        outState.putParcelableArrayList(STATE_DISCOVER_MOVIE_RESPONSE, helper);
         super.onSaveInstanceState(outState);
     }
 

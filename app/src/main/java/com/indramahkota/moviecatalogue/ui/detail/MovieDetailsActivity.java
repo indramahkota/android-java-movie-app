@@ -170,13 +170,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        ArrayList<LanguageEntity> helper = new ArrayList<>();
-        int len = languages.size();
-        for(int i = 0; i<len; ++i) {
-            helper.add(languages.get(i));
+        if(languages != null) {
+            ArrayList<LanguageEntity> helper = new ArrayList<>();
+            int len = languages.size();
+            for(int i = 0; i<len; ++i) {
+                helper.add(languages.get(i));
+            }
+            outState.putParcelableArrayList(STATE_LANGUAGE_RESPONSE, helper);
         }
-        outState.putParcelableArrayList(STATE_LANGUAGE_RESPONSE, helper);
-        outState.putParcelable(STATE_MOVIE_RESPONSE, movieEntity);
+
+        if(movieEntity != null) {
+            outState.putParcelable(STATE_MOVIE_RESPONSE, movieEntity);
+        }
     }
 
     private void initializeUi(@NonNull MovieEntity response) {
@@ -231,15 +236,19 @@ public class MovieDetailsActivity extends AppCompatActivity {
             setTxtLanguage();
         }
 
-        RecyclerView rvCasts = findViewById(R.id.rv_details_cast);
-        rvCasts.setHasFixedSize(true);
-        CastAdapter listCastAdapter = new CastAdapter(response.getCredits().getCast(), this);
-        rvCasts.setAdapter(listCastAdapter);
+        if(response.getCredits().getCast() != null) {
+            RecyclerView rvCasts = findViewById(R.id.rv_details_cast);
+            rvCasts.setHasFixedSize(true);
+            CastAdapter listCastAdapter = new CastAdapter(response.getCredits().getCast(), this);
+            rvCasts.setAdapter(listCastAdapter);
+        }
 
-        RecyclerView rvGenres = findViewById(R.id.rv_details_genres);
-        rvGenres.setHasFixedSize(true);
-        GenreAdapter genreAdapter = new GenreAdapter(response.getGenres(), this);
-        rvGenres.setAdapter(genreAdapter);
+        if(response.getGenres() != null) {
+            RecyclerView rvGenres = findViewById(R.id.rv_details_genres);
+            rvGenres.setHasFixedSize(true);
+            GenreAdapter genreAdapter = new GenreAdapter(response.getGenres(), this);
+            rvGenres.setAdapter(genreAdapter);
+        }
     }
 
     private void setTxtLanguage() {
