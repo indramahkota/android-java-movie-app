@@ -39,4 +39,7 @@
 
     <string name="setting_language">Atur bahasa</string>
     <string name="settings">Pengaturan</string>
+    <string name="error">Kesalahan</string>
+    <string name="page">Halaman:</string>
+    <string name="reset_page">Mengembalikan ke Halaman:</string>
 </resources>

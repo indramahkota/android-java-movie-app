@@ -12,7 +12,8 @@ import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteMovieV
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteTvShowViewModel;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.MovieFragmentViewModel;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.TvShowFragmentViewModel;
-import com.indramahkota.moviecatalogue.ui.search.viewmodel.SearchViewModel;
+import com.indramahkota.moviecatalogue.ui.search.viewmodel.SearchMovieViewModel;
+import com.indramahkota.moviecatalogue.ui.search.viewmodel.SearchTvShowViewModel;
 
 import dagger.Binds;
 import dagger.Module;
@@ -50,8 +51,13 @@ public abstract class ViewModelModule {
 
     @Binds
     @IntoMap
-    @ViewModelKey(SearchViewModel.class)
-    protected abstract ViewModel searchViewModel(SearchViewModel searchViewModel);
+    @ViewModelKey(SearchMovieViewModel.class)
+    protected abstract ViewModel searchMovieViewModel(SearchMovieViewModel searchViewModel);
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(SearchTvShowViewModel.class)
+    protected abstract ViewModel searchTvShowViewModel(SearchTvShowViewModel searchViewModel);
 
     @Binds
     @IntoMap

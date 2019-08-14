@@ -19,8 +19,6 @@
             android:name=".ui.setting.SettingsActivity"
             android:label="@string/settings" />
         <activity
-            android:name=".ui.search.SearchActivity" />
-        <activity
             android:name=".ui.main.MainActivity" />
         <activity
             android:name=".ui.detail.MovieDetailsActivity"
@@ -37,6 +35,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:label="@string/search_list_movies"
+            android:name=".ui.search.SearchMovieActivity" />
+        <activity
+            android:label="@string/search_list_tv_shows"
+            android:name=".ui.search.SearchTvShowActivity" />
     </application>
 
 </manifest>

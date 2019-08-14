@@ -275,10 +275,10 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
      * */
     //Search Movie
     @Override
-    public LiveData<Resource<List<MovieEntity>>> searchListMovie(String query) {
-        MutableLiveData<Resource<List<MovieEntity>>> resultMovie = new MutableLiveData<>();
+    public LiveData<Resource<DiscoverMovieResponse>> searchListMovie(String query, Long page) {
+        MutableLiveData<Resource<DiscoverMovieResponse>> resultMovie = new MutableLiveData<>();
 
-        Call<DiscoverMovieResponse> call = api.searchMovies(BuildConfig.TMDB_API_KEY, query);
+        Call<DiscoverMovieResponse> call = api.searchMovies(BuildConfig.TMDB_API_KEY, query, page);
         call.enqueue(new Callback<DiscoverMovieResponse>() {
             @Override
             public void onResponse(@NonNull Call<DiscoverMovieResponse> call, @NonNull Response<DiscoverMovieResponse> response) {
@@ -297,13 +297,17 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                         }
                         helper.add(movieEntity);
                     }
-                    resultMovie.postValue(Resource.success(helper));
+                    DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
+                    discoverMovieResponse.setPage(response.body().getPage());
+                    discoverMovieResponse.setTotalPages(response.body().getTotalPages());
+                    discoverMovieResponse.setResults(helper);
+                    resultMovie.postValue(Resource.success(discoverMovieResponse));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
-                resultMovie.setValue(Resource.error(t.getMessage(), new ArrayList<>()));
+                resultMovie.setValue(Resource.error(t.getMessage(), new DiscoverMovieResponse()));
             }
         });
 
@@ -312,10 +316,10 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //Search Tv Show
     @Override
-    public LiveData<Resource<List<TvShowEntity>>> searchListTvShow(String query) {
-        MutableLiveData<Resource<List<TvShowEntity>>> resultTvShow = new MutableLiveData<>();
+    public LiveData<Resource<DiscoverTvShowResponse>> searchListTvShow(String query, Long page) {
+        MutableLiveData<Resource<DiscoverTvShowResponse>> resultTvShow = new MutableLiveData<>();
 
-        Call<DiscoverTvShowResponse> call = api.searchTvShows(BuildConfig.TMDB_API_KEY, query);
+        Call<DiscoverTvShowResponse> call = api.searchTvShows(BuildConfig.TMDB_API_KEY, query, page);
         call.enqueue(new Callback<DiscoverTvShowResponse>() {
             @Override
             public void onResponse(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Response<DiscoverTvShowResponse> response) {
@@ -334,13 +338,17 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                         }
                         helper.add(tvShowEntity);
                     }
-                    resultTvShow.postValue(Resource.success(helper));
+                    DiscoverTvShowResponse discoverTvShowResponse = new DiscoverTvShowResponse();
+                    discoverTvShowResponse.setPage(response.body().getPage());
+                    discoverTvShowResponse.setTotalPages(response.body().getTotalPages());
+                    discoverTvShowResponse.setResults(helper);
+                    resultTvShow.postValue(Resource.success(discoverTvShowResponse));
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
-                resultTvShow.setValue(Resource.error(t.getMessage(), new ArrayList<>()));
+                resultTvShow.setValue(Resource.error(t.getMessage(), new DiscoverTvShowResponse()));
             }
         });
 

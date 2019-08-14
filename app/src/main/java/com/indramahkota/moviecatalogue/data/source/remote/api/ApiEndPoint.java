@@ -37,12 +37,14 @@ public interface ApiEndPoint {
     @GET("search/movie")
     Call<DiscoverMovieResponse> searchMovies(
             @Query("api_key") String apiKey,
-            @Query("query") String query);
+            @Query("query") String query,
+            @Query("page") long page);
 
     @GET("search/tv")
     Call<DiscoverTvShowResponse> searchTvShows(
             @Query("api_key") String apiKey,
-            @Query("query") String query);
+            @Query("query") String query,
+            @Query("page") long page);
 
     @GET("configuration/languages")
     Call<List<LanguageEntity>> getLanguages(@Query("api_key") String apiKey);

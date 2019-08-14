@@ -45,8 +45,8 @@ public interface MovieCatalogueDataSource {
      * Search Activity
      * */
     //Search Activity
-    LiveData<Resource<List<MovieEntity>>> searchListMovie(String query);
+    LiveData<Resource<DiscoverMovieResponse>> searchListMovie(String query, Long page);
 
     //Search Activity
-    LiveData<Resource<List<TvShowEntity>>> searchListTvShow(String query);
+    LiveData<Resource<DiscoverTvShowResponse>> searchListTvShow(String query, Long page);
 }

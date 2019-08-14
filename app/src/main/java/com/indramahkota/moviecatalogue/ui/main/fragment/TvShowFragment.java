@@ -23,7 +23,7 @@ import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.adapter.TvShowAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.pagination.PaginationScrollListener;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.TvShowFragmentViewModel;
-import com.indramahkota.moviecatalogue.ui.search.SearchActivity;
+import com.indramahkota.moviecatalogue.ui.search.SearchTvShowActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,7 +98,7 @@ public class TvShowFragment extends Fragment {
                 currentPage++;
                 isLoading = true;
                 viewModel.loadMoreTvShows(currentPage);
-                showToast("Page: " + currentPage);
+                showToast(getResources().getString(R.string.page) + " " + currentPage);
             }
 
             @Override
@@ -115,9 +115,8 @@ public class TvShowFragment extends Fragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Intent moveToSearchActivity = new Intent(getContext(), SearchActivity.class);
-                String[] extraData = {"Tv Show", query};
-                moveToSearchActivity.putExtra(SearchActivity.EXTRA_SEARCH_QUERY, extraData);
+                Intent moveToSearchActivity = new Intent(getContext(), SearchTvShowActivity.class);
+                moveToSearchActivity.putExtra(SearchTvShowActivity.EXTRA_SEARCH_QUERY, query);
                 startActivity(moveToSearchActivity);
                 return true;
             }
@@ -133,7 +132,7 @@ public class TvShowFragment extends Fragment {
             listTvShowAdapter.clear();
             viewModel.loadMoreTvShows(currentPage);
             mShimmerViewContainer.setVisibility(View.VISIBLE);
-            showToast("Reset to Page: " + currentPage);
+            showToast(getResources().getString(R.string.reset_page) + " " + currentPage);
         });
 
         viewModel.listDiscoverTvShow.observe(this, discoverTvShowResponseResource -> {
@@ -156,7 +155,7 @@ public class TvShowFragment extends Fragment {
                 case ERROR:
                     //show error
                     swipeRefreshLayout.setRefreshing(false);
-                    showToast("Error");
+                    showToast(getResources().getString(R.string.error));
                     break;
             }
         });
@@ -167,7 +166,7 @@ public class TvShowFragment extends Fragment {
             mShimmerViewContainer.setVisibility(View.GONE);
         } else {
             viewModel.loadMoreTvShows(currentPage);
-            showToast("Page: " + currentPage);
+            showToast(getResources().getString(R.string.page) + " " + currentPage);
         }
     }
 
