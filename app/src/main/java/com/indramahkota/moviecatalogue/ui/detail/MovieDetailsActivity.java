@@ -131,7 +131,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
                     } else {
                         detailsContainer.setVisibility(View.GONE);
                     }
-                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                     break;
             }
         });

@@ -124,8 +124,15 @@ public class TvShowDetailsActivity extends AppCompatActivity {
                     break;
                 case ERROR:
                     //show error
-                    detailsContainer.setVisibility(View.GONE);
-                    Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
+                    tvShowEntity = tvShowResponseState.data;
+                    if (tvShowEntity != null) {
+                        initializeUi(tvShowEntity);
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        detailsContainer.setVisibility(View.VISIBLE);
+                    } else {
+                        detailsContainer.setVisibility(View.GONE);
+                    }
+                    Toast.makeText(this, getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                     break;
             }
         });
@@ -237,7 +244,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             setTxtLanguage();
         }
 
-        if(response.getCredits().getCast() != null) {
+        if(response.getCredits()!= null && response.getCredits().getCast() != null) {
             RecyclerView rvCasts = findViewById(R.id.rv_details_cast);
             rvCasts.setHasFixedSize(true);
             CastAdapter listCastAdapter = new CastAdapter(response.getCredits().getCast(), this);

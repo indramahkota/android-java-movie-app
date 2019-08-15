@@ -300,7 +300,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
             @Override
             public Boolean shouldFetch(TvShowEntity data) {
-                return data == null;
+                return true;
             }
 
             @Override
@@ -323,6 +323,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                                 } else {
                                     tvShowEntity.setFavorite(false);
                                 }
+                                tvShowEntity.setPage(storedTvShowEntity.getPage());
                             }
                             resultTvShow.setValue(ApiResponse.success(tvShowEntity));
                         }

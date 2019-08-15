@@ -28,8 +28,6 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private static final String STATE_MODE = "state_mode";
-    private static final String SCROLL_STATE_MOVIE = "scroll_state_movie";
-    private static final String SCROLL_STATE_TV_SHOW = "scroll_state_tv_show";
 
     private int mode;
     private FragmentManager mFragmentManager;
@@ -38,9 +36,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private MovieFragment mMovieFragment;
     private TvShowFragment mTvShowFragment;
     private FavoriteFragment mFavoriteFragment;
-
-    private int movieCounter = 0;
-    private int tvShowCounter = 0;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -62,12 +57,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         if (savedInstanceState == null) {
             setTitle(R.string.list_movies);
             mode = R.id.navigation_movie;
-            movieCounter++;
             showMovieFragment();
         } else {
             setMode(savedInstanceState.getInt(STATE_MODE));
-            movieCounter = savedInstanceState.getInt(SCROLL_STATE_MOVIE);
-            tvShowCounter = savedInstanceState.getInt(SCROLL_STATE_TV_SHOW);
         }
     }
 
@@ -75,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_MODE, mode);
-        outState.putInt(SCROLL_STATE_MOVIE, movieCounter);
-        outState.putInt(SCROLL_STATE_TV_SHOW, tvShowCounter);
     }
 
     @Override
@@ -101,15 +91,11 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private boolean setMode(int selectedMode) {
         switch (selectedMode) {
             case R.id.navigation_movie:
-                movieCounter++;
-                tvShowCounter = 0;
                 mode = R.id.navigation_movie;
                 setTitle(R.string.list_movies);
                 showMovieFragment();
                 return true;
             case R.id.navigation_tv_show:
-                tvShowCounter++;
-                movieCounter = 0;
                 mode = R.id.navigation_tv_show;
                 setTitle(R.string.list_tv_shows);
                 showTvShowFragment();
@@ -128,10 +114,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             mMovieFragment = new MovieFragment();
         }
 
-        if(movieCounter > 1) {
-            mMovieFragment.scrollToTop();
-        }
-
         mFragmentTransaction = mFragmentManager.beginTransaction();
         Fragment fragment = mFragmentManager.findFragmentByTag(MovieFragment.class.getSimpleName());
         if (!(fragment instanceof MovieFragment)) {
@@ -143,10 +125,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private void showTvShowFragment() {
         if(mTvShowFragment == null) {
             mTvShowFragment = new TvShowFragment();
-        }
-
-        if(tvShowCounter > 1) {
-            mTvShowFragment.scrollToTop();
         }
 
         mFragmentTransaction = mFragmentManager.beginTransaction();
