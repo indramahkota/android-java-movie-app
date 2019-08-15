@@ -89,11 +89,10 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                                 } else {
                                     if(storedMovieEntity.getFavorite()) {
                                         movieEntity.setFavorite(true);
-                                        movieEntity.setPage(page);
                                     } else {
                                         movieEntity.setFavorite(false);
-                                        movieEntity.setPage(page);
                                     }
+                                    movieEntity.setPage(page);
                                 }
                                 helper.add(movieEntity);
                             }
@@ -166,11 +165,10 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                                 } else {
                                     if(storedTvShowEntity.getFavorite()) {
                                         tvShowEntity.setFavorite(true);
-                                        tvShowEntity.setPage(page);
                                     } else {
                                         tvShowEntity.setFavorite(false);
-                                        tvShowEntity.setPage(page);
                                     }
+                                    tvShowEntity.setPage(page);
                                 }
                                 helper.add(tvShowEntity);
                             }
@@ -379,6 +377,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                     discoverMovieResponse.setPage(response.body().getPage());
                     discoverMovieResponse.setTotalPages(response.body().getTotalPages());
                     discoverMovieResponse.setResults(helper);
+                    dao.insertMovies(helper);
                     resultMovie.postValue(Resource.success(discoverMovieResponse));
                 }
             }
@@ -420,6 +419,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                     discoverTvShowResponse.setPage(response.body().getPage());
                     discoverTvShowResponse.setTotalPages(response.body().getTotalPages());
                     discoverTvShowResponse.setResults(helper);
+                    dao.insertTvShows(helper);
                     resultTvShow.postValue(Resource.success(discoverTvShowResponse));
                 }
             }
