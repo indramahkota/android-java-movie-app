@@ -91,7 +91,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
 
         favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
 
-        if(languages != null)
+        if (tvShowEntity != null && languages != null)
             setTxtLanguage();
         else {
             LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);

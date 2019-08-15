@@ -90,7 +90,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
 
         favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
 
-        if(languages != null)
+        if(movieEntity!= null && languages != null)
             setTxtLanguage();
         else {
             LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
