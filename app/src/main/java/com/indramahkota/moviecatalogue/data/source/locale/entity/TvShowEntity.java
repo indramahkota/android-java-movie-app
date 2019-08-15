@@ -32,6 +32,7 @@ public class TvShowEntity implements Parcelable {
     private static final String GENRES = "genres";
     private static final String ORIGINAL_LANGUAGE = "original_language";
     private static final String FAVORITE = "favorite";
+    private static final String PAGE = "page";
 
     @PrimaryKey()
     @ColumnInfo(name = ITEM_ID)
@@ -79,6 +80,9 @@ public class TvShowEntity implements Parcelable {
     @ColumnInfo(name = FAVORITE)
     private Boolean favorite;
 
+    @ColumnInfo(name = PAGE)
+    private Long page;
+
     public TvShowEntity() {}
 
     private TvShowEntity(@NonNull Parcel in) {
@@ -102,6 +106,11 @@ public class TvShowEntity implements Parcelable {
         originalLanguage = in.readString();
         byte tmpFavorite = in.readByte();
         favorite = tmpFavorite == 0 ? null : tmpFavorite == 1;
+        if (in.readByte() == 0) {
+            page = null;
+        } else {
+            page = in.readLong();
+        }
     }
 
     public static final Creator<TvShowEntity> CREATOR = new Creator<TvShowEntity>() {
@@ -204,6 +213,14 @@ public class TvShowEntity implements Parcelable {
         this.favorite = favorite;
     }
 
+    public Long getPage() {
+        return page;
+    }
+
+    public void setPage(Long page) {
+        this.page = page;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -232,5 +249,11 @@ public class TvShowEntity implements Parcelable {
         parcel.writeTypedList(genres);
         parcel.writeString(originalLanguage);
         parcel.writeByte((byte) (favorite == null ? 0 : favorite ? 1 : 2));
+        if (page == null) {
+            parcel.writeByte((byte) 0);
+        } else {
+            parcel.writeByte((byte) 1);
+            parcel.writeLong(page);
+        }
     }
 }

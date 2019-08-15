@@ -33,11 +33,14 @@ public interface AppDao {
 
     @WorkerThread
     @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE favorite = 1")
-    DataSource.Factory<Integer, MovieEntity> selectAllMovie();
+    DataSource.Factory<Integer, MovieEntity> selectAllFavoriteMovie();
 
     @WorkerThread
-    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME)
-    LiveData<List<MovieEntity>> selectAllMovies();
+    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME+ " WHERE page = :currentPage")
+    List<MovieEntity> selectAllMovie(Long currentPage);
+
+    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
+    MovieEntity selectMovieById(long id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMovie(MovieEntity movieEntity);
@@ -45,14 +48,8 @@ public interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMovies(List<MovieEntity> movieEntities);
 
-    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
-    MovieEntity selectMovieById(long id);
-
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateMovie(MovieEntity movieEntity);
-
-    @Query("DELETE FROM " + MovieEntity.TABLE_NAME + " WHERE favorite = 0")
-    void deleteMovie();
 
     /*
      * Tv Shows
@@ -77,7 +74,4 @@ public interface AppDao {
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateTvShow(TvShowEntity tvShowEntity);
-
-    @Query("DELETE FROM " + TvShowEntity.TABLE_NAME + " WHERE favorite = 0")
-    void deleteTvShow();
 }

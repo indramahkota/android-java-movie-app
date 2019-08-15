@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
+import com.indramahkota.moviecatalogue.utils.FakeData;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,25 +40,17 @@ public class TvShowDetailsViewModelTest {
 
     @Test
     public void testApiFetchData() {
-        when(movieCatalogueRepository.loadTvShowDetails(60735L)).thenReturn(null);
-        assertNotNull(tvShowDetailsViewModel.tvShowDetail);
-        assertTrue(tvShowDetailsViewModel.tvShowDetail.hasObservers());
-    }
+        when(movieCatalogueRepository.loadTvShowDetails(1L)).thenReturn(FakeData.getTvShowLiveData());
 
-    @Test
-    public void testApiFetchDataSuccess() {
-        //when(movieCatalogueRepository.loadTvShowDetails(60735L)).thenReturn();
-        tvShowDetailsViewModel.setTvShowId(60735L);
-        verify(observer).onChanged(Resource.loading(new TvShowEntity()));
-        verify(observer).onChanged(Resource.success(new TvShowEntity()));
-    }
+        tvShowDetailsViewModel.setTvShowId(1L);
 
-    @Test
-    public void testApiFetchDataError() {
-        //when(movieCatalogueRepository.loadTvShowDetails(0L)).thenReturn();
-        tvShowDetailsViewModel.setTvShowId(0L);
-        verify(observer).onChanged(Resource.loading(new TvShowEntity()));
-        verify(observer).onChanged(Resource.error("", new TvShowEntity()));
+        Resource<TvShowEntity> tvShowEntity = tvShowDetailsViewModel.tvShowDetail.getValue();
+
+        verify(movieCatalogueRepository).loadTvShowDetails(1L);
+        verify(observer).onChanged(tvShowEntity);
+
+        assertNotNull(tvShowEntity);
+        assertNotNull(tvShowEntity.data);
     }
 
     @After

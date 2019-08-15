@@ -2,9 +2,11 @@ package com.indramahkota.moviecatalogue.ui.main.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ public class MovieFragment extends Fragment {
     private List<MovieEntity> discoverMovies;
     private ShimmerFrameLayout mShimmerViewContainer;
     private LinearLayoutManager linearLayoutManager;
+    private RelativeLayout relativeLayout;
     private SearchView searchView;
     private View rootView;
 
@@ -78,6 +81,7 @@ public class MovieFragment extends Fragment {
 
         rootView = view.findViewById(R.id.rv_fragment_category_container);
 
+        relativeLayout = view.findViewById(R.id.empty_indicator);
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_fragment_container);
 
         MovieFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieFragmentViewModel.class);
@@ -99,8 +103,8 @@ public class MovieFragment extends Fragment {
 
             @Override
             public void loadMore() {
-                currentPage++;
                 isLoading = true;
+                currentPage++;
                 viewModel.loadMoreMovies(currentPage);
                 showToast(getResources().getString(R.string.page) + " " + currentPage);
             }
@@ -128,36 +132,81 @@ public class MovieFragment extends Fragment {
 
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_to_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
+            isLoading = true;
             currentPage = 1L;
             listMovieAdapter.clear();
             viewModel.loadMoreMovies(currentPage);
+            relativeLayout.setVisibility(View.GONE);
             mShimmerViewContainer.setVisibility(View.VISIBLE);
             showToast(getResources().getString(R.string.reset_page) + " " + currentPage);
         });
 
         viewModel.listDiscoverMovie.observe(this, discoverMovieResponseResource -> {
-            switch (discoverMovieResponseResource.status) {
-                case SUCCESS:
-                    //show data
-                    swipeRefreshLayout.setRefreshing(false);
-                    rvFragmentMovies.setVisibility(View.VISIBLE);
-                    mShimmerViewContainer.setVisibility(View.GONE);
-                    if (discoverMovieResponseResource.data != null) {
-                        if(discoverMovies == null) {
-                            discoverMovies = new ArrayList<>(discoverMovieResponseResource.data.getResults());
-                        } else {
-                            discoverMovies.addAll(discoverMovieResponseResource.data.getResults());
-                        }
-                        listMovieAdapter.addAll(discoverMovieResponseResource.data.getResults());
-                        isLoading = false;
+            swipeRefreshLayout.setRefreshing(false);
+            rvFragmentMovies.setVisibility(View.VISIBLE);
+
+            if(discoverMovieResponseResource.data != null) {
+                if (discoverMovies == null) {
+                    discoverMovies = new ArrayList<>(discoverMovieResponseResource.data.getResults());
+
+                    if(discoverMovies.size() < 1) {
+                        new Handler().postDelayed(() -> {
+                            if(discoverMovies.size() < 1) {
+                                relativeLayout.setVisibility(View.VISIBLE);
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                            }
+                        }, 1000);
+                    } else {
+                        mShimmerViewContainer.setVisibility(View.GONE);
                     }
-                    break;
-                case ERROR:
-                    //show error
-                    swipeRefreshLayout.setRefreshing(false);
-                    showToast(getResources().getString(R.string.error));
-                    break;
+                } else {
+                    switch (discoverMovieResponseResource.status) {
+                        case SUCCESS:
+                            //show data
+                            discoverMovies.addAll(discoverMovieResponseResource.data.getResults());
+                            listMovieAdapter.addAll(discoverMovieResponseResource.data.getResults());
+
+                            if(discoverMovies.size() < 1) {
+                                new Handler().postDelayed(() -> {
+                                    if(discoverMovies.size() < 1) {
+                                        relativeLayout.setVisibility(View.VISIBLE);
+                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                    }
+                                }, 1000);
+                            } else {
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                            }
+                            showToast(getResources().getString(R.string.success));
+                            break;
+                        case ERROR:
+                            //show error
+                            if(discoverMovieResponseResource.data.getResults().size() > 1) {
+                                discoverMovies.addAll(discoverMovieResponseResource.data.getResults());
+                                listMovieAdapter.addAll(discoverMovieResponseResource.data.getResults());
+                            }else {
+                                if(currentPage > 1)
+                                    currentPage--;
+                            }
+
+                            if(discoverMovies.size() < 1) {
+                                new Handler().postDelayed(() -> {
+                                    if(discoverMovies.size() < 1) {
+                                        relativeLayout.setVisibility(View.VISIBLE);
+                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                    }
+                                }, 1000);
+                            } else {
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                            }
+                            showToast(getResources().getString(R.string.error) + " " + getResources().getString(R.string.page) + " " + currentPage);
+                            break;
+                    }
+                }
             }
+
+            new Handler().postDelayed(() -> {
+                isLoading = false;
+            }, 2000);
         });
 
         if(discoverMovies != null) {

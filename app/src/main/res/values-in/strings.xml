@@ -29,7 +29,7 @@
     <string name="no_release_date">Tidak ada tanggal rilis</string>
     <string name="availability_overview">Tidak ada ikhtisar.</string>
     <string name="long_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
-    <string name="no_data_found">Data tidak ditemukan</string>
+    <string name="no_data_found">Tidak ada data.</string>
     <string name="no_genre">Tidak ada jenis</string>
     <string name="no_language">Tidak ada bahasa</string>
     <string name="english_lang">English</string>
@@ -39,7 +39,8 @@
 
     <string name="setting_language">Atur bahasa</string>
     <string name="settings">Pengaturan</string>
-    <string name="error">Kesalahan</string>
+    <string name="error">Kesalahan memuat data</string>
     <string name="page">Halaman:</string>
     <string name="reset_page">Mengembalikan ke Halaman:</string>
+    <string name="success">Sukses memuat data</string>
 </resources>

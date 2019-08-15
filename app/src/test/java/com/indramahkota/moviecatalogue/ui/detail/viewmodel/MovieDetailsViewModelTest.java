@@ -6,6 +6,7 @@ import androidx.lifecycle.Observer;
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
+import com.indramahkota.moviecatalogue.utils.FakeData;
 
 import org.junit.After;
 import org.junit.Before;
@@ -15,7 +16,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,25 +40,17 @@ public class MovieDetailsViewModelTest {
 
     @Test
     public void testApiFetchData() {
-        when(movieCatalogueRepository.loadMovieDetails(384018L)).thenReturn(null);
-        assertNotNull(movieDetailsViewModel.movieDetail);
-        assertTrue(movieDetailsViewModel.movieDetail.hasObservers());
-    }
+        when(movieCatalogueRepository.loadMovieDetails(1L)).thenReturn(FakeData.getMovieLiveData());
 
-    @Test
-    public void testApiFetchDataSuccess() {
-        //when(movieCatalogueRepository.loadMovieDetails(384018L)).thenReturn();
-        movieDetailsViewModel.setMovieId(384018L);
-        verify(observer).onChanged(Resource.loading(new MovieEntity()));
-        verify(observer).onChanged(Resource.success(new MovieEntity()));
-    }
+        movieDetailsViewModel.setMovieId(1L);
 
-    @Test
-    public void testApiFetchDataError() {
-        //when(movieCatalogueRepository.loadMovieDetails(0L)).thenReturn();
-        movieDetailsViewModel.setMovieId(0L);
-        verify(observer).onChanged(Resource.loading(new MovieEntity()));
-        verify(observer).onChanged(Resource.error("", new MovieEntity()));
+        Resource<MovieEntity> movieEntity = movieDetailsViewModel.movieDetail.getValue();
+
+        verify(movieCatalogueRepository).loadMovieDetails(1L);
+        verify(observer).onChanged(movieEntity);
+
+        assertNotNull(movieEntity);
+        assertNotNull(movieEntity.data);
     }
 
     @After

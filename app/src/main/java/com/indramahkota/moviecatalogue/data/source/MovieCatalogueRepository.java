@@ -1,5 +1,7 @@
 package com.indramahkota.moviecatalogue.data.source;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -28,6 +30,8 @@ import retrofit2.Response;
 
 @Singleton
 public class MovieCatalogueRepository implements MovieCatalogueDataSource {
+    private static final String TAG = "REPOSITORY";
+
     private final AppDao dao;
     private final ApiEndPoint api;
     private final AppExecutors exec;
@@ -46,42 +50,78 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
     //MovieFragmentViewModel
     @Override
     public LiveData<Resource<DiscoverMovieResponse>> loadListMovie(Long page) {
-        MutableLiveData<Resource<DiscoverMovieResponse>> resultMovie = new MutableLiveData<>();
-
-        Call<DiscoverMovieResponse> call = api.getDiscoverMovies(BuildConfig.TMDB_API_KEY, page);
-        call.enqueue(new Callback<DiscoverMovieResponse>() {
+        return new NetworkBoundResource<DiscoverMovieResponse, DiscoverMovieResponse>(exec) {
             @Override
-            public void onResponse(@NonNull Call<DiscoverMovieResponse> call, @NonNull Response<DiscoverMovieResponse> response) {
-                if (response.body() != null) {
-                    ArrayList<MovieEntity> helper = new ArrayList<>();
-                    for(MovieEntity movieEntity : response.body().getResults()) {
-                        MovieEntity storedMovieEntity = dao.selectMovieById(movieEntity.getId());
-                        if (storedMovieEntity == null) {
-                            movieEntity.setFavorite(false);
-                        } else {
-                            if(storedMovieEntity.getFavorite()) {
-                                movieEntity.setFavorite(true);
-                            } else {
-                                movieEntity.setFavorite(false);
+            protected LiveData<DiscoverMovieResponse> loadFromDB() {
+                MutableLiveData<DiscoverMovieResponse> dbResourceLiveData = new MutableLiveData<>();
+
+                DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
+                discoverMovieResponse.setPage(page);
+                discoverMovieResponse.setResults(dao.selectAllMovie(page));
+                dbResourceLiveData.setValue(discoverMovieResponse);
+
+                return dbResourceLiveData;
+            }
+
+            @Override
+            protected Boolean shouldFetch(DiscoverMovieResponse data) {
+                return true;
+            }
+
+            @Override
+            protected LiveData<ApiResponse<DiscoverMovieResponse>> createCall() {
+                MutableLiveData<ApiResponse<DiscoverMovieResponse>> resultMovie = new MutableLiveData<>();
+
+                Log.d(TAG, "Load: loadListMovie");
+                Log.d(TAG, "Load: loadListMovie Page: " + page);
+
+                Call<DiscoverMovieResponse> call = api.getDiscoverMovies(BuildConfig.TMDB_API_KEY, page);
+                call.enqueue(new Callback<DiscoverMovieResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DiscoverMovieResponse> call, @NonNull Response<DiscoverMovieResponse> response) {
+                        if (response.body() != null) {
+                            List<MovieEntity> helper = new ArrayList<>();
+                            for(MovieEntity movieEntity : response.body().getResults()) {
+                                MovieEntity storedMovieEntity = dao.selectMovieById(movieEntity.getId());
+                                if (storedMovieEntity == null) {
+                                    movieEntity.setFavorite(false);
+                                    movieEntity.setPage(page);
+                                } else {
+                                    if(storedMovieEntity.getFavorite()) {
+                                        movieEntity.setFavorite(true);
+                                        movieEntity.setPage(page);
+                                    } else {
+                                        movieEntity.setFavorite(false);
+                                        movieEntity.setPage(page);
+                                    }
+                                }
+                                helper.add(movieEntity);
                             }
+                            DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
+                            discoverMovieResponse.setPage(response.body().getPage());
+                            discoverMovieResponse.setTotalPages(response.body().getTotalPages());
+                            discoverMovieResponse.setResults(helper);
+                            resultMovie.postValue(ApiResponse.success(discoverMovieResponse));
+
+                            Log.d(TAG, "Complete: loadListMovie");
                         }
-                        helper.add(movieEntity);
                     }
-                    DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
-                    discoverMovieResponse.setPage(response.body().getPage());
-                    discoverMovieResponse.setTotalPages(response.body().getTotalPages());
-                    discoverMovieResponse.setResults(helper);
-                    resultMovie.postValue(Resource.success(discoverMovieResponse));
-                }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
+                        resultMovie.setValue(ApiResponse.error(t.getMessage(), new DiscoverMovieResponse()));
+
+                        Log.d(TAG, "Error: loadListMovie");
+                    }
+                });
+                return resultMovie;
             }
 
             @Override
-            public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
-                resultMovie.setValue(Resource.error(t.getMessage(), new DiscoverMovieResponse()));
+            protected void saveCallResult(DiscoverMovieResponse data) {
+                dao.insertMovies(data.getResults());
             }
-        });
-
-        return resultMovie;
+        }.asLiveData();
     }
 
     //TvShowFragmentViewModel
@@ -128,7 +168,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
     //FavoriteMovieViewModel
     @Override
     public DataSource.Factory<Integer, MovieEntity> getAllMovie() {
-        return dao.selectAllMovie();
+        return dao.selectAllFavoriteMovie();
     }
 
     @Override
@@ -163,7 +203,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
             @Override
             public Boolean shouldFetch(MovieEntity data) {
-                return data == null;
+                return true;
             }
 
             @Override
@@ -186,6 +226,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                                 } else {
                                     movieEntity.setFavorite(false);
                                 }
+                                movieEntity.setPage(storedMovieEntity.getPage());
                             }
                             resultMovie.setValue(ApiResponse.success(movieEntity));
                         }

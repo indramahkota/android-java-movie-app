@@ -8,17 +8,17 @@ import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class DiscoverMovieResponse implements Parcelable {
     @SerializedName("page")
-    private Integer page;
+    private Long page;
     @SerializedName("results")
-    private ArrayList<MovieEntity> results;
+    private List<MovieEntity> results;
     @SerializedName("total_results")
-    private Integer totalResults;
+    private Long totalResults;
     @SerializedName("total_pages")
-    private Integer totalPages;
+    private Long totalPages;
 
     public DiscoverMovieResponse() {}
 
@@ -26,18 +26,18 @@ public class DiscoverMovieResponse implements Parcelable {
         if (in.readByte() == 0) {
             page = null;
         } else {
-            page = in.readInt();
+            page = in.readLong();
         }
         results = in.createTypedArrayList(MovieEntity.CREATOR);
         if (in.readByte() == 0) {
             totalResults = null;
         } else {
-            totalResults = in.readInt();
+            totalResults = in.readLong();
         }
         if (in.readByte() == 0) {
             totalPages = null;
         } else {
-            totalPages = in.readInt();
+            totalPages = in.readLong();
         }
     }
 
@@ -53,28 +53,36 @@ public class DiscoverMovieResponse implements Parcelable {
         }
     };
 
-    public void setPage(Integer page) {
-        this.page = page;
-    }
-
-    public void setTotalPages(Integer totalPages) {
-        this.totalPages = totalPages;
-    }
-
-    public void setResults(ArrayList<MovieEntity> results) {
-        this.results = results;
-    }
-
-    public Integer getPage() {
+    public Long getPage() {
         return page;
     }
 
-    public ArrayList<MovieEntity> getResults() {
+    public void setPage(Long page) {
+        this.page = page;
+    }
+
+    public List<MovieEntity> getResults() {
         return results;
     }
 
-    public Integer getTotalPages() {
+    public void setResults(List<MovieEntity> results) {
+        this.results = results;
+    }
+
+    public Long getTotalResults() {
+        return totalResults;
+    }
+
+    public void setTotalResults(Long totalResults) {
+        this.totalResults = totalResults;
+    }
+
+    public Long getTotalPages() {
         return totalPages;
+    }
+
+    public void setTotalPages(Long totalPages) {
+        this.totalPages = totalPages;
     }
 
     @Override
@@ -88,20 +96,20 @@ public class DiscoverMovieResponse implements Parcelable {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeInt(page);
+            parcel.writeLong(page);
         }
         parcel.writeTypedList(results);
         if (totalResults == null) {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeInt(totalResults);
+            parcel.writeLong(totalResults);
         }
         if (totalPages == null) {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeInt(totalPages);
+            parcel.writeLong(totalPages);
         }
     }
 }

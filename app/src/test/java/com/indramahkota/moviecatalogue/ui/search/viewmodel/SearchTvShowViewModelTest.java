@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
+package com.indramahkota.moviecatalogue.ui.search.viewmodel;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
@@ -20,35 +20,36 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class TvShowFragmentViewModelTest {
+public class SearchTvShowViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
     MovieCatalogueRepository movieCatalogueRepository;
 
-    private TvShowFragmentViewModel tvShowFragmentViewModel;
+    private SearchTvShowViewModel searchViewModel;
 
     @Mock
-    Observer<Resource<DiscoverTvShowResponse>> observer;
+    Observer<Resource<DiscoverTvShowResponse>> tvShowObserver;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        tvShowFragmentViewModel = new TvShowFragmentViewModel(movieCatalogueRepository);
-        tvShowFragmentViewModel.listDiscoverTvShow.observeForever(observer);
+        searchViewModel = new SearchTvShowViewModel(movieCatalogueRepository);
+        searchViewModel.searchTvShow.observeForever(tvShowObserver);
     }
 
     @Test
     public void testApiFetchData() {
-        when(movieCatalogueRepository.loadListTvShow(1L)).thenReturn(FakeData.getListTvShowLiveData());
+        when(movieCatalogueRepository.searchListTvShow("Test", 1L)).thenReturn(FakeData.getListTvShowLiveData());
 
-        tvShowFragmentViewModel.loadMoreTvShows(1L);
+        searchViewModel.setQuery("Test");
+        searchViewModel.loadMoreMovies(1L);
 
-        Resource<DiscoverTvShowResponse> discoverTvShow = tvShowFragmentViewModel.listDiscoverTvShow.getValue();
+        Resource<DiscoverTvShowResponse> discoverTvShow = searchViewModel.searchTvShow.getValue();
 
-        verify(movieCatalogueRepository).loadListTvShow(1L);
-        verify(observer).onChanged(discoverTvShow);
+        verify(movieCatalogueRepository).searchListTvShow("Test", 1L);
+        verify(tvShowObserver).onChanged(discoverTvShow);
 
         assertNotNull(discoverTvShow);
         assertNotNull(discoverTvShow.data);
@@ -58,6 +59,6 @@ public class TvShowFragmentViewModelTest {
     @After
     public void tearDown() {
         movieCatalogueRepository = null;
-        tvShowFragmentViewModel = null;
+        searchViewModel = null;
     }
 }

@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
+package com.indramahkota.moviecatalogue.ui.search.viewmodel;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.Observer;
@@ -20,35 +20,36 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class MovieFragmentViewModelTest {
+public class SearchMovieViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
     MovieCatalogueRepository movieCatalogueRepository;
 
-    private MovieFragmentViewModel movieFragmentViewModel;
+    private SearchMovieViewModel searchViewModel;
 
     @Mock
-    Observer<Resource<DiscoverMovieResponse>> observer;
+    Observer<Resource<DiscoverMovieResponse>> movieObserver;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        movieFragmentViewModel = new MovieFragmentViewModel(movieCatalogueRepository);
-        movieFragmentViewModel.listDiscoverMovie.observeForever(observer);
+        searchViewModel = new SearchMovieViewModel(movieCatalogueRepository);
+        searchViewModel.searchMovie.observeForever(movieObserver);
     }
 
     @Test
     public void testApiFetchData() {
-        when(movieCatalogueRepository.loadListMovie(1L)).thenReturn(FakeData.getListMovieLiveData());
+        when(movieCatalogueRepository.searchListMovie("Test", 1L)).thenReturn(FakeData.getListMovieLiveData());
 
-        movieFragmentViewModel.loadMoreMovies(1L);
+        searchViewModel.setQuery("Test");
+        searchViewModel.loadMoreMovies(1L);
 
-        Resource<DiscoverMovieResponse> discoverMovie = movieFragmentViewModel.listDiscoverMovie.getValue();
+        Resource<DiscoverMovieResponse> discoverMovie = searchViewModel.searchMovie.getValue();
 
-        verify(movieCatalogueRepository).loadListMovie(1L);
-        verify(observer).onChanged(discoverMovie);
+        verify(movieCatalogueRepository).searchListMovie("Test", 1L);
+        verify(movieObserver).onChanged(discoverMovie);
 
         assertNotNull(discoverMovie);
         assertNotNull(discoverMovie.data);
@@ -58,6 +59,6 @@ public class MovieFragmentViewModelTest {
     @After
     public void tearDown() {
         movieCatalogueRepository = null;
-        movieFragmentViewModel = null;
+        searchViewModel = null;
     }
 }

@@ -22,7 +22,7 @@ android {
         }
     }
     defaultConfig {
-        buildConfigField("String", "TMDB_API_KEY", '"b650046bf640e7bf7054093854b8d02a"')
+        buildConfigField("String", "TMDB_API_KEY", '"0baf2c567988149d686a1289304f46cb"')
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -85,11 +85,12 @@ dependencies {
     // Dependencies for Retrofit
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-gson:$retrofitVersion"
-    implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    //implementation "com.squareup.retrofit2:adapter-rxjava2:$retrofitVersion"
+    //testImplementation 'com.squareup.okhttp3:mockwebserver:3.9.1'
 
     // Dependencies for Rx Java and Rx Android
-    implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
-    implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
+    //implementation "io.reactivex.rxjava2:rxjava:$rxJavaVersion"
+    //implementation "io.reactivex.rxjava2:rxandroid:$rxAndroidVersion"
 
     // Dependencies for Dagger
     implementation "com.google.dagger:dagger:$daggerVersion"
