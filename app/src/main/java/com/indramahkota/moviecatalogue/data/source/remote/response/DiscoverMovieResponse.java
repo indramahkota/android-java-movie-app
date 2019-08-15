@@ -69,14 +69,6 @@ public class DiscoverMovieResponse implements Parcelable {
         this.results = results;
     }
 
-    public Long getTotalResults() {
-        return totalResults;
-    }
-
-    public void setTotalResults(Long totalResults) {
-        this.totalResults = totalResults;
-    }
-
     public Long getTotalPages() {
         return totalPages;
     }

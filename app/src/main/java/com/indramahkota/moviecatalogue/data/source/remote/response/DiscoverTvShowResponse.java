@@ -8,17 +8,17 @@ import androidx.annotation.NonNull;
 import com.google.gson.annotations.SerializedName;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class DiscoverTvShowResponse implements Parcelable {
     @SerializedName("page")
-    private Integer page;
+    private Long page;
     @SerializedName("results")
-    private ArrayList<TvShowEntity> results;
+    private List<TvShowEntity> results;
     @SerializedName("total_results")
-    private Integer totalResults;
+    private Long totalResults;
     @SerializedName("total_pages")
-    private Integer totalPages;
+    private Long totalPages;
 
     public DiscoverTvShowResponse() {}
 
@@ -26,18 +26,18 @@ public class DiscoverTvShowResponse implements Parcelable {
         if (in.readByte() == 0) {
             page = null;
         } else {
-            page = in.readInt();
+            page = in.readLong();
         }
         results = in.createTypedArrayList(TvShowEntity.CREATOR);
         if (in.readByte() == 0) {
             totalResults = null;
         } else {
-            totalResults = in.readInt();
+            totalResults = in.readLong();
         }
         if (in.readByte() == 0) {
             totalPages = null;
         } else {
-            totalPages = in.readInt();
+            totalPages = in.readLong();
         }
     }
 
@@ -53,28 +53,28 @@ public class DiscoverTvShowResponse implements Parcelable {
         }
     };
 
-    public Integer getPage() {
+    public Long getPage() {
         return page;
     }
 
-    public void setPage(Integer page) {
+    public void setPage(Long page) {
         this.page = page;
     }
 
-    public Integer getTotalPages() {
-        return totalPages;
-    }
-
-    public void setTotalPages(Integer totalPages) {
-        this.totalPages = totalPages;
-    }
-
-    public ArrayList<TvShowEntity> getResults() {
+    public List<TvShowEntity> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<TvShowEntity> results) {
+    public void setResults(List<TvShowEntity> results) {
         this.results = results;
+    }
+
+    public Long getTotalPages() {
+        return totalPages;
+    }
+
+    public void setTotalPages(Long totalPages) {
+        this.totalPages = totalPages;
     }
 
     @Override
@@ -88,20 +88,20 @@ public class DiscoverTvShowResponse implements Parcelable {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeInt(page);
+            parcel.writeLong(page);
         }
         parcel.writeTypedList(results);
         if (totalResults == null) {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeInt(totalResults);
+            parcel.writeLong(totalResults);
         }
         if (totalPages == null) {
             parcel.writeByte((byte) 0);
         } else {
             parcel.writeByte((byte) 1);
-            parcel.writeInt(totalPages);
+            parcel.writeLong(totalPages);
         }
     }
 }

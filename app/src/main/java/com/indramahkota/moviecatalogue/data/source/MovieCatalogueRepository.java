@@ -127,42 +127,78 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
     //TvShowFragmentViewModel
     @Override
     public LiveData<Resource<DiscoverTvShowResponse>> loadListTvShow(Long page) {
-        MutableLiveData<Resource<DiscoverTvShowResponse>> resultTvShow = new MutableLiveData<>();
-
-        Call<DiscoverTvShowResponse> call = api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY, page);
-        call.enqueue(new Callback<DiscoverTvShowResponse>() {
+        return new NetworkBoundResource<DiscoverTvShowResponse, DiscoverTvShowResponse>(exec) {
             @Override
-            public void onResponse(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Response<DiscoverTvShowResponse> response) {
-                if (response.body() != null) {
-                    ArrayList<TvShowEntity> helper = new ArrayList<>();
-                    for(TvShowEntity tvShowEntity : response.body().getResults()) {
-                        TvShowEntity storedTvShowEntity = dao.selectTvShowById(tvShowEntity.getId());
-                        if (storedTvShowEntity == null) {
-                            tvShowEntity.setFavorite(false);
-                        } else {
-                            if(storedTvShowEntity.getFavorite()) {
-                                tvShowEntity.setFavorite(true);
-                            } else {
-                                tvShowEntity.setFavorite(false);
+            protected LiveData<DiscoverTvShowResponse> loadFromDB() {
+                MutableLiveData<DiscoverTvShowResponse> dbResourceLiveData = new MutableLiveData<>();
+
+                DiscoverTvShowResponse discoverTvShowResponse = new DiscoverTvShowResponse();
+                discoverTvShowResponse.setPage(page);
+                discoverTvShowResponse.setResults(dao.selectAllTvShow(page));
+                dbResourceLiveData.setValue(discoverTvShowResponse);
+
+                return dbResourceLiveData;
+            }
+
+            @Override
+            protected Boolean shouldFetch(DiscoverTvShowResponse data) {
+                return true;
+            }
+
+            @Override
+            protected LiveData<ApiResponse<DiscoverTvShowResponse>> createCall() {
+                MutableLiveData<ApiResponse<DiscoverTvShowResponse>> resultTvShow = new MutableLiveData<>();
+
+                Log.d(TAG, "Load: loadListTvShow");
+                Log.d(TAG, "Load: loadListTvShow Page: " + page);
+
+                Call<DiscoverTvShowResponse> call = api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY, page);
+                call.enqueue(new Callback<DiscoverTvShowResponse>() {
+                    @Override
+                    public void onResponse(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Response<DiscoverTvShowResponse> response) {
+                        if (response.body() != null) {
+                            List<TvShowEntity> helper = new ArrayList<>();
+                            for(TvShowEntity tvShowEntity : response.body().getResults()) {
+                                TvShowEntity storedTvShowEntity = dao.selectTvShowById(tvShowEntity.getId());
+                                if (storedTvShowEntity == null) {
+                                    tvShowEntity.setFavorite(false);
+                                    tvShowEntity.setPage(page);
+                                } else {
+                                    if(storedTvShowEntity.getFavorite()) {
+                                        tvShowEntity.setFavorite(true);
+                                        tvShowEntity.setPage(page);
+                                    } else {
+                                        tvShowEntity.setFavorite(false);
+                                        tvShowEntity.setPage(page);
+                                    }
+                                }
+                                helper.add(tvShowEntity);
                             }
+                            DiscoverTvShowResponse discoverTvShowResponse = new DiscoverTvShowResponse();
+                            discoverTvShowResponse.setPage(response.body().getPage());
+                            discoverTvShowResponse.setTotalPages(response.body().getTotalPages());
+                            discoverTvShowResponse.setResults(helper);
+                            resultTvShow.postValue(ApiResponse.success(discoverTvShowResponse));
+
+                            Log.d(TAG, "Complete: loadListTvShow");
                         }
-                        helper.add(tvShowEntity);
                     }
-                    DiscoverTvShowResponse discoverTvShowResponse = new DiscoverTvShowResponse();
-                    discoverTvShowResponse.setPage(response.body().getPage());
-                    discoverTvShowResponse.setTotalPages(response.body().getTotalPages());
-                    discoverTvShowResponse.setResults(helper);
-                    resultTvShow.postValue(Resource.success(discoverTvShowResponse));
-                }
+
+                    @Override
+                    public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
+                        resultTvShow.setValue(ApiResponse.error(t.getMessage(), new DiscoverTvShowResponse()));
+
+                        Log.d(TAG, "Error: loadListTvShow");
+                    }
+                });
+                return resultTvShow;
             }
 
             @Override
-            public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
-                resultTvShow.setValue(Resource.error(t.getMessage(), new DiscoverTvShowResponse()));
+            protected void saveCallResult(DiscoverTvShowResponse data) {
+                dao.insertTvShows(data.getResults());
             }
-        });
-
-        return resultTvShow;
+        }.asLiveData();
     }
 
     //FavoriteMovieViewModel

@@ -198,15 +198,13 @@ public class MovieFragment extends Fragment {
                             } else {
                                 mShimmerViewContainer.setVisibility(View.GONE);
                             }
-                            showToast(getResources().getString(R.string.error) + " " + getResources().getString(R.string.page) + " " + currentPage);
+                            showToast(getResources().getString(R.string.error));
                             break;
                     }
                 }
             }
 
-            new Handler().postDelayed(() -> {
-                isLoading = false;
-            }, 2000);
+            new Handler().postDelayed(() -> isLoading = false, 2000);
         });
 
         if(discoverMovies != null) {

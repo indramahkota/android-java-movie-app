@@ -2,9 +2,11 @@ package com.indramahkota.moviecatalogue.ui.main.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -47,6 +49,7 @@ public class TvShowFragment extends Fragment {
     private List<TvShowEntity> discoverTvShows;
     private ShimmerFrameLayout mShimmerViewContainer;
     private LinearLayoutManager linearLayoutManager;
+    private RelativeLayout relativeLayout;
     private SearchView searchView;
     private View rootView;
 
@@ -78,6 +81,7 @@ public class TvShowFragment extends Fragment {
 
         rootView = view.findViewById(R.id.rv_fragment_category_container);
 
+        relativeLayout = view.findViewById(R.id.empty_indicator);
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_fragment_container);
 
         TvShowFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowFragmentViewModel.class);
@@ -128,36 +132,79 @@ public class TvShowFragment extends Fragment {
 
         SwipeRefreshLayout swipeRefreshLayout = view.findViewById(R.id.swipe_to_refresh);
         swipeRefreshLayout.setOnRefreshListener(() -> {
+            isLoading = true;
             currentPage = 1L;
             listTvShowAdapter.clear();
             viewModel.loadMoreTvShows(currentPage);
+            relativeLayout.setVisibility(View.GONE);
             mShimmerViewContainer.setVisibility(View.VISIBLE);
             showToast(getResources().getString(R.string.reset_page) + " " + currentPage);
         });
 
         viewModel.listDiscoverTvShow.observe(this, discoverTvShowResponseResource -> {
-            switch (discoverTvShowResponseResource.status) {
-                case SUCCESS:
-                    //show data
-                    swipeRefreshLayout.setRefreshing(false);
-                    rvFragmentTvShows.setVisibility(View.VISIBLE);
-                    mShimmerViewContainer.setVisibility(View.GONE);
-                    if (discoverTvShowResponseResource.data != null) {
-                        if(discoverTvShows == null) {
-                            discoverTvShows = new ArrayList<>(discoverTvShowResponseResource.data.getResults());
-                        } else {
-                            discoverTvShows.addAll(discoverTvShowResponseResource.data.getResults());
-                        }
-                        listTvShowAdapter.addAll(discoverTvShowResponseResource.data.getResults());
-                        isLoading = false;
+            swipeRefreshLayout.setRefreshing(false);
+            rvFragmentTvShows.setVisibility(View.VISIBLE);
+
+            if(discoverTvShowResponseResource.data != null) {
+                if (discoverTvShows == null) {
+                    discoverTvShows = new ArrayList<>(discoverTvShowResponseResource.data.getResults());
+
+                    if(discoverTvShows.size() < 1) {
+                        new Handler().postDelayed(() -> {
+                            if(discoverTvShows.size() < 1) {
+                                relativeLayout.setVisibility(View.VISIBLE);
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                            }
+                        }, 1000);
+                    } else {
+                        mShimmerViewContainer.setVisibility(View.GONE);
                     }
-                    break;
-                case ERROR:
-                    //show error
-                    swipeRefreshLayout.setRefreshing(false);
-                    showToast(getResources().getString(R.string.error));
-                    break;
+                } else {
+                    switch (discoverTvShowResponseResource.status) {
+                        case SUCCESS:
+                            //show data
+                            discoverTvShows.addAll(discoverTvShowResponseResource.data.getResults());
+                            listTvShowAdapter.addAll(discoverTvShowResponseResource.data.getResults());
+
+                            if(discoverTvShows.size() < 1) {
+                                new Handler().postDelayed(() -> {
+                                    if(discoverTvShows.size() < 1) {
+                                        relativeLayout.setVisibility(View.VISIBLE);
+                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                    }
+                                }, 1000);
+                            } else {
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                            }
+                            showToast(getResources().getString(R.string.success));
+                            break;
+                        case ERROR:
+                            //show error
+                            if(discoverTvShowResponseResource.data.getResults().size() > 1) {
+                                discoverTvShows.addAll(discoverTvShowResponseResource.data.getResults());
+                                listTvShowAdapter.addAll(discoverTvShowResponseResource.data.getResults());
+                            }else {
+                                if(currentPage > 1)
+                                    currentPage--;
+                            }
+
+                            if(discoverTvShows.size() < 1) {
+                                new Handler().postDelayed(() -> {
+                                    if(discoverTvShows.size() < 1) {
+                                        relativeLayout.setVisibility(View.VISIBLE);
+                                        mShimmerViewContainer.setVisibility(View.GONE);
+                                    }
+                                }, 1000);
+                            } else {
+                                mShimmerViewContainer.setVisibility(View.GONE);
+                            }
+                            showToast(getResources().getString(R.string.error));
+                            break;
+                    }
+                }
             }
+
+            new Handler().postDelayed(() -> isLoading = false, 2000);
         });
 
         if(discoverTvShows != null) {

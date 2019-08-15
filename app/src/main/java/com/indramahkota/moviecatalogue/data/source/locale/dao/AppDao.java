@@ -36,7 +36,7 @@ public interface AppDao {
     DataSource.Factory<Integer, MovieEntity> selectAllFavoriteMovie();
 
     @WorkerThread
-    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME+ " WHERE page = :currentPage")
+    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE page = :currentPage")
     List<MovieEntity> selectAllMovie(Long currentPage);
 
     @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
@@ -60,17 +60,17 @@ public interface AppDao {
     DataSource.Factory<Integer, TvShowEntity> selectAllTvShow();
 
     @WorkerThread
-    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME)
-    LiveData<List<TvShowEntity>> selectAllTvShows();
+    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE page = :currentPage")
+    List<TvShowEntity> selectAllTvShow(Long currentPage);
+
+    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE itemId = :id")
+    TvShowEntity selectTvShowById(long id);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTvShow(TvShowEntity tvShowEntity);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTvShows(List<TvShowEntity> tvShowEntities);
-
-    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE itemId = :id")
-    TvShowEntity selectTvShowById(long id);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateTvShow(TvShowEntity tvShowEntity);
