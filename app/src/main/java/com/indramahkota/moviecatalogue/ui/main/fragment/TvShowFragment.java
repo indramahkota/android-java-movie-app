@@ -148,34 +148,24 @@ public class TvShowFragment extends Fragment {
             if(discoverTvShowResponseResource.data != null) {
                 if (discoverTvShows == null) {
                     discoverTvShows = new ArrayList<>(discoverTvShowResponseResource.data.getResults());
-
-                    if(discoverTvShows.size() < 1) {
-                        new Handler().postDelayed(() -> {
-                            if(discoverTvShows.size() < 1) {
-                                relativeLayout.setVisibility(View.VISIBLE);
-                                mShimmerViewContainer.setVisibility(View.GONE);
-                            }
-                        }, 1000);
-                    } else {
-                        mShimmerViewContainer.setVisibility(View.GONE);
-                    }
                 } else {
                     switch (discoverTvShowResponseResource.status) {
                         case SUCCESS:
                             //show data
                             discoverTvShows.addAll(discoverTvShowResponseResource.data.getResults());
                             listTvShowAdapter.addAll(discoverTvShowResponseResource.data.getResults());
-
                             if(discoverTvShows.size() < 1) {
                                 new Handler().postDelayed(() -> {
                                     if(discoverTvShows.size() < 1) {
                                         relativeLayout.setVisibility(View.VISIBLE);
+                                        rvFragmentTvShows.setVisibility(View.GONE);
                                         mShimmerViewContainer.setVisibility(View.GONE);
                                     }
                                 }, 1000);
                             } else {
                                 mShimmerViewContainer.setVisibility(View.GONE);
                             }
+                            new Handler().postDelayed(() -> isLoading = false, 2000);
                             showToast(getResources().getString(R.string.success));
                             break;
                         case ERROR:
@@ -187,30 +177,33 @@ public class TvShowFragment extends Fragment {
                                 if(currentPage > 1)
                                     currentPage--;
                             }
-
                             if(discoverTvShows.size() < 1) {
                                 new Handler().postDelayed(() -> {
                                     if(discoverTvShows.size() < 1) {
                                         relativeLayout.setVisibility(View.VISIBLE);
+                                        rvFragmentTvShows.setVisibility(View.GONE);
                                         mShimmerViewContainer.setVisibility(View.GONE);
                                     }
                                 }, 1000);
                             } else {
                                 mShimmerViewContainer.setVisibility(View.GONE);
                             }
+                            new Handler().postDelayed(() -> isLoading = false, 2000);
                             showToast(getResources().getString(R.string.error));
                             break;
                     }
                 }
             }
-
-            new Handler().postDelayed(() -> isLoading = false, 2000);
         });
 
         if(discoverTvShows != null) {
             listTvShowAdapter.addAll(discoverTvShows);
             linearLayoutManager.scrollToPosition(scrollPosition);
             mShimmerViewContainer.setVisibility(View.GONE);
+            if(discoverTvShows.size() < 1) {
+                rvFragmentTvShows.setVisibility(View.GONE);
+                relativeLayout.setVisibility(View.VISIBLE);
+            }
         } else {
             viewModel.loadMoreTvShows(currentPage);
             showToast(getResources().getString(R.string.page) + " " + currentPage);

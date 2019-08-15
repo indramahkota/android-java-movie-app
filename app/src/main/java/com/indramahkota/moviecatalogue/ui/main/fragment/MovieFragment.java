@@ -148,34 +148,24 @@ public class MovieFragment extends Fragment {
             if(discoverMovieResponseResource.data != null) {
                 if (discoverMovies == null) {
                     discoverMovies = new ArrayList<>(discoverMovieResponseResource.data.getResults());
-
-                    if(discoverMovies.size() < 1) {
-                        new Handler().postDelayed(() -> {
-                            if(discoverMovies.size() < 1) {
-                                relativeLayout.setVisibility(View.VISIBLE);
-                                mShimmerViewContainer.setVisibility(View.GONE);
-                            }
-                        }, 1000);
-                    } else {
-                        mShimmerViewContainer.setVisibility(View.GONE);
-                    }
                 } else {
                     switch (discoverMovieResponseResource.status) {
                         case SUCCESS:
                             //show data
                             discoverMovies.addAll(discoverMovieResponseResource.data.getResults());
                             listMovieAdapter.addAll(discoverMovieResponseResource.data.getResults());
-
                             if(discoverMovies.size() < 1) {
                                 new Handler().postDelayed(() -> {
                                     if(discoverMovies.size() < 1) {
                                         relativeLayout.setVisibility(View.VISIBLE);
+                                        rvFragmentMovies.setVisibility(View.GONE);
                                         mShimmerViewContainer.setVisibility(View.GONE);
                                     }
                                 }, 1000);
                             } else {
                                 mShimmerViewContainer.setVisibility(View.GONE);
                             }
+                            new Handler().postDelayed(() -> isLoading = false, 2000);
                             showToast(getResources().getString(R.string.success));
                             break;
                         case ERROR:
@@ -187,30 +177,33 @@ public class MovieFragment extends Fragment {
                                 if(currentPage > 1)
                                     currentPage--;
                             }
-
                             if(discoverMovies.size() < 1) {
                                 new Handler().postDelayed(() -> {
                                     if(discoverMovies.size() < 1) {
                                         relativeLayout.setVisibility(View.VISIBLE);
+                                        rvFragmentMovies.setVisibility(View.GONE);
                                         mShimmerViewContainer.setVisibility(View.GONE);
                                     }
                                 }, 1000);
                             } else {
                                 mShimmerViewContainer.setVisibility(View.GONE);
                             }
+                            new Handler().postDelayed(() -> isLoading = false, 2000);
                             showToast(getResources().getString(R.string.error));
                             break;
                     }
                 }
             }
-
-            new Handler().postDelayed(() -> isLoading = false, 2000);
         });
 
         if(discoverMovies != null) {
             listMovieAdapter.addAll(discoverMovies);
             linearLayoutManager.scrollToPosition(scrollPosition);
             mShimmerViewContainer.setVisibility(View.GONE);
+            if(discoverMovies.size() < 1) {
+                rvFragmentMovies.setVisibility(View.GONE);
+                relativeLayout.setVisibility(View.VISIBLE);
+            }
         } else {
             viewModel.loadMoreMovies(currentPage);
             showToast(getResources().getString(R.string.page) + " " + currentPage);
