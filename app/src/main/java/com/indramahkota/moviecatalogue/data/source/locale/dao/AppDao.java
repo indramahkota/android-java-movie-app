@@ -48,6 +48,10 @@ public interface AppDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertMovies(List<MovieEntity> movieEntities);
 
+    @WorkerThread
+    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE favorite = 1")
+    LiveData<List<MovieEntity>> getAllFavoriteMovie();
+
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateMovie(MovieEntity movieEntity);
 
@@ -71,6 +75,10 @@ public interface AppDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertTvShows(List<TvShowEntity> tvShowEntities);
+
+    @WorkerThread
+    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE favorite = 1")
+    LiveData<List<TvShowEntity>> getAllFavoriteTvShow();
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
     void updateTvShow(TvShowEntity tvShowEntity);

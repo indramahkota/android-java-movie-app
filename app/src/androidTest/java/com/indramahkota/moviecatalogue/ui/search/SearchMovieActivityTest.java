@@ -40,8 +40,6 @@ public class SearchMovieActivityTest {
 
     @Test
     public void loadData() {
-        //Data awal jumlahnya tergantung hasil pencarian
-        //minimal tidak ada, maksimal data awal 20 untuk 1 page jika hasil ada
         onView(withId(R.id.rv_search_category)).check(matches(isDisplayed()));
         onView(withId(R.id.rv_search_category)).check(new RecyclerViewItemCountAssertion(20));
     }

@@ -19,15 +19,15 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
 @Database(entities = {MovieEntity.class, TvShowEntity.class, LanguageEntity.class}, version = 1, exportSchema = false)
 @TypeConverters({CastTypeConverter.class, GenresTypeConverter.class, CreditsTypeConverter.class, DoubleTypeConverter.class})
-public abstract class FavoriteDatabase extends RoomDatabase {
+public abstract class MyDatabase extends RoomDatabase {
     public static final String DATABASE_NAME = "my_movie_catalogue_database.db";
-    private static FavoriteDatabase INSTANCE;
+    private static MyDatabase INSTANCE;
 
-    public abstract AppDao favoriteDao();
+    public abstract AppDao appDao();
 
-    public static synchronized FavoriteDatabase getInstance(Context context) {
+    public static synchronized MyDatabase getInstance(Context context) {
         if(INSTANCE == null) {
-            synchronized (FavoriteDatabase.class) {
+            synchronized (MyDatabase.class) {
                 if (INSTANCE == null) {
                     INSTANCE = buildDatabase(context);
                 }
@@ -37,9 +37,9 @@ public abstract class FavoriteDatabase extends RoomDatabase {
     }
 
     @NonNull
-    private static FavoriteDatabase buildDatabase(Context context) {
+    private static MyDatabase buildDatabase(Context context) {
         return Room.databaseBuilder(context,
-                FavoriteDatabase.class, DATABASE_NAME)
+                MyDatabase.class, DATABASE_NAME)
                 .allowMainThreadQueries().build();
     }
 }

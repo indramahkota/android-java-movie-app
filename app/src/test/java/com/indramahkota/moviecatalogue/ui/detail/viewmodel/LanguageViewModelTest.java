@@ -41,7 +41,7 @@ public class LanguageViewModelTest {
 
     @Test
     public void testApiFetchData() {
-        Resource<List<LanguageEntity>> languageResources = FakeData.getLanguages();
+        Resource<List<LanguageEntity>> languageResources = FakeData.getResourceLanguages();
         MutableLiveData<Resource<List<LanguageEntity>>> liveData = new MutableLiveData<>();
         liveData.setValue(languageResources);
 

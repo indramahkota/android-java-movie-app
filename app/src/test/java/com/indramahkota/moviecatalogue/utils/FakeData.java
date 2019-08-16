@@ -76,11 +76,10 @@ public class FakeData {
         return data;
     }
 
-    public static Resource<DiscoverMovieResponse> getResourceListMovie() {
-        ArrayList<MovieEntity> movieEntities = new ArrayList<>();
+    public static List<MovieEntity> getListMovie() {
+        List<MovieEntity> movieEntities = new ArrayList<>();
         ArrayList<String[]> arrayData = generateStringData();
         int len = arrayData.size();
-
         for (int i = 0; i < len; ++i) {
             MovieEntity movie = new MovieEntity();
             movie.setPosterPath(arrayData.get(i)[0]);
@@ -91,22 +90,24 @@ public class FakeData {
             movie.setReleaseDate(arrayData.get(i)[5]);
             movie.setVoteAverage(Double.valueOf(arrayData.get(i)[6]));
             movie.setOriginalLanguage(arrayData.get(i)[7]);
+            movie.setPage(1L);
             movieEntities.add(movie);
         }
+        return movieEntities;
+    }
 
+    public static Resource<DiscoverMovieResponse> getResourceListMovie() {
         DiscoverMovieResponse discoverMovie = new DiscoverMovieResponse();
         discoverMovie.setPage(1L);
         discoverMovie.setTotalPages(1L);
-        discoverMovie.setResults(movieEntities);
-
+        discoverMovie.setResults(getListMovie());
         return Resource.success(discoverMovie);
     }
 
-    public static Resource<DiscoverTvShowResponse> getResourceListTvShow() {
-        ArrayList<TvShowEntity> tvShowEntities = new ArrayList<>();
+    public static List<TvShowEntity> getListTvShow() {
+        List<TvShowEntity> tvShowEntities = new ArrayList<>();
         ArrayList<String[]> arrayData = generateStringData();
         int len = arrayData.size();
-
         for (int i = 0; i < len; ++i) {
             TvShowEntity tvShow = new TvShowEntity();
             tvShow.setPosterPath(arrayData.get(i)[0]);
@@ -117,18 +118,21 @@ public class FakeData {
             tvShow.setFirstAirDate(arrayData.get(i)[5]);
             tvShow.setVoteAverage(Double.valueOf(arrayData.get(i)[6]));
             tvShow.setOriginalLanguage(arrayData.get(i)[7]);
+            tvShow.setPage(1L);
             tvShowEntities.add(tvShow);
         }
+        return tvShowEntities;
+    }
 
+    public static Resource<DiscoverTvShowResponse> getResourceListTvShow() {
         DiscoverTvShowResponse discoverTvShow = new DiscoverTvShowResponse();
         discoverTvShow.setPage(1L);
         discoverTvShow.setTotalPages(1L);
-        discoverTvShow.setResults(tvShowEntities);
-
+        discoverTvShow.setResults(getListTvShow());
         return Resource.success(discoverTvShow);
     }
 
-    public static Resource<MovieEntity> getResourceMovie() {
+    public static MovieEntity getMovie() {
         ArrayList<String[]> arrayData = generateStringData();
         MovieEntity movie = new MovieEntity();
         movie.setPosterPath(arrayData.get(0)[0]);
@@ -139,10 +143,14 @@ public class FakeData {
         movie.setReleaseDate(arrayData.get(0)[5]);
         movie.setVoteAverage(Double.valueOf(arrayData.get(0)[6]));
         movie.setOriginalLanguage(arrayData.get(0)[7]);
-        return Resource.success(movie);
+        return movie;
     }
 
-    public static Resource<TvShowEntity> getResourceTvShow() {
+    public static Resource<MovieEntity> getResourceMovie() {
+        return Resource.success(getMovie());
+    }
+
+    public static TvShowEntity getTvShow() {
         ArrayList<String[]> arrayData = generateStringData();
         TvShowEntity tvShow = new TvShowEntity();
         tvShow.setPosterPath(arrayData.get(0)[0]);
@@ -153,10 +161,14 @@ public class FakeData {
         tvShow.setFirstAirDate(arrayData.get(0)[5]);
         tvShow.setVoteAverage(Double.valueOf(arrayData.get(0)[6]));
         tvShow.setOriginalLanguage(arrayData.get(0)[7]);
-        return Resource.success(tvShow);
+        return tvShow;
     }
 
-    public static Resource<List<LanguageEntity>> getLanguages () {
+    public static Resource<TvShowEntity> getResourceTvShow() {
+        return Resource.success(getTvShow());
+    }
+
+    public static List<LanguageEntity> getLanguages() {
         ArrayList<LanguageEntity> data = new ArrayList<>();
         LanguageEntity lang1 = new LanguageEntity();
         lang1.setEnglishName("English");
@@ -177,6 +189,10 @@ public class FakeData {
         LanguageEntity lang5 = new LanguageEntity();
         lang5.setEnglishName("Javanese");
         data.add(lang5);
-        return Resource.success(data);
+        return data;
+    }
+
+    public static Resource<List<LanguageEntity>> getResourceLanguages() {
+        return Resource.success(getLanguages());
     }
 }

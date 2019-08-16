@@ -4,6 +4,7 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FakeData {
     private static ArrayList<String[]> generateStringData() {
@@ -20,6 +21,50 @@ public class FakeData {
                 "07, Okt 2014", "6.6"};
         data.add(data2);
         return data;
+    }
+
+    public static List<MovieEntity> getListMovie(boolean favorite) {
+        List<MovieEntity> movieEntities = new ArrayList<>();
+        ArrayList<String[]> arrayData = generateStringData();
+        int len = arrayData.size();
+
+        for (int i = 0; i < len; ++i) {
+            MovieEntity movie = new MovieEntity();
+            movie.setPosterPath(arrayData.get(i)[0]);
+            movie.setBackdropPath(arrayData.get(i)[1]);
+            movie.setId(Long.valueOf(arrayData.get(i)[2]));
+            movie.setTitle(arrayData.get(i)[3]);
+            movie.setOverview(arrayData.get(i)[4]);
+            movie.setReleaseDate(arrayData.get(i)[5]);
+            movie.setVoteAverage(Double.valueOf(arrayData.get(i)[6]));
+            movie.setOriginalLanguage(arrayData.get(i)[7]);
+            movie.setFavorite(favorite);
+            movieEntities.add(movie);
+        }
+
+        return movieEntities;
+    }
+
+    public static List<TvShowEntity> getListTvShow(boolean favorite) {
+        List<TvShowEntity> tvShowEntities = new ArrayList<>();
+        ArrayList<String[]> arrayData = generateStringData();
+        int len = arrayData.size();
+
+        for (int i = 0; i < len; ++i) {
+            TvShowEntity tvShow = new TvShowEntity();
+            tvShow.setPosterPath(arrayData.get(i)[0]);
+            tvShow.setBackdropPath(arrayData.get(i)[1]);
+            tvShow.setId(Long.valueOf(arrayData.get(i)[2]));
+            tvShow.setName(arrayData.get(i)[3]);
+            tvShow.setOverview(arrayData.get(i)[4]);
+            tvShow.setFirstAirDate(arrayData.get(i)[5]);
+            tvShow.setVoteAverage(Double.valueOf(arrayData.get(i)[6]));
+            tvShow.setOriginalLanguage(arrayData.get(i)[7]);
+            tvShow.setFavorite(favorite);
+            tvShowEntities.add(tvShow);
+        }
+
+        return tvShowEntities;
     }
 
     public static MovieEntity getMovieData() {

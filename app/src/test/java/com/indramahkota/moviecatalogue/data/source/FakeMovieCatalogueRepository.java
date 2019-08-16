@@ -1,7 +1,5 @@
 package com.indramahkota.moviecatalogue.data.source;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -9,7 +7,6 @@ import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import com.indramahkota.moviecatalogue.BuildConfig;
-import com.indramahkota.moviecatalogue.EspressoIdlingResource;
 import com.indramahkota.moviecatalogue.data.source.locale.dao.AppDao;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
@@ -32,14 +29,12 @@ import retrofit2.Response;
 
 @Singleton
 public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
-    private static final String TAG = "REPOSITORY";
-
     private final AppDao dao;
     private final ApiEndPoint api;
     private final AppExecutors exec;
 
     @Inject
-    public FakeMovieCatalogueRepository(AppDao appDao, ApiEndPoint apiEndPoint, AppExecutors exec){
+    FakeMovieCatalogueRepository(AppDao appDao, ApiEndPoint apiEndPoint, AppExecutors exec){
         this.dao = appDao;
         this.api = apiEndPoint;
         this.exec = exec;
@@ -67,17 +62,12 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
 
             @Override
             protected Boolean shouldFetch(DiscoverMovieResponse data) {
-                return true;
+                return data == null;
             }
 
             @Override
             protected LiveData<ApiResponse<DiscoverMovieResponse>> createCall() {
                 MutableLiveData<ApiResponse<DiscoverMovieResponse>> resultMovie = new MutableLiveData<>();
-
-                EspressoIdlingResource.increment();
-
-                Log.d(TAG, "Load: loadListMovie");
-                Log.d(TAG, "Load: loadListMovie Page: " + page);
 
                 Call<DiscoverMovieResponse> call = api.getDiscoverMovies(BuildConfig.TMDB_API_KEY, page);
                 call.enqueue(new Callback<DiscoverMovieResponse>() {
@@ -105,20 +95,12 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
                             discoverMovieResponse.setTotalPages(response.body().getTotalPages());
                             discoverMovieResponse.setResults(helper);
                             resultMovie.postValue(ApiResponse.success(discoverMovieResponse));
-
-                            EspressoIdlingResource.decrement();
-
-                            Log.d(TAG, "Complete: loadListMovie");
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
                         resultMovie.setValue(ApiResponse.error(t.getMessage(), new DiscoverMovieResponse()));
-
-                        EspressoIdlingResource.decrement();
-
-                        Log.d(TAG, "Error: loadListMovie");
                     }
                 });
                 return resultMovie;
@@ -149,17 +131,12 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
 
             @Override
             protected Boolean shouldFetch(DiscoverTvShowResponse data) {
-                return true;
+                return data == null;
             }
 
             @Override
             protected LiveData<ApiResponse<DiscoverTvShowResponse>> createCall() {
                 MutableLiveData<ApiResponse<DiscoverTvShowResponse>> resultTvShow = new MutableLiveData<>();
-
-                EspressoIdlingResource.increment();
-
-                Log.d(TAG, "Load: loadListTvShow");
-                Log.d(TAG, "Load: loadListTvShow Page: " + page);
 
                 Call<DiscoverTvShowResponse> call = api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY, page);
                 call.enqueue(new Callback<DiscoverTvShowResponse>() {
@@ -187,20 +164,12 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
                             discoverTvShowResponse.setTotalPages(response.body().getTotalPages());
                             discoverTvShowResponse.setResults(helper);
                             resultTvShow.postValue(ApiResponse.success(discoverTvShowResponse));
-
-                            EspressoIdlingResource.decrement();
-
-                            Log.d(TAG, "Complete: loadListTvShow");
                         }
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
                         resultTvShow.setValue(ApiResponse.error(t.getMessage(), new DiscoverTvShowResponse()));
-
-                        EspressoIdlingResource.decrement();
-
-                        Log.d(TAG, "Error: loadListTvShow");
                     }
                 });
                 return resultTvShow;
@@ -291,14 +260,12 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
 
             @Override
             public Boolean shouldFetch(MovieEntity data) {
-                return true;
+                return data == null;
             }
 
             @Override
             public LiveData<ApiResponse<MovieEntity>> createCall() {
                 MutableLiveData<ApiResponse<MovieEntity>> resultMovie = new MutableLiveData<>();
-
-                EspressoIdlingResource.increment();
 
                 Call<MovieEntity> call = api.getMovie(movieId, BuildConfig.TMDB_API_KEY, "credits");
                 call.enqueue(new Callback<MovieEntity>() {
@@ -320,15 +287,11 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
                             }
                             resultMovie.setValue(ApiResponse.success(movieEntity));
                         }
-
-                        EspressoIdlingResource.decrement();
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<MovieEntity> call, @NonNull Throwable t) {
                         resultMovie.setValue(ApiResponse.error(t.getMessage(), new MovieEntity()));
-
-                        EspressoIdlingResource.decrement();
                     }
                 });
                 return resultMovie;
@@ -358,14 +321,12 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
 
             @Override
             public Boolean shouldFetch(TvShowEntity data) {
-                return true;
+                return data == null;
             }
 
             @Override
             public LiveData<ApiResponse<TvShowEntity>> createCall() {
                 MutableLiveData<ApiResponse<TvShowEntity>> resultTvShow = new MutableLiveData<>();
-
-                EspressoIdlingResource.increment();
 
                 Call<TvShowEntity> call = api.getTvShow(tvShowId, BuildConfig.TMDB_API_KEY, "credits");
                 call.enqueue(new Callback<TvShowEntity>() {
@@ -387,15 +348,11 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
                             }
                             resultTvShow.setValue(ApiResponse.success(tvShowEntity));
                         }
-
-                        EspressoIdlingResource.decrement();
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<TvShowEntity> call, @NonNull Throwable t) {
                         resultTvShow.setValue(ApiResponse.error(t.getMessage(), new TvShowEntity()));
-
-                        EspressoIdlingResource.decrement();
                     }
                 });
                 return resultTvShow;
@@ -419,8 +376,6 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
     @Override
     public LiveData<Resource<DiscoverMovieResponse>> searchListMovie(String query, Long page) {
         MutableLiveData<Resource<DiscoverMovieResponse>> resultMovie = new MutableLiveData<>();
-
-        EspressoIdlingResource.increment();
 
         Call<DiscoverMovieResponse> call = api.searchMovies(BuildConfig.TMDB_API_KEY, query, page);
         call.enqueue(new Callback<DiscoverMovieResponse>() {
@@ -447,16 +402,12 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
                     discoverMovieResponse.setResults(helper);
                     dao.insertMovies(helper);
                     resultMovie.postValue(Resource.success(discoverMovieResponse));
-
-                    EspressoIdlingResource.decrement();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
                 resultMovie.setValue(Resource.error(t.getMessage(), new DiscoverMovieResponse()));
-
-                EspressoIdlingResource.decrement();
             }
         });
 
@@ -467,8 +418,6 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
     @Override
     public LiveData<Resource<DiscoverTvShowResponse>> searchListTvShow(String query, Long page) {
         MutableLiveData<Resource<DiscoverTvShowResponse>> resultTvShow = new MutableLiveData<>();
-
-        EspressoIdlingResource.increment();
 
         Call<DiscoverTvShowResponse> call = api.searchTvShows(BuildConfig.TMDB_API_KEY, query, page);
         call.enqueue(new Callback<DiscoverTvShowResponse>() {
@@ -495,16 +444,12 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
                     discoverTvShowResponse.setResults(helper);
                     dao.insertTvShows(helper);
                     resultTvShow.postValue(Resource.success(discoverTvShowResponse));
-
-                    EspressoIdlingResource.decrement();
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
                 resultTvShow.setValue(Resource.error(t.getMessage(), new DiscoverTvShowResponse()));
-
-                EspressoIdlingResource.decrement();
             }
         });
 
@@ -531,20 +476,15 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
             public LiveData<ApiResponse<List<LanguageEntity>>> createCall() {
                 MutableLiveData<ApiResponse<List<LanguageEntity>>> resultLanguage = new MutableLiveData<>();
 
-                EspressoIdlingResource.increment();
-
                 Call<List<LanguageEntity>> call = api.getLanguages(BuildConfig.TMDB_API_KEY);
                 call.enqueue(new Callback<List<LanguageEntity>>() {
                     @Override
                     public void onResponse(@NonNull Call<List<LanguageEntity>> call, @NonNull Response<List<LanguageEntity>> response) {
                         resultLanguage.setValue(ApiResponse.success(response.body()));
-
-                        EspressoIdlingResource.decrement();
                     }
 
                     @Override
                     public void onFailure(@NonNull Call<List<LanguageEntity>> call, @NonNull Throwable t) {
-                        EspressoIdlingResource.decrement();
                     }
                 });
                 return resultLanguage;

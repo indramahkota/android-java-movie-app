@@ -24,7 +24,7 @@ public class TvShowFragmentViewModelTest {
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
-    MovieCatalogueRepository movieCatalogueRepository;
+    private MovieCatalogueRepository movieCatalogueRepository;
 
     private TvShowFragmentViewModel tvShowFragmentViewModel;
 
