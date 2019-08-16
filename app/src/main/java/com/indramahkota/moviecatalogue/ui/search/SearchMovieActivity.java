@@ -112,7 +112,7 @@ public class SearchMovieActivity extends AppCompatActivity {
                 searchViewModel.loadMoreMovies(currentPage);
             }
 
-            showToast(getResources().getString(R.string.reset_page) + " " + currentPage);
+            showToast(getResources().getString(R.string.refresh));
         });
 
         searchViewModel.searchMovie.observe(this, movieViewState -> {
