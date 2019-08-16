@@ -17,8 +17,11 @@ import java.util.List;
 
 import static com.indramahkota.moviecatalogue.utils.FakeData.getListMovie;
 import static com.indramahkota.moviecatalogue.utils.FakeData.getListTvShow;
+import static com.indramahkota.moviecatalogue.utils.FakeData.getMovieData;
+import static com.indramahkota.moviecatalogue.utils.FakeData.getTvShowData;
 import static com.indramahkota.moviecatalogue.utils.LiveDataTestUtil.getValue;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class LocalDatabaseTest {
 
@@ -43,22 +46,50 @@ public class LocalDatabaseTest {
     @Test
     public void insertAllMovieEntity() {
 
-        List<MovieEntity> expectedCourses = getListMovie(true);
-        db.appDao().insertMovies(expectedCourses);
+        List<MovieEntity> expectedData = getListMovie(true);
+        db.appDao().insertMovies(expectedData);
 
-        List<MovieEntity> actualCourses = getValue(db.appDao().getAllFavoriteMovie());
+        List<MovieEntity> actualData = getValue(db.appDao().getAllFavoriteMovie());
 
-        assertEquals(expectedCourses.size(), actualCourses.size());
+        assertEquals(expectedData.size(), actualData.size());
     }
 
     @Test
     public void insertAllTvShowEntity() {
 
-        List<TvShowEntity> expectedCourses = getListTvShow(true);
-        db.appDao().insertTvShows(expectedCourses);
+        List<TvShowEntity> expectedData = getListTvShow(true);
+        db.appDao().insertTvShows(expectedData);
 
-        List<TvShowEntity> actualCourses = getValue(db.appDao().getAllFavoriteTvShow());
+        List<TvShowEntity> actualData = getValue(db.appDao().getAllFavoriteTvShow());
 
-        assertEquals(expectedCourses.size(), actualCourses.size());
+        assertEquals(expectedData.size(), actualData.size());
+    }
+
+    @Test
+    public void updateMovieEntity() {
+        MovieEntity expectedData = getMovieData(false);
+        db.appDao().insertMovie(expectedData);
+
+        expectedData.setFavorite(true);
+        db.appDao().updateMovie(expectedData);
+
+        MovieEntity actualModule = db.appDao().selectMovieById(expectedData.getId());
+
+        assertNotNull(actualModule);
+        assertEquals(expectedData.getFavorite(), actualModule.getFavorite());
+    }
+
+    @Test
+    public void updateTvShowEntity() {
+        TvShowEntity expectedData = getTvShowData(false);
+        db.appDao().insertTvShow(expectedData);
+
+        expectedData.setFavorite(true);
+        db.appDao().updateTvShow(expectedData);
+
+        TvShowEntity actualModule = db.appDao().selectTvShowById(expectedData.getId());
+
+        assertNotNull(actualModule);
+        assertEquals(expectedData.getFavorite(), actualModule.getFavorite());
     }
 }

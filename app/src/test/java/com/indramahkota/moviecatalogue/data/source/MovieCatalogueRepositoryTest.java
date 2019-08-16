@@ -73,6 +73,7 @@ public class MovieCatalogueRepositoryTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void getAllMovie() {
         DataSource.Factory<Integer, MovieEntity> movieEntitySourceFactory = mock(DataSource.Factory.class);
 
@@ -84,6 +85,7 @@ public class MovieCatalogueRepositoryTest {
     }
 
     @Test
+    @SuppressWarnings("unchecked")
     public void getAllTvShow() {
         DataSource.Factory<Integer, TvShowEntity> tvShowEntitySourceFactory = mock(DataSource.Factory.class);
 

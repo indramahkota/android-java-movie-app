@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,7 +20,6 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
-import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.fragment.pagedlist.MoviePagedListAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteMovieViewModel;
 
@@ -31,7 +31,7 @@ public class FavoriteMovieFragment extends Fragment {
     private static final String STATE_SCROLL = "state_scroll";
 
     @Inject
-    ViewModelFactory viewModelFactory;
+    ViewModelProvider.Factory viewModelFactory;
 
     private LinearLayoutManager linearLayoutManager;
     private ShimmerFrameLayout mShimmerViewContainer;

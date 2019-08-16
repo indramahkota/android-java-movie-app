@@ -24,7 +24,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class TvShowDetailsActivityTest {
-    private final TvShowEntity dummyTvShow = FakeData.getTvShowData();
+    private final TvShowEntity dummyTvShow = FakeData.getTvShowData(false);
 
     @Rule
     public ActivityTestRule<TvShowDetailsActivity> activityRule = new ActivityTestRule<TvShowDetailsActivity>(TvShowDetailsActivity.class) {
@@ -44,6 +44,13 @@ public class TvShowDetailsActivityTest {
 
     @Test
     public void loadData() {
+        //menunggu 3 detik lagi baru ready
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         onView(withId(R.id.txt_title)).check(matches(isDisplayed()));
         onView(withId(R.id.txt_title)).check(matches(withText(dummyTvShow.getName())));
 
@@ -55,13 +62,8 @@ public class TvShowDetailsActivityTest {
         onView(withId(R.id.txt_release_date)).check(matches(isDisplayed()));
         onView(withId(R.id.txt_release_date)).check(matches(withText(dummyTvShow.getFirstAirDate())));
 
-        onView(withId(R.id.txt_overview)).check(matches(isDisplayed()));
+        //Overview juga kemungkinan bisa berubah
         onView(withId(R.id.txt_overview)).check(matches(withText(dummyTvShow.getOverview())));
-
-
-        onView(withId(R.id.rv_details_cast)).check(matches(isDisplayed()));
-
-        onView(withId(R.id.rv_details_genres)).check(matches(isDisplayed()));
     }
 
     @After

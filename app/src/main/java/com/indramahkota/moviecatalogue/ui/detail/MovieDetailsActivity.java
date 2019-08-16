@@ -12,6 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -58,7 +59,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
     private ShimmerFrameLayout mShimmerViewContainer;
 
     @Inject
-    ViewModelFactory viewModelFactory;
+    ViewModelProvider.Factory viewModelFactory;
     private FavoriteMovieViewModel favoriteMovieViewModel;
 
     @Override

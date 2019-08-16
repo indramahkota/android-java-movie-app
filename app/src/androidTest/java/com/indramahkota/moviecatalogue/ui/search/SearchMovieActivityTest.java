@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.test.espresso.IdlingRegistry;
+import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -17,6 +18,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
@@ -42,6 +44,7 @@ public class SearchMovieActivityTest {
     public void loadData() {
         onView(withId(R.id.rv_search_category)).check(matches(isDisplayed()));
         onView(withId(R.id.rv_search_category)).check(new RecyclerViewItemCountAssertion(20));
+        onView(withId(R.id.rv_fragment_category)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
     }
 
     @After

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.platform.app.InstrumentationRegistry;
 import androidx.test.rule.ActivityTestRule;
 
@@ -25,7 +24,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 public class MovieDetailsActivityTest {
-    private final MovieEntity dummyMovie = FakeData.getMovieData();
+    private final MovieEntity dummyMovie = FakeData.getMovieData(false);
 
     @Rule
     public ActivityTestRule<MovieDetailsActivity> activityRule = new ActivityTestRule<MovieDetailsActivity>(MovieDetailsActivity.class) {
@@ -45,10 +44,17 @@ public class MovieDetailsActivityTest {
 
     @Test
     public void loadData() {
-        onView(ViewMatchers.withId(R.id.txt_title)).check(matches(isDisplayed()));
+        //menunggu 3 detik lagi baru ready
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        onView(withId(R.id.txt_title)).check(matches(isDisplayed()));
         onView(withId(R.id.txt_title)).check(matches(withText(dummyMovie.getTitle())));
 
-        //Rating bisa berubah-ubah
+        //Rating bisa berubah-ubah setiap harinya
         onView(withId(R.id.txt_rating)).check(matches(isDisplayed()));
         onView(withId(R.id.txt_rating)).check(matches(withText(String.valueOf(dummyMovie.getVoteAverage()))));
 
@@ -56,12 +62,8 @@ public class MovieDetailsActivityTest {
         onView(withId(R.id.txt_release_date)).check(matches(isDisplayed()));
         onView(withId(R.id.txt_release_date)).check(matches(withText(dummyMovie.getReleaseDate())));
 
-        onView(withId(R.id.txt_overview)).check(matches(isDisplayed()));
+        //Overview juga kemungkinan bisa berubah
         onView(withId(R.id.txt_overview)).check(matches(withText(dummyMovie.getOverview())));
-
-        onView(withId(R.id.rv_details_cast)).check(matches(isDisplayed()));
-
-        onView(withId(R.id.rv_details_genres)).check(matches(isDisplayed()));
     }
 
     @After

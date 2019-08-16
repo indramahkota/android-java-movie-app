@@ -12,7 +12,7 @@ public class FakeData {
         String[] data1 = {"/dzBtMocZuJbjLOXvrl4zGYigDzh.jpg",
                 "/1TUg5pO1VZ4B0Q1amk3OlXvlpXV.jpg", "420818", "The Lion King",
                 "Simba idolises his father, King Mufasa, and takes to heart his own royal destiny. But not everyone in the kingdom celebrates the new cub's arrival. Scar, Mufasa's brother—and former heir to the throne—has plans of his own. The battle for Pride Rock is ravaged with betrayal, tragedy and drama, ultimately resulting in Simba's exile. With help from a curious pair of newfound friends, Simba will have to figure out how to grow up and take back what is rightfully his.",
-                "12, Jul 2019", "7.1"};
+                "12, Jul 2019", "7.2"};
         data.add(data1);
 
         String[] data2 = {"/fki3kBlwJzFp8QohL43g9ReV455.jpg",
@@ -37,7 +37,6 @@ public class FakeData {
             movie.setOverview(arrayData.get(i)[4]);
             movie.setReleaseDate(arrayData.get(i)[5]);
             movie.setVoteAverage(Double.valueOf(arrayData.get(i)[6]));
-            movie.setOriginalLanguage(arrayData.get(i)[7]);
             movie.setFavorite(favorite);
             movieEntities.add(movie);
         }
@@ -59,7 +58,6 @@ public class FakeData {
             tvShow.setOverview(arrayData.get(i)[4]);
             tvShow.setFirstAirDate(arrayData.get(i)[5]);
             tvShow.setVoteAverage(Double.valueOf(arrayData.get(i)[6]));
-            tvShow.setOriginalLanguage(arrayData.get(i)[7]);
             tvShow.setFavorite(favorite);
             tvShowEntities.add(tvShow);
         }
@@ -67,7 +65,7 @@ public class FakeData {
         return tvShowEntities;
     }
 
-    public static MovieEntity getMovieData() {
+    public static MovieEntity getMovieData(boolean favorite) {
         ArrayList<String[]> arrayData = generateStringData();
         MovieEntity movie = new MovieEntity();
         movie.setPosterPath(arrayData.get(0)[0]);
@@ -77,10 +75,11 @@ public class FakeData {
         movie.setOverview(arrayData.get(0)[4]);
         movie.setReleaseDate(arrayData.get(0)[5]);
         movie.setVoteAverage(Double.valueOf(arrayData.get(0)[6]));
+        movie.setFavorite(favorite);
         return movie;
     }
 
-    public static TvShowEntity getTvShowData() {
+    public static TvShowEntity getTvShowData(boolean favorite) {
         ArrayList<String[]> arrayData = generateStringData();
         TvShowEntity tvShow = new TvShowEntity();
         tvShow.setPosterPath(arrayData.get(1)[0]);
@@ -90,6 +89,7 @@ public class FakeData {
         tvShow.setOverview(arrayData.get(1)[4]);
         tvShow.setFirstAirDate(arrayData.get(1)[5]);
         tvShow.setVoteAverage(Double.valueOf(arrayData.get(1)[6]));
+        tvShow.setFavorite(favorite);
         return tvShow;
     }
 }

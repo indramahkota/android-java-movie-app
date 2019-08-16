@@ -64,8 +64,8 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
         if (savedInstanceState == null) {
             setTitle(R.string.list_movies);
             mode = R.id.navigation_movie;
-            showMovieFragment();
             movieCounter++;
+            showMovieFragment();
         } else {
             setMode(savedInstanceState.getInt(STATE_MODE));
             movieCounter = savedInstanceState.getInt(SCROLL_STATE_MOVIE);
@@ -117,23 +117,23 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             case R.id.navigation_movie:
                 mode = R.id.navigation_movie;
                 setTitle(R.string.list_movies);
-                showMovieFragment();
                 movieCounter++;
                 tvShowCounter = 0;
+                showMovieFragment();
                 return true;
             case R.id.navigation_tv_show:
                 mode = R.id.navigation_tv_show;
                 setTitle(R.string.list_tv_shows);
-                showTvShowFragment();
                 tvShowCounter++;
                 movieCounter = 0;
+                showTvShowFragment();
                 return true;
             case R.id.navigation_favorite:
                 mode = R.id.navigation_favorite;
                 setTitle(R.string.list_favorites);
-                showFavoriteFragment();
                 movieCounter = 0;
                 tvShowCounter = 0;
+                showFavoriteFragment();
                 return true;
         }
         return false;
