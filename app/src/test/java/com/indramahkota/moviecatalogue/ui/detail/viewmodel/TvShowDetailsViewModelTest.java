@@ -1,6 +1,7 @@
 package com.indramahkota.moviecatalogue.ui.detail.viewmodel;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
@@ -15,7 +16,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -40,17 +40,15 @@ public class TvShowDetailsViewModelTest {
 
     @Test
     public void testApiFetchData() {
-        when(movieCatalogueRepository.loadTvShowDetails(1L)).thenReturn(FakeData.getTvShowLiveData());
+        Resource<TvShowEntity> tvShowEntity = FakeData.getResourceTvShow();
+        MutableLiveData<Resource<TvShowEntity>> liveData = new MutableLiveData<>();
+        liveData.setValue(tvShowEntity);
+
+        when(movieCatalogueRepository.loadTvShowDetails(1L)).thenReturn(liveData);
 
         tvShowDetailsViewModel.setTvShowId(1L);
 
-        Resource<TvShowEntity> tvShowEntity = tvShowDetailsViewModel.tvShowDetail.getValue();
-
-        verify(movieCatalogueRepository).loadTvShowDetails(1L);
         verify(observer).onChanged(tvShowEntity);
-
-        assertNotNull(tvShowEntity);
-        assertNotNull(tvShowEntity.data);
     }
 
     @After

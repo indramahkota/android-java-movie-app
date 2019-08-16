@@ -1,15 +1,14 @@
 package com.indramahkota.moviecatalogue.utils;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-
 import com.indramahkota.moviecatalogue.data.source.Resource;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
 import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FakeData {
     private static ArrayList<String[]> generateStringData() {
@@ -77,8 +76,7 @@ public class FakeData {
         return data;
     }
 
-    public static LiveData<Resource<DiscoverMovieResponse>> getListMovieLiveData() {
-        MutableLiveData<Resource<DiscoverMovieResponse>> liveData = new MutableLiveData<>();
+    public static Resource<DiscoverMovieResponse> getResourceListMovie() {
         ArrayList<MovieEntity> movieEntities = new ArrayList<>();
         ArrayList<String[]> arrayData = generateStringData();
         int len = arrayData.size();
@@ -97,16 +95,14 @@ public class FakeData {
         }
 
         DiscoverMovieResponse discoverMovie = new DiscoverMovieResponse();
-        discoverMovie.setPage(1);
-        discoverMovie.setTotalPages(1);
+        discoverMovie.setPage(1L);
+        discoverMovie.setTotalPages(1L);
         discoverMovie.setResults(movieEntities);
 
-        liveData.setValue(Resource.success(discoverMovie));
-        return liveData;
+        return Resource.success(discoverMovie);
     }
 
-    public static LiveData<Resource<DiscoverTvShowResponse>> getListTvShowLiveData() {
-        MutableLiveData<Resource<DiscoverTvShowResponse>> liveData = new MutableLiveData<>();
+    public static Resource<DiscoverTvShowResponse> getResourceListTvShow() {
         ArrayList<TvShowEntity> tvShowEntities = new ArrayList<>();
         ArrayList<String[]> arrayData = generateStringData();
         int len = arrayData.size();
@@ -125,16 +121,14 @@ public class FakeData {
         }
 
         DiscoverTvShowResponse discoverTvShow = new DiscoverTvShowResponse();
-        discoverTvShow.setPage(1);
-        discoverTvShow.setTotalPages(1);
+        discoverTvShow.setPage(1L);
+        discoverTvShow.setTotalPages(1L);
         discoverTvShow.setResults(tvShowEntities);
 
-        liveData.setValue(Resource.success(discoverTvShow));
-        return liveData;
+        return Resource.success(discoverTvShow);
     }
 
-    public static LiveData<Resource<MovieEntity>> getMovieLiveData() {
-        MutableLiveData<Resource<MovieEntity>> liveData = new MutableLiveData<>();
+    public static Resource<MovieEntity> getResourceMovie() {
         ArrayList<String[]> arrayData = generateStringData();
         MovieEntity movie = new MovieEntity();
         movie.setPosterPath(arrayData.get(0)[0]);
@@ -145,12 +139,10 @@ public class FakeData {
         movie.setReleaseDate(arrayData.get(0)[5]);
         movie.setVoteAverage(Double.valueOf(arrayData.get(0)[6]));
         movie.setOriginalLanguage(arrayData.get(0)[7]);
-        liveData.setValue(Resource.success(movie));
-        return liveData;
+        return Resource.success(movie);
     }
 
-    public static LiveData<Resource<TvShowEntity>> getTvShowLiveData() {
-        MutableLiveData<Resource<TvShowEntity>> liveData = new MutableLiveData<>();
+    public static Resource<TvShowEntity> getResourceTvShow() {
         ArrayList<String[]> arrayData = generateStringData();
         TvShowEntity tvShow = new TvShowEntity();
         tvShow.setPosterPath(arrayData.get(0)[0]);
@@ -161,11 +153,10 @@ public class FakeData {
         tvShow.setFirstAirDate(arrayData.get(0)[5]);
         tvShow.setVoteAverage(Double.valueOf(arrayData.get(0)[6]));
         tvShow.setOriginalLanguage(arrayData.get(0)[7]);
-        liveData.setValue(Resource.success(tvShow));
-        return liveData;
+        return Resource.success(tvShow);
     }
 
-    /*private static ArrayList<LanguageEntity> generateLanguageData() {
+    public static Resource<List<LanguageEntity>> getLanguages () {
         ArrayList<LanguageEntity> data = new ArrayList<>();
         LanguageEntity lang1 = new LanguageEntity();
         lang1.setEnglishName("English");
@@ -186,12 +177,6 @@ public class FakeData {
         LanguageEntity lang5 = new LanguageEntity();
         lang5.setEnglishName("Javanese");
         data.add(lang5);
-        return data;
+        return Resource.success(data);
     }
-
-    public static LiveData<Resource<List<LanguageEntity>>> getLanguages () {
-        MutableLiveData<Resource<List<LanguageEntity>>> listLanguage = new MutableLiveData<>();
-        listLanguage.setValue(Resource.success(generateLanguageData()));
-        return listLanguage;
-    }*/
 }

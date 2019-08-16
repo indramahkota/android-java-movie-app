@@ -43,4 +43,6 @@
     <string name="page">Halaman:</string>
     <string name="reset_page">Mengembalikan ke Halaman:</string>
     <string name="success">Sukses memuat data</string>
+    <string name="message_undo">Apakah kamu ingin membatalkan?</string>
+    <string name="refresh">Perbaharui</string>
 </resources>

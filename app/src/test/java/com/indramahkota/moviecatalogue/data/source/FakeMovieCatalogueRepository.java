@@ -31,7 +31,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 @Singleton
-public class MovieCatalogueRepository implements MovieCatalogueDataSource {
+public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
     private static final String TAG = "REPOSITORY";
 
     private final AppDao dao;
@@ -39,7 +39,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
     private final AppExecutors exec;
 
     @Inject
-    public MovieCatalogueRepository(AppDao appDao, ApiEndPoint apiEndPoint, AppExecutors exec){
+    public FakeMovieCatalogueRepository(AppDao appDao, ApiEndPoint apiEndPoint, AppExecutors exec){
         this.dao = appDao;
         this.api = apiEndPoint;
         this.exec = exec;

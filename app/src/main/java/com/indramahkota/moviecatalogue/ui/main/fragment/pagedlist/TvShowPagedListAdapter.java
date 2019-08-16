@@ -83,6 +83,10 @@ public class TvShowPagedListAdapter extends PagedListAdapter<TvShowEntity, TvSho
         }
     }
 
+    public TvShowEntity getItemById(int swipedPosition) {
+        return getItem(swipedPosition);
+    }
+
     class TvShowViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imgPoster;
         private final TextView txtTitle;

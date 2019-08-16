@@ -1,6 +1,7 @@
 package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
@@ -15,8 +16,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,18 +40,15 @@ public class TvShowFragmentViewModelTest {
 
     @Test
     public void testApiFetchData() {
-        when(movieCatalogueRepository.loadListTvShow(1L)).thenReturn(FakeData.getListTvShowLiveData());
+        Resource<DiscoverTvShowResponse> discoverTvShow = FakeData.getResourceListTvShow();
+        MutableLiveData<Resource<DiscoverTvShowResponse>> liveData = new MutableLiveData<>();
+        liveData.setValue(discoverTvShow);
+
+        when(movieCatalogueRepository.loadListTvShow(1L)).thenReturn(liveData);
 
         tvShowFragmentViewModel.loadMoreTvShows(1L);
 
-        Resource<DiscoverTvShowResponse> discoverTvShow = tvShowFragmentViewModel.listDiscoverTvShow.getValue();
-
-        verify(movieCatalogueRepository).loadListTvShow(1L);
         verify(observer).onChanged(discoverTvShow);
-
-        assertNotNull(discoverTvShow);
-        assertNotNull(discoverTvShow.data);
-        assertEquals(10, discoverTvShow.data.getResults().size());
     }
 
     @After

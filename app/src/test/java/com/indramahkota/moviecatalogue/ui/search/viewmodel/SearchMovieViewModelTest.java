@@ -1,6 +1,7 @@
 package com.indramahkota.moviecatalogue.ui.search.viewmodel;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
@@ -15,8 +16,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,19 +40,16 @@ public class SearchMovieViewModelTest {
 
     @Test
     public void testApiFetchData() {
-        when(movieCatalogueRepository.searchListMovie("Test", 1L)).thenReturn(FakeData.getListMovieLiveData());
+        Resource<DiscoverMovieResponse> discoverMovie = FakeData.getResourceListMovie();
+        MutableLiveData<Resource<DiscoverMovieResponse>> liveData = new MutableLiveData<>();
+        liveData.setValue(discoverMovie);
+
+        when(movieCatalogueRepository.searchListMovie("Test", 1L)).thenReturn(liveData);
 
         searchViewModel.setQuery("Test");
         searchViewModel.loadMoreMovies(1L);
 
-        Resource<DiscoverMovieResponse> discoverMovie = searchViewModel.searchMovie.getValue();
-
-        verify(movieCatalogueRepository).searchListMovie("Test", 1L);
         verify(movieObserver).onChanged(discoverMovie);
-
-        assertNotNull(discoverMovie);
-        assertNotNull(discoverMovie.data);
-        assertEquals(10, discoverMovie.data.getResults().size());
     }
 
     @After

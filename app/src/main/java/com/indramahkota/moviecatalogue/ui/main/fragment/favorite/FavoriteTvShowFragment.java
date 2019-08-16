@@ -5,16 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.snackbar.Snackbar;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.fragment.pagedlist.TvShowPagedListAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteTvShowViewModel;
@@ -32,8 +36,55 @@ public class FavoriteTvShowFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private ShimmerFrameLayout mShimmerViewContainer;
     private Integer scrollPosition = 0;
-    private RecyclerView rvTvShows;
     private RelativeLayout relativeLayout;
+    private FavoriteTvShowViewModel favoriteTvShowViewModel;
+    private TvShowPagedListAdapter favoriteTvShowAdapter;
+    private ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+        @Override
+        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            // Aksi di bawah digunakan untuk melakukan swap ke kenan dan ke kiri
+            return makeMovementFlags(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return true;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            if (getView() != null) {
+                // Sebelum melakukan penghapusan, course harus mendapatkan posisi dari item yang di swipe
+                int swipedPosition = viewHolder.getAdapterPosition();
+
+                // Kemudian memanggil CourseEntity sesuai posisi ketika diswipe
+                TvShowEntity tvShowEntity = favoriteTvShowAdapter.getItemById(swipedPosition);
+                if(tvShowEntity.getFavorite()) {
+                    tvShowEntity.setFavorite(false);
+                } else {
+                    tvShowEntity.setFavorite(true);
+                }
+
+                // Melakukan setBookmark untuk menghapus bookmark dari list course
+                favoriteTvShowViewModel.updateTvShow(tvShowEntity);
+
+                if(tvShowEntity.getFavorite()) {
+                    tvShowEntity.setFavorite(false);
+                } else {
+                    tvShowEntity.setFavorite(true);
+                }
+
+                // Memanggil Snackbar untuk melakukan pengecekan, apakah benar melakukan penghapusan bookmark
+                Snackbar snackbar = Snackbar.make(getView(), R.string.message_undo, Snackbar.LENGTH_LONG);
+
+                // Mengembalikan item yang terhapus
+                snackbar.setAction(R.string.message_ok, v -> favoriteTvShowViewModel.updateTvShow(tvShowEntity));
+
+                // Menampilkan snackbar
+                snackbar.show();
+            }
+        }
+    });
 
     public static FavoriteTvShowFragment newInstance(String title) {
         FavoriteTvShowFragment fragment = new FavoriteTvShowFragment();
@@ -76,25 +127,39 @@ public class FavoriteTvShowFragment extends Fragment {
         mShimmerViewContainer.setVisibility(View.GONE);
 
         linearLayoutManager = new LinearLayoutManager(view.getContext());
-        rvTvShows = view.findViewById(R.id.rv_category);
+        RecyclerView rvTvShows = view.findViewById(R.id.rv_category);
         rvTvShows.setLayoutManager(linearLayoutManager);
         rvTvShows.setHasFixedSize(true);
+        itemTouchHelper.attachToRecyclerView(rvTvShows);
+
+        favoriteTvShowAdapter = new TvShowPagedListAdapter(getContext());
+        rvTvShows.setAdapter(favoriteTvShowAdapter);
 
         relativeLayout = view.findViewById(R.id.favorite_empty_indicator);
         relativeLayout.setVisibility(View.GONE);
 
-        FavoriteTvShowViewModel favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
+        favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
         favoriteTvShowViewModel.getListTvShow().observe(this, tvShows -> {
-            TvShowPagedListAdapter favoriteTvShowAdapter = new TvShowPagedListAdapter(getContext());
-            favoriteTvShowAdapter.submitList(tvShows);
+            if(tvShows.data != null) {
+                switch (tvShows.status) {
+                    case LOADING:
+                        mShimmerViewContainer.setVisibility(View.VISIBLE);
+                        break;
+                    case SUCCESS:
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        favoriteTvShowAdapter.submitList(tvShows.data);
+                        favoriteTvShowAdapter.notifyDataSetChanged();
+                        linearLayoutManager.scrollToPosition(scrollPosition);
+                        break;
+                    case ERROR:
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                        break;
+                }
 
-            rvTvShows.setAdapter(favoriteTvShowAdapter);
-            linearLayoutManager.scrollToPosition(scrollPosition);
-
-            if(tvShows.size() > 0) {
-                relativeLayout.setVisibility(View.GONE);
-            } else {
-                relativeLayout.setVisibility(View.VISIBLE);
+                if(tvShows.data.size() < 1) {
+                    relativeLayout.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

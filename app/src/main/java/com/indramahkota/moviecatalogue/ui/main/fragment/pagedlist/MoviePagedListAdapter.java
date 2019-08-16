@@ -83,6 +83,10 @@ public class MoviePagedListAdapter extends PagedListAdapter<MovieEntity, MoviePa
         }
     }
 
+    public MovieEntity getItemById(int swipedPosition) {
+        return getItem(swipedPosition);
+    }
+
     class MovieViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imgPoster;
         private final TextView txtTitle;

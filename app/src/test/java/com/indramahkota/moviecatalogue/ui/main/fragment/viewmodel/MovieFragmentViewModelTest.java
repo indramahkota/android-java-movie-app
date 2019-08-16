@@ -1,6 +1,7 @@
 package com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
@@ -15,8 +16,6 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -41,18 +40,15 @@ public class MovieFragmentViewModelTest {
 
     @Test
     public void testApiFetchData() {
-        when(movieCatalogueRepository.loadListMovie(1L)).thenReturn(FakeData.getListMovieLiveData());
+        Resource<DiscoverMovieResponse> discoverMovie = FakeData.getResourceListMovie();
+        MutableLiveData<Resource<DiscoverMovieResponse>> liveData = new MutableLiveData<>();
+        liveData.setValue(discoverMovie);
+
+        when(movieCatalogueRepository.loadListMovie(1L)).thenReturn(liveData);
 
         movieFragmentViewModel.loadMoreMovies(1L);
 
-        Resource<DiscoverMovieResponse> discoverMovie = movieFragmentViewModel.listDiscoverMovie.getValue();
-
-        verify(movieCatalogueRepository).loadListMovie(1L);
         verify(observer).onChanged(discoverMovie);
-
-        assertNotNull(discoverMovie);
-        assertNotNull(discoverMovie.data);
-        assertEquals(10, discoverMovie.data.getResults().size());
     }
 
     @After

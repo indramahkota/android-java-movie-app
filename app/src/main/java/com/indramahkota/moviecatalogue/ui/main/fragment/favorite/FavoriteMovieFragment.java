@@ -5,16 +5,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.snackbar.Snackbar;
 import com.indramahkota.moviecatalogue.R;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.fragment.pagedlist.MoviePagedListAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteMovieViewModel;
@@ -32,8 +36,55 @@ public class FavoriteMovieFragment extends Fragment {
     private LinearLayoutManager linearLayoutManager;
     private ShimmerFrameLayout mShimmerViewContainer;
     private Integer scrollPosition = 0;
-    private RecyclerView rvMovies;
     private RelativeLayout relativeLayout;
+    private MoviePagedListAdapter favoriteMovieAdapter;
+    private FavoriteMovieViewModel favoriteMovieViewModel;
+    private ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+        @Override
+        public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
+            // Aksi di bawah digunakan untuk melakukan swap ke kenan dan ke kiri
+            return makeMovementFlags(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT);
+        }
+
+        @Override
+        public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+            return true;
+        }
+
+        @Override
+        public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+            if (getView() != null) {
+                // Sebelum melakukan penghapusan, course harus mendapatkan posisi dari item yang di swipe
+                int swipedPosition = viewHolder.getAdapterPosition();
+
+                // Kemudian memanggil CourseEntity sesuai posisi ketika diswipe
+                MovieEntity movieEntity = favoriteMovieAdapter.getItemById(swipedPosition);
+                if(movieEntity.getFavorite()) {
+                    movieEntity.setFavorite(false);
+                } else {
+                    movieEntity.setFavorite(true);
+                }
+
+                // Melakukan setBookmark untuk menghapus bookmark dari list course
+                favoriteMovieViewModel.updateMovie(movieEntity);
+
+                if(movieEntity.getFavorite()) {
+                    movieEntity.setFavorite(false);
+                } else {
+                    movieEntity.setFavorite(true);
+                }
+
+                // Memanggil Snackbar untuk melakukan pengecekan, apakah benar melakukan penghapusan bookmark
+                Snackbar snackbar = Snackbar.make(getView(), R.string.message_undo, Snackbar.LENGTH_LONG);
+
+                // Mengembalikan item yang terhapus
+                snackbar.setAction(R.string.message_ok, v -> favoriteMovieViewModel.updateMovie(movieEntity));
+
+                // Menampilkan snackbar
+                snackbar.show();
+            }
+        }
+    });
 
     public static FavoriteMovieFragment newInstance(String title) {
         FavoriteMovieFragment fragment = new FavoriteMovieFragment();
@@ -76,25 +127,39 @@ public class FavoriteMovieFragment extends Fragment {
         mShimmerViewContainer.setVisibility(View.GONE);
 
         linearLayoutManager = new LinearLayoutManager(view.getContext());
-        rvMovies = view.findViewById(R.id.rv_category);
+        RecyclerView rvMovies = view.findViewById(R.id.rv_category);
         rvMovies.setLayoutManager(linearLayoutManager);
         rvMovies.setHasFixedSize(true);
+        itemTouchHelper.attachToRecyclerView(rvMovies);
+
+        favoriteMovieAdapter = new MoviePagedListAdapter(getContext());
+        rvMovies.setAdapter(favoriteMovieAdapter);
 
         relativeLayout = view.findViewById(R.id.favorite_empty_indicator);
         relativeLayout.setVisibility(View.GONE);
 
-        FavoriteMovieViewModel favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
+        favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
         favoriteMovieViewModel.getListMovie().observe(this, movies -> {
-            MoviePagedListAdapter favoriteMovieAdapter = new MoviePagedListAdapter(getContext());
-            favoriteMovieAdapter.submitList(movies);
+            if(movies.data != null) {
+                switch (movies.status) {
+                    case LOADING:
+                        mShimmerViewContainer.setVisibility(View.VISIBLE);
+                        break;
+                    case SUCCESS:
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        favoriteMovieAdapter.submitList(movies.data);
+                        favoriteMovieAdapter.notifyDataSetChanged();
+                        linearLayoutManager.scrollToPosition(scrollPosition);
+                        break;
+                    case ERROR:
+                        mShimmerViewContainer.setVisibility(View.GONE);
+                        Toast.makeText(getContext(), getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
+                        break;
+                }
 
-            rvMovies.setAdapter(favoriteMovieAdapter);
-            linearLayoutManager.scrollToPosition(scrollPosition);
-
-            if(movies.size() > 0) {
-                relativeLayout.setVisibility(View.GONE);
-            } else {
-                relativeLayout.setVisibility(View.VISIBLE);
+                if(movies.data.size() < 1) {
+                    relativeLayout.setVisibility(View.VISIBLE);
+                }
             }
         });
     }

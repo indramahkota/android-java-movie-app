@@ -138,7 +138,7 @@ public class MovieFragment extends Fragment {
             viewModel.loadMoreMovies(currentPage);
             relativeLayout.setVisibility(View.GONE);
             mShimmerViewContainer.setVisibility(View.VISIBLE);
-            showToast(getResources().getString(R.string.reset_page) + " " + currentPage);
+            showToast(getResources().getString(R.string.refresh));
         });
 
         viewModel.listDiscoverMovie.observe(this, discoverMovieResponseResource -> {
@@ -166,7 +166,7 @@ public class MovieFragment extends Fragment {
                                 mShimmerViewContainer.setVisibility(View.GONE);
                             }
                             new Handler().postDelayed(() -> isLoading = false, 2000);
-                            showToast(getResources().getString(R.string.success));
+                            //showToast(getResources().getString(R.string.success));
                             break;
                         case ERROR:
                             //show error
@@ -189,7 +189,7 @@ public class MovieFragment extends Fragment {
                                 mShimmerViewContainer.setVisibility(View.GONE);
                             }
                             new Handler().postDelayed(() -> isLoading = false, 2000);
-                            showToast(getResources().getString(R.string.error));
+                            //showToast(getResources().getString(R.string.error));
                             break;
                     }
                 }

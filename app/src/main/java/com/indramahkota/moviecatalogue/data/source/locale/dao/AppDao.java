@@ -57,7 +57,7 @@ public interface AppDao {
 
     @WorkerThread
     @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE favorite = 1")
-    DataSource.Factory<Integer, TvShowEntity> selectAllTvShow();
+    DataSource.Factory<Integer, TvShowEntity> selectAllFavoriteTvShow();
 
     @WorkerThread
     @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE page = :currentPage")

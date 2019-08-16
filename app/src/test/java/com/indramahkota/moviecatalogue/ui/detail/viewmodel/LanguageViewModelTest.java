@@ -1,4 +1,4 @@
-package com.indramahkota.moviecatalogue.ui.search.viewmodel;
+package com.indramahkota.moviecatalogue.ui.detail.viewmodel;
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule;
 import androidx.lifecycle.MutableLiveData;
@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.utils.FakeData;
 
 import org.junit.After;
@@ -16,45 +16,45 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.List;
+
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class SearchTvShowViewModelTest {
+public class LanguageViewModelTest {
     @Rule
     public InstantTaskExecutorRule instantExecutorRule = new InstantTaskExecutorRule();
 
     @Mock
     MovieCatalogueRepository movieCatalogueRepository;
 
-    private SearchTvShowViewModel searchViewModel;
+    private LanguageViewModel languageViewModel;
 
     @Mock
-    Observer<Resource<DiscoverTvShowResponse>> tvShowObserver;
+    Observer<Resource<List<LanguageEntity>>> observer;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        searchViewModel = new SearchTvShowViewModel(movieCatalogueRepository);
-        searchViewModel.searchTvShow.observeForever(tvShowObserver);
+        languageViewModel = new LanguageViewModel(movieCatalogueRepository);
     }
 
     @Test
     public void testApiFetchData() {
-        Resource<DiscoverTvShowResponse> discoverTvShow = FakeData.getResourceListTvShow();
-        MutableLiveData<Resource<DiscoverTvShowResponse>> liveData = new MutableLiveData<>();
-        liveData.setValue(discoverTvShow);
+        Resource<List<LanguageEntity>> languageResources = FakeData.getLanguages();
+        MutableLiveData<Resource<List<LanguageEntity>>> liveData = new MutableLiveData<>();
+        liveData.setValue(languageResources);
 
-        when(movieCatalogueRepository.searchListTvShow("Test", 1L)).thenReturn(liveData);
+        when(movieCatalogueRepository.loadLanguage()).thenReturn(liveData);
 
-        searchViewModel.setQuery("Test");
-        searchViewModel.loadMoreMovies(1L);
+        languageViewModel.getLanguages().observeForever(observer);
 
-        verify(tvShowObserver).onChanged(discoverTvShow);
+        verify(observer).onChanged(languageResources);
     }
 
     @After
     public void tearDown() {
         movieCatalogueRepository = null;
-        searchViewModel = null;
+        languageViewModel = null;
     }
 }
