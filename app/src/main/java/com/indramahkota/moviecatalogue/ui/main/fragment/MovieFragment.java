@@ -210,6 +210,10 @@ public class MovieFragment extends Fragment {
         }
     }
 
+    public void scrollToTop() {
+        rvFragmentMovies.smoothScrollToPosition(0);
+    }
+
     private void showToast(String message) {
         if(mToast != null)
             mToast.cancel();

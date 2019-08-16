@@ -28,6 +28,10 @@ import dagger.android.support.HasSupportFragmentInjector;
 
 public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
     private static final String STATE_MODE = "state_mode";
+    private static final String SCROLL_STATE_MOVIE = "movie_rv_scroll_state";
+    private static final String FRAGMENT_STATE_MOVIE = "movie_fragment_state";
+    private static final String SCROLL_STATE_TV_SHOW = "tv_show_rv_scroll_state";
+    private static final String FRAGMENT_STATE_TV_SHOW = "tv_show_fragment_state";
 
     private int mode;
     private FragmentManager mFragmentManager;
@@ -36,6 +40,9 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private MovieFragment mMovieFragment;
     private TvShowFragment mTvShowFragment;
     private FavoriteFragment mFavoriteFragment;
+
+    private int movieCounter = 0;
+    private int tvShowCounter = 0;
 
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
@@ -58,8 +65,17 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             setTitle(R.string.list_movies);
             mode = R.id.navigation_movie;
             showMovieFragment();
+            movieCounter++;
         } else {
             setMode(savedInstanceState.getInt(STATE_MODE));
+            movieCounter = savedInstanceState.getInt(SCROLL_STATE_MOVIE);
+            tvShowCounter = savedInstanceState.getInt(SCROLL_STATE_TV_SHOW);
+
+            if(mode == R.id.navigation_movie) {
+                mMovieFragment = (MovieFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_STATE_MOVIE);
+            } else if(mode == R.id.navigation_tv_show) {
+                mTvShowFragment = (TvShowFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_STATE_TV_SHOW);
+            }
         }
     }
 
@@ -67,6 +83,14 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_MODE, mode);
+        outState.putInt(SCROLL_STATE_MOVIE, movieCounter);
+        outState.putInt(SCROLL_STATE_TV_SHOW, tvShowCounter);
+
+        if(mode == R.id.navigation_movie) {
+            getSupportFragmentManager().putFragment(outState, FRAGMENT_STATE_MOVIE, mMovieFragment);
+        } else if(mode == R.id.navigation_tv_show) {
+            getSupportFragmentManager().putFragment(outState, FRAGMENT_STATE_TV_SHOW, mTvShowFragment);
+        }
     }
 
     @Override
@@ -94,16 +118,22 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
                 mode = R.id.navigation_movie;
                 setTitle(R.string.list_movies);
                 showMovieFragment();
+                movieCounter++;
+                tvShowCounter = 0;
                 return true;
             case R.id.navigation_tv_show:
                 mode = R.id.navigation_tv_show;
                 setTitle(R.string.list_tv_shows);
                 showTvShowFragment();
+                tvShowCounter++;
+                movieCounter = 0;
                 return true;
             case R.id.navigation_favorite:
                 mode = R.id.navigation_favorite;
                 setTitle(R.string.list_favorites);
                 showFavoriteFragment();
+                movieCounter = 0;
+                tvShowCounter = 0;
                 return true;
         }
         return false;
@@ -112,6 +142,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private void showMovieFragment() {
         if(mMovieFragment == null) {
             mMovieFragment = new MovieFragment();
+        }
+
+        if(movieCounter > 1) {
+            mMovieFragment.scrollToTop();
         }
 
         mFragmentTransaction = mFragmentManager.beginTransaction();
@@ -125,6 +159,10 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     private void showTvShowFragment() {
         if(mTvShowFragment == null) {
             mTvShowFragment = new TvShowFragment();
+        }
+
+        if(tvShowCounter > 1) {
+            mTvShowFragment.scrollToTop();
         }
 
         mFragmentTransaction = mFragmentManager.beginTransaction();

@@ -210,6 +210,10 @@ public class TvShowFragment extends Fragment {
         }
     }
 
+    public void scrollToTop() {
+        rvFragmentTvShows.smoothScrollToPosition(0);
+    }
+
     private void showToast(String message) {
         if(mToast != null)
             mToast.cancel();

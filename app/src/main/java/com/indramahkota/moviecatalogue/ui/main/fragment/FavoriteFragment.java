@@ -8,13 +8,13 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.ui.main.adapter.TabPagerAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.favorite.FavoriteMovieFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.favorite.FavoriteTvShowFragment;
+import com.indramahkota.moviecatalogue.ui.utils.CustomViewPager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +49,8 @@ public class FavoriteFragment extends Fragment {
         TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(getChildFragmentManager(), listFragment, listTitle);
         tabPagerAdapter.notifyDataSetChanged();
 
-        ViewPager viewPager = view.findViewById(R.id.view_pager);
+        CustomViewPager viewPager = view.findViewById(R.id.view_pager);
+        viewPager.setPagingEnabled(false);
         viewPager.setAdapter(tabPagerAdapter);
 
         TabLayout tabs = view.findViewById(R.id.tabs);
