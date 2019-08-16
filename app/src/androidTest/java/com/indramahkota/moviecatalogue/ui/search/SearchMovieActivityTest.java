@@ -44,7 +44,7 @@ public class SearchMovieActivityTest {
     public void loadData() {
         onView(withId(R.id.rv_search_category)).check(matches(isDisplayed()));
         onView(withId(R.id.rv_search_category)).check(new RecyclerViewItemCountAssertion(20));
-        onView(withId(R.id.rv_fragment_category)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.rv_search_category)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
     }
 
     @After

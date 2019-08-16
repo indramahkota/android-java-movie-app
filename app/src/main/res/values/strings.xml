@@ -42,7 +42,7 @@
     <string name="error">Error load data</string>
     <string name="page">Page:</string>
     <string name="reset_page">Reset to Page:</string>
-    <string name="success">Success load data</string>
+    <!--<string name="success">Success load data</string>-->
     <string name="message_undo">Do you want to cancel?</string>
     <string name="message_ok" translatable="false">OK</string>
     <string name="refresh">Refresh</string>

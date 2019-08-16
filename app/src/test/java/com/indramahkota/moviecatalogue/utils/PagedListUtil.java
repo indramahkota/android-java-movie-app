@@ -11,7 +11,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class PagedListUtil {
-
+    @SuppressWarnings("unchecked")
     public static <T> PagedList<T> mockPagedList(List<T> list) {
         PagedList<T> pagedList = mock(PagedList.class);
         Answer<T> answer = invocation -> {

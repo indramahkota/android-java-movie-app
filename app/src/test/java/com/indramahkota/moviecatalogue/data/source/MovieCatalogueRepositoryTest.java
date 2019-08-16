@@ -14,8 +14,6 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvSho
 import com.indramahkota.moviecatalogue.utils.InstantAppExecutors;
 import com.indramahkota.moviecatalogue.utils.LiveDataTestUtil;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 
@@ -39,14 +37,6 @@ public class MovieCatalogueRepositoryTest {
     private ApiEndPoint api = mock(ApiEndPoint.class);
     private InstantAppExecutors instantAppExecutors = mock(InstantAppExecutors.class);
     private FakeMovieCatalogueRepository fakeMovieCatalogueRepository = new FakeMovieCatalogueRepository(dao, api, instantAppExecutors);
-
-    @Before
-    public void setUp() {
-    }
-
-    @After
-    public void tearDown() {
-    }
 
     @Test
     public void loadListMovie() {
