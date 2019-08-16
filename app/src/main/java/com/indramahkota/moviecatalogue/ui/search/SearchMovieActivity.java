@@ -16,7 +16,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
-import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.main.adapter.MovieAdapter;
 import com.indramahkota.moviecatalogue.ui.main.fragment.pagination.PaginationScrollListener;
 import com.indramahkota.moviecatalogue.ui.search.viewmodel.SearchMovieViewModel;

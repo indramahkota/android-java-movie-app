@@ -26,6 +26,7 @@ public abstract class NetworkBoundResource<ResultType, RequestType> {
         });
     }
 
+    @SuppressWarnings("EmptyMethod")
     private void onFetchFailed() { }
 
     protected abstract LiveData<ResultType> loadFromDB();

@@ -24,7 +24,6 @@ import com.indramahkota.moviecatalogue.R;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
-import com.indramahkota.moviecatalogue.factory.ViewModelFactory;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.CastAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.adapter.GenreAdapter;
 import com.indramahkota.moviecatalogue.ui.detail.viewmodel.LanguageViewModel;

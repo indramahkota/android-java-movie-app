@@ -9,7 +9,7 @@ public class ViewModelUtil {
         return new ViewModelProvider.Factory() {
             @NonNull
             @Override
-            @SuppressWarnings("unchecked")
+            @SuppressWarnings({"unchecked", "TypeParameterHidesVisibleType"})
             public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
                 if (modelClass.isAssignableFrom(model.getClass())) {
                     return (T) model;
