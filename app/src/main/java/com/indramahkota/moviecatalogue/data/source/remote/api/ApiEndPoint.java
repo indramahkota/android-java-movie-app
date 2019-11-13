@@ -3,8 +3,8 @@ package com.indramahkota.moviecatalogue.data.source.remote.api;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
 
 import java.util.List;
 
@@ -15,12 +15,12 @@ import retrofit2.http.Query;
 
 public interface ApiEndPoint {
     @GET("discover/movie")
-    Call<DiscoverMovieResponse> getDiscoverMovies(@Query("api_key") String apiKey,
-                                                  @Query("page") long page);
+    Call<MovieResponse> getDiscoverMovies(@Query("api_key") String apiKey,
+                                          @Query("page") long page);
 
     @GET("discover/tv")
-    Call<DiscoverTvShowResponse> getDiscoverTvShows(@Query("api_key") String apiKey,
-                                                    @Query("page") long page);
+    Call<TvShowResponse> getDiscoverTvShows(@Query("api_key") String apiKey,
+                                            @Query("page") long page);
 
     @GET("movie/{movie_id}")
     Call<MovieEntity> getMovie(
@@ -35,13 +35,13 @@ public interface ApiEndPoint {
             @Query("append_to_response") String appendToResponse);
 
     @GET("search/movie")
-    Call<DiscoverMovieResponse> searchMovies(
+    Call<MovieResponse> searchMovies(
             @Query("api_key") String apiKey,
             @Query("query") String query,
             @Query("page") long page);
 
     @GET("search/tv")
-    Call<DiscoverTvShowResponse> searchTvShows(
+    Call<TvShowResponse> searchTvShows(
             @Query("api_key") String apiKey,
             @Query("query") String query,
             @Query("page") long page);

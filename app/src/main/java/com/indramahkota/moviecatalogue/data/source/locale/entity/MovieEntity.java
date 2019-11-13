@@ -11,7 +11,6 @@ import androidx.room.TypeConverters;
 
 import com.google.gson.annotations.SerializedName;
 import com.indramahkota.moviecatalogue.data.source.locale.converter.CreditsTypeConverter;
-import com.indramahkota.moviecatalogue.data.source.locale.converter.DoubleTypeConverter;
 import com.indramahkota.moviecatalogue.data.source.locale.converter.GenresTypeConverter;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Credits;
 import com.indramahkota.moviecatalogue.data.source.remote.response.others.Genres;
@@ -49,7 +48,6 @@ public class MovieEntity implements Parcelable {
     private String releaseDate;
 
     @ColumnInfo(name = VOTE_AVERAGE)
-    @TypeConverters(DoubleTypeConverter.class)
     @SerializedName("vote_average")
     private Double voteAverage;
 

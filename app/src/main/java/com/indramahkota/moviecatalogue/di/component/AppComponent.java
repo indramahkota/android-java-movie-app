@@ -33,7 +33,7 @@ import dagger.android.support.AndroidSupportInjectionModule;
 )
 
 @Singleton
-public interface ApiComponent {
+public interface AppComponent {
     @Component.Builder
     interface Builder {
         @BindsInstance
@@ -45,7 +45,7 @@ public interface ApiComponent {
         @BindsInstance
         Builder dbModule(DbModule dbModule);
 
-        ApiComponent build();
+        AppComponent build();
     }
 
     void inject(MovieCatalogueApp movieCatalogueApp);

@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
 
 import javax.inject.Inject;
 
@@ -15,7 +15,7 @@ public class TvShowFragmentViewModel extends ViewModel {
     private MovieCatalogueRepository repository;
 
     private MutableLiveData<Long> pageHandler = new MutableLiveData<>();
-    public LiveData<Resource<DiscoverTvShowResponse>> listDiscoverTvShow = Transformations.switchMap(pageHandler,
+    public LiveData<Resource<TvShowResponse>> listDiscoverTvShow = Transformations.switchMap(pageHandler,
             page -> repository.loadListTvShow(page));
 
     @Inject

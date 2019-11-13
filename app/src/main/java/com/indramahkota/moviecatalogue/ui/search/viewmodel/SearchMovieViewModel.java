@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
 
 import javax.inject.Inject;
 
@@ -16,7 +16,7 @@ public class SearchMovieViewModel extends ViewModel {
 
     private String stringQuery;
     private MutableLiveData<Long> pageHandler = new MutableLiveData<>();
-    public LiveData<Resource<DiscoverMovieResponse>> searchMovie = Transformations.switchMap(pageHandler,
+    public LiveData<Resource<MovieResponse>> searchMovie = Transformations.switchMap(pageHandler,
             page -> repository.searchListMovie(stringQuery, page));
 
     @Inject

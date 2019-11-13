@@ -10,7 +10,7 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 
 import java.util.List;
 
-public class DiscoverMovieResponse implements Parcelable {
+public class MovieResponse implements Parcelable {
     @SerializedName("page")
     private Long page;
     @SerializedName("results")
@@ -20,9 +20,9 @@ public class DiscoverMovieResponse implements Parcelable {
     @SerializedName("total_pages")
     private Long totalPages;
 
-    public DiscoverMovieResponse() {}
+    public MovieResponse() {}
 
-    private DiscoverMovieResponse(@NonNull Parcel in) {
+    private MovieResponse(@NonNull Parcel in) {
         if (in.readByte() == 0) {
             page = null;
         } else {
@@ -41,15 +41,15 @@ public class DiscoverMovieResponse implements Parcelable {
         }
     }
 
-    public static final Creator<DiscoverMovieResponse> CREATOR = new Creator<DiscoverMovieResponse>() {
+    public static final Creator<MovieResponse> CREATOR = new Creator<MovieResponse>() {
         @Override
-        public DiscoverMovieResponse createFromParcel(Parcel in) {
-            return new DiscoverMovieResponse(in);
+        public MovieResponse createFromParcel(Parcel in) {
+            return new MovieResponse(in);
         }
 
         @Override
-        public DiscoverMovieResponse[] newArray(int size) {
-            return new DiscoverMovieResponse[size];
+        public MovieResponse[] newArray(int size) {
+            return new MovieResponse[size];
         }
     };
 

@@ -13,8 +13,8 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiEndPoint;
 import com.indramahkota.moviecatalogue.data.source.remote.response.ApiResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
 import com.indramahkota.moviecatalogue.ui.utils.AppExecutors;
 
 import java.util.ArrayList;
@@ -46,33 +46,33 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //MovieFragmentViewModel
     @Override
-    public LiveData<Resource<DiscoverMovieResponse>> loadListMovie(Long page) {
-        return new NetworkBoundResource<DiscoverMovieResponse, DiscoverMovieResponse>(exec) {
+    public LiveData<Resource<MovieResponse>> loadListMovie(Long page) {
+        return new NetworkBoundResource<MovieResponse, MovieResponse>(exec) {
             @Override
-            protected LiveData<DiscoverMovieResponse> loadFromDB() {
-                MutableLiveData<DiscoverMovieResponse> dbResourceLiveData = new MutableLiveData<>();
+            protected LiveData<MovieResponse> loadFromDB() {
+                MutableLiveData<MovieResponse> dbResourceLiveData = new MutableLiveData<>();
 
-                DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
-                discoverMovieResponse.setPage(page);
-                discoverMovieResponse.setResults(dao.selectAllMovie(page));
-                dbResourceLiveData.setValue(discoverMovieResponse);
+                MovieResponse movieResponse = new MovieResponse();
+                movieResponse.setPage(page);
+                movieResponse.setResults(dao.selectAllMovie(page));
+                dbResourceLiveData.setValue(movieResponse);
 
                 return dbResourceLiveData;
             }
 
             @Override
-            protected Boolean shouldFetch(DiscoverMovieResponse data) {
+            protected Boolean shouldFetch(MovieResponse data) {
                 return data == null;
             }
 
             @Override
-            protected LiveData<ApiResponse<DiscoverMovieResponse>> createCall() {
-                MutableLiveData<ApiResponse<DiscoverMovieResponse>> resultMovie = new MutableLiveData<>();
+            protected LiveData<ApiResponse<MovieResponse>> createCall() {
+                MutableLiveData<ApiResponse<MovieResponse>> resultMovie = new MutableLiveData<>();
 
-                Call<DiscoverMovieResponse> call = api.getDiscoverMovies(BuildConfig.TMDB_API_KEY, page);
-                call.enqueue(new Callback<DiscoverMovieResponse>() {
+                Call<MovieResponse> call = api.getDiscoverMovies(BuildConfig.TMDB_API_KEY, page);
+                call.enqueue(new Callback<MovieResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<DiscoverMovieResponse> call, @NonNull Response<DiscoverMovieResponse> response) {
+                    public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                         if (response.body() != null) {
                             List<MovieEntity> helper = new ArrayList<>();
                             for(MovieEntity movieEntity : response.body().getResults()) {
@@ -90,24 +90,24 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
                                 }
                                 helper.add(movieEntity);
                             }
-                            DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
-                            discoverMovieResponse.setPage(response.body().getPage());
-                            discoverMovieResponse.setTotalPages(response.body().getTotalPages());
-                            discoverMovieResponse.setResults(helper);
-                            resultMovie.postValue(ApiResponse.success(discoverMovieResponse));
+                            MovieResponse movieResponse = new MovieResponse();
+                            movieResponse.setPage(response.body().getPage());
+                            movieResponse.setTotalPages(response.body().getTotalPages());
+                            movieResponse.setResults(helper);
+                            resultMovie.postValue(ApiResponse.success(movieResponse));
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
-                        resultMovie.setValue(ApiResponse.error(t.getMessage(), new DiscoverMovieResponse()));
+                    public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
+                        resultMovie.setValue(ApiResponse.error(t.getMessage(), new MovieResponse()));
                     }
                 });
                 return resultMovie;
             }
 
             @Override
-            protected void saveCallResult(DiscoverMovieResponse data) {
+            protected void saveCallResult(MovieResponse data) {
                 dao.insertMovies(data.getResults());
             }
         }.asLiveData();
@@ -115,33 +115,33 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //TvShowFragmentViewModel
     @Override
-    public LiveData<Resource<DiscoverTvShowResponse>> loadListTvShow(Long page) {
-        return new NetworkBoundResource<DiscoverTvShowResponse, DiscoverTvShowResponse>(exec) {
+    public LiveData<Resource<TvShowResponse>> loadListTvShow(Long page) {
+        return new NetworkBoundResource<TvShowResponse, TvShowResponse>(exec) {
             @Override
-            protected LiveData<DiscoverTvShowResponse> loadFromDB() {
-                MutableLiveData<DiscoverTvShowResponse> dbResourceLiveData = new MutableLiveData<>();
+            protected LiveData<TvShowResponse> loadFromDB() {
+                MutableLiveData<TvShowResponse> dbResourceLiveData = new MutableLiveData<>();
 
-                DiscoverTvShowResponse discoverTvShowResponse = new DiscoverTvShowResponse();
-                discoverTvShowResponse.setPage(page);
-                discoverTvShowResponse.setResults(dao.selectAllTvShow(page));
-                dbResourceLiveData.setValue(discoverTvShowResponse);
+                TvShowResponse tvShowResponse = new TvShowResponse();
+                tvShowResponse.setPage(page);
+                tvShowResponse.setResults(dao.selectAllTvShow(page));
+                dbResourceLiveData.setValue(tvShowResponse);
 
                 return dbResourceLiveData;
             }
 
             @Override
-            protected Boolean shouldFetch(DiscoverTvShowResponse data) {
+            protected Boolean shouldFetch(TvShowResponse data) {
                 return data == null;
             }
 
             @Override
-            protected LiveData<ApiResponse<DiscoverTvShowResponse>> createCall() {
-                MutableLiveData<ApiResponse<DiscoverTvShowResponse>> resultTvShow = new MutableLiveData<>();
+            protected LiveData<ApiResponse<TvShowResponse>> createCall() {
+                MutableLiveData<ApiResponse<TvShowResponse>> resultTvShow = new MutableLiveData<>();
 
-                Call<DiscoverTvShowResponse> call = api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY, page);
-                call.enqueue(new Callback<DiscoverTvShowResponse>() {
+                Call<TvShowResponse> call = api.getDiscoverTvShows(BuildConfig.TMDB_API_KEY, page);
+                call.enqueue(new Callback<TvShowResponse>() {
                     @Override
-                    public void onResponse(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Response<DiscoverTvShowResponse> response) {
+                    public void onResponse(@NonNull Call<TvShowResponse> call, @NonNull Response<TvShowResponse> response) {
                         if (response.body() != null) {
                             List<TvShowEntity> helper = new ArrayList<>();
                             for(TvShowEntity tvShowEntity : response.body().getResults()) {
@@ -159,24 +159,24 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
                                 }
                                 helper.add(tvShowEntity);
                             }
-                            DiscoverTvShowResponse discoverTvShowResponse = new DiscoverTvShowResponse();
-                            discoverTvShowResponse.setPage(response.body().getPage());
-                            discoverTvShowResponse.setTotalPages(response.body().getTotalPages());
-                            discoverTvShowResponse.setResults(helper);
-                            resultTvShow.postValue(ApiResponse.success(discoverTvShowResponse));
+                            TvShowResponse tvShowResponse = new TvShowResponse();
+                            tvShowResponse.setPage(response.body().getPage());
+                            tvShowResponse.setTotalPages(response.body().getTotalPages());
+                            tvShowResponse.setResults(helper);
+                            resultTvShow.postValue(ApiResponse.success(tvShowResponse));
                         }
                     }
 
                     @Override
-                    public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
-                        resultTvShow.setValue(ApiResponse.error(t.getMessage(), new DiscoverTvShowResponse()));
+                    public void onFailure(@NonNull Call<TvShowResponse> call, @NonNull Throwable t) {
+                        resultTvShow.setValue(ApiResponse.error(t.getMessage(), new TvShowResponse()));
                     }
                 });
                 return resultTvShow;
             }
 
             @Override
-            protected void saveCallResult(DiscoverTvShowResponse data) {
+            protected void saveCallResult(TvShowResponse data) {
                 dao.insertTvShows(data.getResults());
             }
         }.asLiveData();
@@ -374,13 +374,13 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
      * */
     //Search Movie
     @Override
-    public LiveData<Resource<DiscoverMovieResponse>> searchListMovie(String query, Long page) {
-        MutableLiveData<Resource<DiscoverMovieResponse>> resultMovie = new MutableLiveData<>();
+    public LiveData<Resource<MovieResponse>> searchListMovie(String query, Long page) {
+        MutableLiveData<Resource<MovieResponse>> resultMovie = new MutableLiveData<>();
 
-        Call<DiscoverMovieResponse> call = api.searchMovies(BuildConfig.TMDB_API_KEY, query, page);
-        call.enqueue(new Callback<DiscoverMovieResponse>() {
+        Call<MovieResponse> call = api.searchMovies(BuildConfig.TMDB_API_KEY, query, page);
+        call.enqueue(new Callback<MovieResponse>() {
             @Override
-            public void onResponse(@NonNull Call<DiscoverMovieResponse> call, @NonNull Response<DiscoverMovieResponse> response) {
+            public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                 if (response.body() != null) {
                     ArrayList<MovieEntity> helper = new ArrayList<>();
                     for(MovieEntity movieEntity : response.body().getResults()) {
@@ -396,18 +396,18 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
                         }
                         helper.add(movieEntity);
                     }
-                    DiscoverMovieResponse discoverMovieResponse = new DiscoverMovieResponse();
-                    discoverMovieResponse.setPage(response.body().getPage());
-                    discoverMovieResponse.setTotalPages(response.body().getTotalPages());
-                    discoverMovieResponse.setResults(helper);
+                    MovieResponse movieResponse = new MovieResponse();
+                    movieResponse.setPage(response.body().getPage());
+                    movieResponse.setTotalPages(response.body().getTotalPages());
+                    movieResponse.setResults(helper);
                     dao.insertMovies(helper);
-                    resultMovie.postValue(Resource.success(discoverMovieResponse));
+                    resultMovie.postValue(Resource.success(movieResponse));
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<DiscoverMovieResponse> call, @NonNull Throwable t) {
-                resultMovie.setValue(Resource.error(t.getMessage(), new DiscoverMovieResponse()));
+            public void onFailure(@NonNull Call<MovieResponse> call, @NonNull Throwable t) {
+                resultMovie.setValue(Resource.error(t.getMessage(), new MovieResponse()));
             }
         });
 
@@ -416,13 +416,13 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
 
     //Search Tv Show
     @Override
-    public LiveData<Resource<DiscoverTvShowResponse>> searchListTvShow(String query, Long page) {
-        MutableLiveData<Resource<DiscoverTvShowResponse>> resultTvShow = new MutableLiveData<>();
+    public LiveData<Resource<TvShowResponse>> searchListTvShow(String query, Long page) {
+        MutableLiveData<Resource<TvShowResponse>> resultTvShow = new MutableLiveData<>();
 
-        Call<DiscoverTvShowResponse> call = api.searchTvShows(BuildConfig.TMDB_API_KEY, query, page);
-        call.enqueue(new Callback<DiscoverTvShowResponse>() {
+        Call<TvShowResponse> call = api.searchTvShows(BuildConfig.TMDB_API_KEY, query, page);
+        call.enqueue(new Callback<TvShowResponse>() {
             @Override
-            public void onResponse(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Response<DiscoverTvShowResponse> response) {
+            public void onResponse(@NonNull Call<TvShowResponse> call, @NonNull Response<TvShowResponse> response) {
                 if (response.body() != null) {
                     ArrayList<TvShowEntity> helper = new ArrayList<>();
                     for(TvShowEntity tvShowEntity : response.body().getResults()) {
@@ -438,18 +438,18 @@ public class FakeMovieCatalogueRepository implements MovieCatalogueDataSource {
                         }
                         helper.add(tvShowEntity);
                     }
-                    DiscoverTvShowResponse discoverTvShowResponse = new DiscoverTvShowResponse();
-                    discoverTvShowResponse.setPage(response.body().getPage());
-                    discoverTvShowResponse.setTotalPages(response.body().getTotalPages());
-                    discoverTvShowResponse.setResults(helper);
+                    TvShowResponse tvShowResponse = new TvShowResponse();
+                    tvShowResponse.setPage(response.body().getPage());
+                    tvShowResponse.setTotalPages(response.body().getTotalPages());
+                    tvShowResponse.setResults(helper);
                     dao.insertTvShows(helper);
-                    resultTvShow.postValue(Resource.success(discoverTvShowResponse));
+                    resultTvShow.postValue(Resource.success(tvShowResponse));
                 }
             }
 
             @Override
-            public void onFailure(@NonNull Call<DiscoverTvShowResponse> call, @NonNull Throwable t) {
-                resultTvShow.setValue(Resource.error(t.getMessage(), new DiscoverTvShowResponse()));
+            public void onFailure(@NonNull Call<TvShowResponse> call, @NonNull Throwable t) {
+                resultTvShow.setValue(Resource.error(t.getMessage(), new TvShowResponse()));
             }
         });
 

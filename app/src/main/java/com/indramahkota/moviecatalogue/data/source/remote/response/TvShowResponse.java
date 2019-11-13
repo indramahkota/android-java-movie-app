@@ -10,7 +10,7 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 
 import java.util.List;
 
-public class DiscoverTvShowResponse implements Parcelable {
+public class TvShowResponse implements Parcelable {
     @SerializedName("page")
     private Long page;
     @SerializedName("results")
@@ -20,9 +20,9 @@ public class DiscoverTvShowResponse implements Parcelable {
     @SerializedName("total_pages")
     private Long totalPages;
 
-    public DiscoverTvShowResponse() {}
+    public TvShowResponse() {}
 
-    private DiscoverTvShowResponse(@NonNull Parcel in) {
+    private TvShowResponse(@NonNull Parcel in) {
         if (in.readByte() == 0) {
             page = null;
         } else {
@@ -41,15 +41,15 @@ public class DiscoverTvShowResponse implements Parcelable {
         }
     }
 
-    public static final Creator<DiscoverTvShowResponse> CREATOR = new Creator<DiscoverTvShowResponse>() {
+    public static final Creator<TvShowResponse> CREATOR = new Creator<TvShowResponse>() {
         @Override
-        public DiscoverTvShowResponse createFromParcel(Parcel in) {
-            return new DiscoverTvShowResponse(in);
+        public TvShowResponse createFromParcel(Parcel in) {
+            return new TvShowResponse(in);
         }
 
         @Override
-        public DiscoverTvShowResponse[] newArray(int size) {
-            return new DiscoverTvShowResponse[size];
+        public TvShowResponse[] newArray(int size) {
+            return new TvShowResponse[size];
         }
     };
 

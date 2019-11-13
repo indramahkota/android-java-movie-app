@@ -6,8 +6,8 @@ import androidx.paging.PagedList;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
 
 import java.util.List;
 
@@ -16,10 +16,10 @@ public interface MovieCatalogueDataSource {
     * Main Activity
     * */
     //Movie Fragment
-    LiveData<Resource<DiscoverMovieResponse>> loadListMovie(Long page);
+    LiveData<Resource<MovieResponse>> loadListMovie(Long page);
 
     //Tv Show Fragment
-    LiveData<Resource<DiscoverTvShowResponse>> loadListTvShow(Long page);
+    LiveData<Resource<TvShowResponse>> loadListTvShow(Long page);
 
     //Favorite Movie Fragment
     LiveData<Resource<PagedList<MovieEntity>>> getAllMovie();
@@ -45,8 +45,8 @@ public interface MovieCatalogueDataSource {
      * Search Activity
      * */
     //Search Activity
-    LiveData<Resource<DiscoverMovieResponse>> searchListMovie(String query, Long page);
+    LiveData<Resource<MovieResponse>> searchListMovie(String query, Long page);
 
     //Search Activity
-    LiveData<Resource<DiscoverTvShowResponse>> searchListTvShow(String query, Long page);
+    LiveData<Resource<TvShowResponse>> searchListTvShow(String query, Long page);
 }

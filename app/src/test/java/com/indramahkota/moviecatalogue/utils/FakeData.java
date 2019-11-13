@@ -4,8 +4,8 @@ import com.indramahkota.moviecatalogue.data.source.Resource;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -96,8 +96,8 @@ public class FakeData {
         return movieEntities;
     }
 
-    public static Resource<DiscoverMovieResponse> getResourceListMovie() {
-        DiscoverMovieResponse discoverMovie = new DiscoverMovieResponse();
+    public static Resource<MovieResponse> getResourceListMovie() {
+        MovieResponse discoverMovie = new MovieResponse();
         discoverMovie.setPage(1L);
         discoverMovie.setTotalPages(1L);
         discoverMovie.setResults(getListMovie());
@@ -124,8 +124,8 @@ public class FakeData {
         return tvShowEntities;
     }
 
-    public static Resource<DiscoverTvShowResponse> getResourceListTvShow() {
-        DiscoverTvShowResponse discoverTvShow = new DiscoverTvShowResponse();
+    public static Resource<TvShowResponse> getResourceListTvShow() {
+        TvShowResponse discoverTvShow = new TvShowResponse();
         discoverTvShow.setPage(1L);
         discoverTvShow.setTotalPages(1L);
         discoverTvShow.setResults(getListTvShow());

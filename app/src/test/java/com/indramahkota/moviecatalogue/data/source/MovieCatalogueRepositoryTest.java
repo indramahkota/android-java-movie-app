@@ -9,8 +9,8 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.LanguageEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
 import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 import com.indramahkota.moviecatalogue.data.source.remote.api.ApiEndPoint;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
 import com.indramahkota.moviecatalogue.utils.InstantAppExecutors;
 import com.indramahkota.moviecatalogue.utils.LiveDataTestUtil;
 
@@ -44,7 +44,7 @@ public class MovieCatalogueRepositoryTest {
         when(dao.selectAllMovie(1L)).thenReturn(dummyData);
 
         //skip load remote data
-        Resource<DiscoverMovieResponse> result = LiveDataTestUtil.getValue(fakeMovieCatalogueRepository.loadListMovie(1L));
+        Resource<MovieResponse> result = LiveDataTestUtil.getValue(fakeMovieCatalogueRepository.loadListMovie(1L));
 
         verify(dao).selectAllMovie(1L);
         assertNotNull(result.data);
@@ -56,7 +56,7 @@ public class MovieCatalogueRepositoryTest {
         when(dao.selectAllTvShow(1L)).thenReturn(dummyData);
 
         //skip load remote data
-        Resource<DiscoverTvShowResponse> result = LiveDataTestUtil.getValue(fakeMovieCatalogueRepository.loadListTvShow(1L));
+        Resource<TvShowResponse> result = LiveDataTestUtil.getValue(fakeMovieCatalogueRepository.loadListTvShow(1L));
 
         verify(dao).selectAllTvShow(1L);
         assertNotNull(result.data);

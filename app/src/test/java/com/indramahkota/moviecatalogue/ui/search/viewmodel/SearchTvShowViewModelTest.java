@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverTvShowResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.TvShowResponse;
 import com.indramahkota.moviecatalogue.utils.FakeData;
 
 import org.junit.After;
@@ -29,7 +29,7 @@ public class SearchTvShowViewModelTest {
     private SearchTvShowViewModel searchViewModel;
 
     @Mock
-    Observer<Resource<DiscoverTvShowResponse>> tvShowObserver;
+    Observer<Resource<TvShowResponse>> tvShowObserver;
 
     @Before
     public void setUp() {
@@ -40,8 +40,8 @@ public class SearchTvShowViewModelTest {
 
     @Test
     public void testApiFetchData() {
-        Resource<DiscoverTvShowResponse> discoverTvShow = FakeData.getResourceListTvShow();
-        MutableLiveData<Resource<DiscoverTvShowResponse>> liveData = new MutableLiveData<>();
+        Resource<TvShowResponse> discoverTvShow = FakeData.getResourceListTvShow();
+        MutableLiveData<Resource<TvShowResponse>> liveData = new MutableLiveData<>();
         liveData.setValue(discoverTvShow);
 
         when(movieCatalogueRepository.searchListTvShow("Test", 1L)).thenReturn(liveData);

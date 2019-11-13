@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer;
 
 import com.indramahkota.moviecatalogue.data.source.MovieCatalogueRepository;
 import com.indramahkota.moviecatalogue.data.source.Resource;
-import com.indramahkota.moviecatalogue.data.source.remote.response.DiscoverMovieResponse;
+import com.indramahkota.moviecatalogue.data.source.remote.response.MovieResponse;
 import com.indramahkota.moviecatalogue.utils.FakeData;
 
 import org.junit.After;
@@ -29,7 +29,7 @@ public class SearchMovieViewModelTest {
     private SearchMovieViewModel searchViewModel;
 
     @Mock
-    Observer<Resource<DiscoverMovieResponse>> movieObserver;
+    Observer<Resource<MovieResponse>> movieObserver;
 
     @Before
     public void setUp() {
@@ -40,8 +40,8 @@ public class SearchMovieViewModelTest {
 
     @Test
     public void testApiFetchData() {
-        Resource<DiscoverMovieResponse> discoverMovie = FakeData.getResourceListMovie();
-        MutableLiveData<Resource<DiscoverMovieResponse>> liveData = new MutableLiveData<>();
+        Resource<MovieResponse> discoverMovie = FakeData.getResourceListMovie();
+        MutableLiveData<Resource<MovieResponse>> liveData = new MutableLiveData<>();
         liveData.setValue(discoverMovie);
 
         when(movieCatalogueRepository.searchListMovie("Test", 1L)).thenReturn(liveData);
