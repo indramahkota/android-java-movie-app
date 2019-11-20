@@ -20,6 +20,7 @@ import java.util.List;
 @Entity(tableName = TvShowEntity.TABLE_NAME)
 public class TvShowEntity implements Parcelable {
     public static final String TABLE_NAME = "tv_shows";
+    public static final String POPULARITY = "popularity";
 
     private static final String ITEM_ID = "itemId";
     private static final String NAME = "name";
@@ -42,6 +43,10 @@ public class TvShowEntity implements Parcelable {
     @ColumnInfo(name = NAME)
     @SerializedName("name")
     private String name;
+
+    @ColumnInfo(name = POPULARITY)
+    @SerializedName("popularity")
+    private Double popularity;
 
     @ColumnInfo(name = FIRST_AIR_DATE)
     @SerializedName("first_air_date")
@@ -85,13 +90,18 @@ public class TvShowEntity implements Parcelable {
 
     public TvShowEntity() {}
 
-    private TvShowEntity(@NonNull Parcel in) {
+    protected TvShowEntity(@NonNull Parcel in) {
         if (in.readByte() == 0) {
             id = null;
         } else {
             id = in.readLong();
         }
         name = in.readString();
+        if (in.readByte() == 0) {
+            popularity = null;
+        } else {
+            popularity = in.readDouble();
+        }
         firstAirDate = in.readString();
         if (in.readByte() == 0) {
             voteAverage = null;
@@ -139,6 +149,14 @@ public class TvShowEntity implements Parcelable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Double getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Double popularity) {
+        this.popularity = popularity;
     }
 
     public String getFirstAirDate() {
@@ -227,33 +245,39 @@ public class TvShowEntity implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel dest, int flags) {
         if (id == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(id);
+            dest.writeByte((byte) 1);
+            dest.writeLong(id);
         }
-        parcel.writeString(name);
-        parcel.writeString(firstAirDate);
+        dest.writeString(name);
+        if (popularity == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(popularity);
+        }
+        dest.writeString(firstAirDate);
         if (voteAverage == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeDouble(voteAverage);
+            dest.writeByte((byte) 1);
+            dest.writeDouble(voteAverage);
         }
-        parcel.writeString(overview);
-        parcel.writeString(posterPath);
-        parcel.writeString(backdropPath);
-        parcel.writeParcelable(credits, i);
-        parcel.writeTypedList(genres);
-        parcel.writeString(originalLanguage);
-        parcel.writeByte((byte) (favorite == null ? 0 : favorite ? 1 : 2));
+        dest.writeString(overview);
+        dest.writeString(posterPath);
+        dest.writeString(backdropPath);
+        dest.writeParcelable(credits, flags);
+        dest.writeTypedList(genres);
+        dest.writeString(originalLanguage);
+        dest.writeByte((byte) (favorite == null ? 0 : favorite ? 1 : 2));
         if (page == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(page);
+            dest.writeByte((byte) 1);
+            dest.writeLong(page);
         }
     }
 }

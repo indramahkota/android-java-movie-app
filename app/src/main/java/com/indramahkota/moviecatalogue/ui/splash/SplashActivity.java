@@ -9,22 +9,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.indramahkota.moviecatalogue.ui.main.MainActivity;
 
 public class SplashActivity extends AppCompatActivity {
-    private static final String STATE_HANDLER = "state_handler";
-
-    private Boolean stateHandler = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null) {
-            stateHandler = savedInstanceState.getBoolean(STATE_HANDLER);
-        }
-
-        if(!stateHandler) {
-            stateHandler = true;
-            final Handler handler = new Handler();
-            handler.postDelayed(() -> {
+        if (savedInstanceState == null) {
+            new Handler().postDelayed(() -> {
                 startActivity(new Intent(SplashActivity.this, MainActivity.class));
                 finish();
             }, 2000);
@@ -34,6 +25,6 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(STATE_HANDLER, stateHandler);
+        outState.putBoolean("STATE_HANDLER", true);
     }
 }

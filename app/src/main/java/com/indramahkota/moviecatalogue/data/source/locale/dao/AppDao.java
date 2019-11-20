@@ -32,11 +32,11 @@ public interface AppDao {
      * */
 
     @WorkerThread
-    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE favorite = 1")
+    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE favorite = 1 ORDER BY " + MovieEntity.POPULARITY + " DESC")
     DataSource.Factory<Integer, MovieEntity> selectAllFavoriteMovie();
 
     @WorkerThread
-    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE page = :currentPage")
+    @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE page = :currentPage ORDER BY " + MovieEntity.POPULARITY + " DESC")
     List<MovieEntity> selectAllMovie(Long currentPage);
 
     @Query("SELECT * FROM " + MovieEntity.TABLE_NAME + " WHERE itemId = :id")
@@ -60,11 +60,11 @@ public interface AppDao {
      * */
 
     @WorkerThread
-    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE favorite = 1")
+    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE favorite = 1 ORDER BY " + TvShowEntity.POPULARITY + " DESC")
     DataSource.Factory<Integer, TvShowEntity> selectAllFavoriteTvShow();
 
     @WorkerThread
-    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE page = :currentPage")
+    @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE page = :currentPage ORDER BY " + TvShowEntity.POPULARITY + " DESC")
     List<TvShowEntity> selectAllTvShow(Long currentPage);
 
     @Query("SELECT * FROM " + TvShowEntity.TABLE_NAME + " WHERE itemId = :id")

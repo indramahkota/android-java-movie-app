@@ -20,6 +20,7 @@ import java.util.List;
 @Entity(tableName = MovieEntity.TABLE_NAME)
 public class MovieEntity implements Parcelable {
     public static final String TABLE_NAME = "movies";
+    public static final String POPULARITY = "popularity";
 
     private static final String ITEM_ID = "itemId";
     private static final String TITLE = "title";
@@ -42,6 +43,10 @@ public class MovieEntity implements Parcelable {
     @ColumnInfo(name = TITLE)
     @SerializedName("title")
     private String title;
+
+    @ColumnInfo(name = POPULARITY)
+    @SerializedName("popularity")
+    private Double popularity;
 
     @ColumnInfo(name = RELEASE_DATE)
     @SerializedName("release_date")
@@ -85,13 +90,18 @@ public class MovieEntity implements Parcelable {
 
     public MovieEntity() {}
 
-    private MovieEntity(@NonNull Parcel in) {
+    protected MovieEntity(@NonNull Parcel in) {
         if (in.readByte() == 0) {
             id = null;
         } else {
             id = in.readLong();
         }
         title = in.readString();
+        if (in.readByte() == 0) {
+            popularity = null;
+        } else {
+            popularity = in.readDouble();
+        }
         releaseDate = in.readString();
         if (in.readByte() == 0) {
             voteAverage = null;
@@ -139,6 +149,14 @@ public class MovieEntity implements Parcelable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Double getPopularity() {
+        return popularity;
+    }
+
+    public void setPopularity(Double popularity) {
+        this.popularity = popularity;
     }
 
     public String getReleaseDate() {
@@ -227,33 +245,39 @@ public class MovieEntity implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel dest, int flags) {
         if (id == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(id);
+            dest.writeByte((byte) 1);
+            dest.writeLong(id);
         }
-        parcel.writeString(title);
-        parcel.writeString(releaseDate);
+        dest.writeString(title);
+        if (popularity == null) {
+            dest.writeByte((byte) 0);
+        } else {
+            dest.writeByte((byte) 1);
+            dest.writeDouble(popularity);
+        }
+        dest.writeString(releaseDate);
         if (voteAverage == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeDouble(voteAverage);
+            dest.writeByte((byte) 1);
+            dest.writeDouble(voteAverage);
         }
-        parcel.writeString(overview);
-        parcel.writeString(posterPath);
-        parcel.writeString(backdropPath);
-        parcel.writeParcelable(credits, i);
-        parcel.writeTypedList(genres);
-        parcel.writeString(originalLanguage);
-        parcel.writeByte((byte) (favorite == null ? 0 : favorite ? 1 : 2));
+        dest.writeString(overview);
+        dest.writeString(posterPath);
+        dest.writeString(backdropPath);
+        dest.writeParcelable(credits, flags);
+        dest.writeTypedList(genres);
+        dest.writeString(originalLanguage);
+        dest.writeByte((byte) (favorite == null ? 0 : favorite ? 1 : 2));
         if (page == null) {
-            parcel.writeByte((byte) 0);
+            dest.writeByte((byte) 0);
         } else {
-            parcel.writeByte((byte) 1);
-            parcel.writeLong(page);
+            dest.writeByte((byte) 1);
+            dest.writeLong(page);
         }
     }
 }
