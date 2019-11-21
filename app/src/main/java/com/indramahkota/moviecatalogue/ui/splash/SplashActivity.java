@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.indramahkota.moviecatalogue.ui.main.MainActivity;
@@ -23,8 +24,11 @@ public class SplashActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean("STATE_HANDLER", true);
     }
+
+    @Override
+    public void onBackPressed() {}
 }
