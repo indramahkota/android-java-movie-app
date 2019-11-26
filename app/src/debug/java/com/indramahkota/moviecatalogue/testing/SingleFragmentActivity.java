@@ -14,11 +14,9 @@ import com.indramahkota.moviecatalogue.R;
 import javax.inject.Inject;
 
 import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
 
-public class SingleFragmentActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class SingleFragmentActivity extends AppCompatActivity {
     @Inject
     DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
@@ -49,10 +47,5 @@ public class SingleFragmentActivity extends AppCompatActivity implements HasSupp
                 .beginTransaction()
                 .add(R.id.container, fragment)
                 .commit();
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return dispatchingAndroidInjector;
     }
 }

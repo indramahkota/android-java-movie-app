@@ -1,6 +1,5 @@
 package com.indramahkota.moviecatalogue;
 
-import android.app.Activity;
 import android.app.Application;
 
 import com.indramahkota.moviecatalogue.di.component.DaggerAppComponent;
@@ -9,15 +8,16 @@ import com.indramahkota.moviecatalogue.di.module.DbModule;
 
 import javax.inject.Inject;
 
+import dagger.android.AndroidInjector;
 import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasActivityInjector;
+import dagger.android.HasAndroidInjector;
 
-public class MovieCatalogueApp extends Application implements HasActivityInjector {
+public class MovieCatalogueApp extends Application implements HasAndroidInjector {
     @Inject
-    DispatchingAndroidInjector<Activity> dispatchingAndroidInjector;
+    DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
 
     @Override
-    public DispatchingAndroidInjector<Activity> activityInjector() {
+    public AndroidInjector<Object> androidInjector() {
         return dispatchingAndroidInjector;
     }
 

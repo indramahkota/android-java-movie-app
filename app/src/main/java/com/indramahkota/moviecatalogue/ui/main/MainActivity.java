@@ -19,14 +19,9 @@ import com.indramahkota.moviecatalogue.ui.main.fragment.MovieFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.TvShowFragment;
 import com.indramahkota.moviecatalogue.ui.setting.SettingsActivity;
 
-import javax.inject.Inject;
-
 import dagger.android.AndroidInjection;
-import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.support.HasSupportFragmentInjector;
 
-public class MainActivity extends AppCompatActivity implements HasSupportFragmentInjector {
+public class MainActivity extends AppCompatActivity {
     private static final String STATE_MODE = "state_mode";
     private static final String SCROLL_STATE_MOVIE = "movie_rv_scroll_state";
     private static final String FRAGMENT_STATE_MOVIE = "movie_fragment_state";
@@ -43,9 +38,6 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
 
     private int movieCounter = 0;
     private int tvShowCounter = 0;
-
-    @Inject
-    DispatchingAndroidInjector<Fragment> dispatchingAndroidInjector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_MODE, mode);
         outState.putInt(SCROLL_STATE_MOVIE, movieCounter);
@@ -184,10 +176,5 @@ public class MainActivity extends AppCompatActivity implements HasSupportFragmen
             mFragmentTransaction.replace(R.id.frame_container, mFavoriteFragment, FavoriteFragment.class.getSimpleName());
             mFragmentTransaction.commit();
         }
-    }
-
-    @Override
-    public AndroidInjector<Fragment> supportFragmentInjector() {
-        return dispatchingAndroidInjector;
     }
 }
