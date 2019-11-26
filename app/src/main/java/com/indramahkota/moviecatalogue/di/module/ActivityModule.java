@@ -14,20 +14,20 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class ActivityModule {
     @ContributesAndroidInjector(modules = FragmentModule.class)
-    abstract MainActivity contributeMainActivityInjector();
+    abstract MainActivity mainActivityInjector();
 
     @ContributesAndroidInjector(modules = FragmentModule.class)
-    abstract SingleFragmentActivity contributeSingleFragmentActivityInjector();
+    abstract SingleFragmentActivity singleFragmentActivityInjector();
 
     @ContributesAndroidInjector()
-    abstract MovieDetailsActivity contributeMovieDetailsActivityInjector();
+    abstract MovieDetailsActivity movieDetailsActivityInjector();
 
     @ContributesAndroidInjector()
-    abstract TvShowDetailsActivity contributeTvShowDetailsActivityInjector();
+    abstract TvShowDetailsActivity tvShowDetailsActivityInjector();
 
     @ContributesAndroidInjector()
-    abstract SearchMovieActivity contributeSearchMovieActivityInjector();
+    abstract SearchMovieActivity searchMovieActivityInjector();
 
     @ContributesAndroidInjector()
-    abstract SearchTvShowActivity contributeSearchTvShowActivityInjector();
+    abstract SearchTvShowActivity searchTvShowActivityInjector();
 }

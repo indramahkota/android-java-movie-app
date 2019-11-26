@@ -12,17 +12,17 @@ import dagger.android.ContributesAndroidInjector;
 @Module
 public abstract class FragmentModule {
     @ContributesAndroidInjector
-    abstract MovieFragment contributeMovieListFragment();
+    abstract MovieFragment movieFragmentInjector();
 
     @ContributesAndroidInjector
-    abstract TvShowFragment contributeTvListFragment();
+    abstract TvShowFragment tvShowFragmentInjector();
 
     @ContributesAndroidInjector
-    abstract FavoriteFragment contributeFavoriteFragment();
+    abstract FavoriteFragment favoriteFragmentInjector();
 
     @ContributesAndroidInjector
-    abstract FavoriteMovieFragment contributeFavoriteMovieFragment();
+    abstract FavoriteMovieFragment favoriteMovieFragmentInjector();
 
     @ContributesAndroidInjector
-    abstract FavoriteTvShowFragment contributeFavoriteTvShowFragment();
+    abstract FavoriteTvShowFragment favoriteTvShowFragmentInjector();
 }
