@@ -93,7 +93,6 @@ public class MoviePagedListAdapter extends PagedListAdapter<MovieEntity, MoviePa
         private final TextView txtRelease;
         private final TextView txtRating;
         private final TextView txtOverview;
-        private final ImageView imgFavorite;
 
         MovieViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,7 +101,7 @@ public class MoviePagedListAdapter extends PagedListAdapter<MovieEntity, MoviePa
             txtRelease = itemView.findViewById(R.id.txt_release_date);
             txtRating = itemView.findViewById(R.id.txt_rating);
             txtOverview = itemView.findViewById(R.id.txt_overview);
-            imgFavorite = itemView.findViewById(R.id.img_bookmark);
+            ImageView imgFavorite = itemView.findViewById(R.id.img_bookmark);
             imgFavorite.setVisibility(View.VISIBLE);
         }
 

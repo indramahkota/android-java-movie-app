@@ -93,7 +93,6 @@ public class TvShowPagedListAdapter extends PagedListAdapter<TvShowEntity, TvSho
         private final TextView txtRelease;
         private final TextView txtRating;
         private final TextView txtOverview;
-        private final ImageView imgFavorite;
 
         TvShowViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -102,7 +101,7 @@ public class TvShowPagedListAdapter extends PagedListAdapter<TvShowEntity, TvSho
             txtRelease = itemView.findViewById(R.id.txt_release_date);
             txtRating = itemView.findViewById(R.id.txt_rating);
             txtOverview = itemView.findViewById(R.id.txt_overview);
-            imgFavorite = itemView.findViewById(R.id.img_bookmark);
+            ImageView imgFavorite = itemView.findViewById(R.id.img_bookmark);
             imgFavorite.setVisibility(View.VISIBLE);
         }
 
