@@ -14,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -84,7 +83,7 @@ public class MovieFragment extends Fragment {
         relativeLayout = view.findViewById(R.id.empty_indicator);
         mShimmerViewContainer = view.findViewById(R.id.shimmer_view_fragment_container);
 
-        MovieFragmentViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieFragmentViewModel.class);
+        MovieFragmentViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(MovieFragmentViewModel.class);
 
         linearLayoutManager = new LinearLayoutManager(view.getContext());
         rvFragmentMovies = view.findViewById(R.id.rv_fragment_category);
@@ -141,7 +140,7 @@ public class MovieFragment extends Fragment {
             showToast(getResources().getString(R.string.refresh));
         });
 
-        viewModel.listDiscoverMovie.observe(this, discoverMovieResponseResource -> {
+        viewModel.listDiscoverMovie.observe(getViewLifecycleOwner(), discoverMovieResponseResource -> {
             swipeRefreshLayout.setRefreshing(false);
             rvFragmentMovies.setVisibility(View.VISIBLE);
 

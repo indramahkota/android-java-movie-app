@@ -544,6 +544,8 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
                     @Override
                     public void onFailure(@NonNull Call<List<LanguageEntity>> call, @NonNull Throwable t) {
+                        resultLanguage.setValue(ApiResponse.error(t.getMessage(), new ArrayList<>()));
+
                         EspressoIdlingResource.decrement();
                     }
                 });

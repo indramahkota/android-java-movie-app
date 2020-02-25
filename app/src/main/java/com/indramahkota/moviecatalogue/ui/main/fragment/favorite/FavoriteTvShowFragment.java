@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -138,8 +137,8 @@ public class FavoriteTvShowFragment extends Fragment {
         relativeLayout = view.findViewById(R.id.favorite_empty_indicator);
         relativeLayout.setVisibility(View.GONE);
 
-        favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
-        favoriteTvShowViewModel.getListTvShow().observe(this, tvShows -> {
+        favoriteTvShowViewModel = new ViewModelProvider(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
+        favoriteTvShowViewModel.getListTvShow().observe(getViewLifecycleOwner(), tvShows -> {
             if(tvShows.data != null) {
                 switch (tvShows.status) {
                     case LOADING:

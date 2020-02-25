@@ -8,7 +8,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -61,7 +60,7 @@ public class SearchTvShowActivity extends AppCompatActivity {
             searchTvShows = savedInstanceState.getParcelableArrayList(STATE_SEARCH_TV_SHOW_RESPONSE);
         }
 
-        SearchTvShowViewModel searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchTvShowViewModel.class);
+        SearchTvShowViewModel searchViewModel = new ViewModelProvider(this, viewModelFactory).get(SearchTvShowViewModel.class);
 
         String searchQuery = getIntent().getStringExtra(EXTRA_SEARCH_QUERY);
         if (searchQuery != null && !searchQuery.isEmpty()) {
