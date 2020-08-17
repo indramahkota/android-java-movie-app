@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".MovieCatalogueApp"
         android:allowBackup="true"
         android:fullBackupContent="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,14 +15,20 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".ui.main.MainActivity"/>
+        <activity
+            android:name=".ui.setting.SettingsActivity"
+            android:label="@string/settings" />
+        <activity
+            android:name=".ui.main.MainActivity"
+            android:theme="@style/MainTheme" />
         <activity
             android:name=".ui.detail.MovieDetailsActivity"
             android:label="@string/title_activity_movie_details" />
         <activity
             android:name=".ui.detail.TvShowDetailsActivity"
             android:label="@string/title_activity_tv_show_details" />
-        <activity android:name=".ui.splash.SplashActivity"
+        <activity
+            android:name=".ui.splash.SplashActivity"
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,6 +36,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:label="@string/search_list_movies"
+            android:name=".ui.search.SearchMovieActivity" />
+        <activity
+            android:label="@string/search_list_tv_shows"
+            android:name=".ui.search.SearchTvShowActivity" />
     </application>
 
 </manifest>

@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">Katalog Film</string>
+    <string name="title_activity_movie_details">Detail Film</string>
+    <string name="title_activity_tv_show_details">Detail Acara Tv</string>
+
+    <string name="title_movie">Film</string>
+    <string name="title_tv_show">Acara Tv</string>
+    <string name="list_movies">Daftar Film</string>
+    <string name="list_tv_shows">Daftar Acara Tv</string>
+    <string name="list_favorites">Daftar Favorit</string>
+
+    <string name="movies">Film</string>
+    <string name="tv_shows">Acara Tv</string>
+    <string name="favorite">Favorit</string>
+
+    <string name="title">Judul:</string>
+    <string name="genre">Jenis:</string>
+    <string name="rating">Peringkat:</string>
+    <string name="language">Bahasa:</string>
+    <string name="release_date">Tanggal Rilis:</string>
+    <string name="overview">Ikhtisar:</string>
+    <string name="cast_crew">Pemeran/Kru:</string>
+    <string name="empty_fav">Saat ini kamu tidak mempunyai koleksi favorit.</string>
+    <string name="searchToolTip">Ketik disini untuk mencari</string>
+
+    <string name="todo">lakukan</string>
+    <string name="no_rating">Tidak ada peringkat</string>
+    <string name="no_title">Tidak ada judul</string>
+    <string name="no_release_date">Tidak ada tanggal rilis</string>
+    <string name="availability_overview">Tidak ada ikhtisar.</string>
+    <string name="long_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
+    <string name="no_data_found">Tidak ada data.</string>
+    <string name="no_genre">Tidak ada jenis</string>
+    <string name="no_language">Tidak ada bahasa</string>
+    <string name="english_lang">English</string>
+    <string name="search_list_movies">Cari Film</string>
+    <string name="search_list_tv_shows">Cari Acara Tv</string>
+    <string name="setting">Pengaturan</string>
+
+    <string name="setting_language">Atur bahasa</string>
+    <string name="settings">Pengaturan</string>
+    <string name="error">Kesalahan memuat data</string>
+    <string name="page">Halaman:</string>
+    <!--<string name="success">Sukses memuat data</string>-->
+    <string name="message_undo">Apakah kamu ingin membatalkan?</string>
+    <string name="refresh">Perbaharui</string>
+</resources>

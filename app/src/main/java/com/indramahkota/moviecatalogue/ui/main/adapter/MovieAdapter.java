@@ -16,30 +16,60 @@ import com.bumptech.glide.load.resource.bitmap.CenterCrop;
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestOptions;
 import com.indramahkota.moviecatalogue.R;
-import com.indramahkota.moviecatalogue.data.Constant;
-import com.indramahkota.moviecatalogue.data.model.DiscoverMovie;
+import com.indramahkota.moviecatalogue.data.source.locale.entity.MovieEntity;
+import com.indramahkota.moviecatalogue.data.source.remote.api.ApiConstant;
 import com.indramahkota.moviecatalogue.ui.detail.MovieDetailsActivity;
+import com.indramahkota.moviecatalogue.ui.utils.CustomDateFormat;
 import com.indramahkota.moviecatalogue.ui.utils.CustomOnItemClickListener;
 
 import java.util.List;
 
 public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryViewHolder> {
     private final Context mContext;
-    private final List<DiscoverMovie> listMovies;
+    private final List<MovieEntity> listMovies;
 
-    private List<DiscoverMovie> getListMovies() {
+    private List<MovieEntity> getListMovies() {
         return listMovies;
     }
 
-    public MovieAdapter(List<DiscoverMovie> listMovies, Context context) {
+    public MovieAdapter(List<MovieEntity> listMovies, Context context) {
         this.listMovies = listMovies;
         this.mContext = context;
+    }
+
+    public void add(MovieEntity response) {
+        listMovies.add(response);
+        notifyItemInserted(listMovies.size() - 1);
+    }
+
+    public void addAll(List<MovieEntity> postItems) {
+        for (MovieEntity response : postItems) {
+            add(response);
+        }
+    }
+
+    private void remove(MovieEntity postItems) {
+        int position = listMovies.indexOf(postItems);
+        if (position > -1) {
+            listMovies.remove(position);
+            notifyItemRemoved(position);
+        }
+    }
+
+    public void clear() {
+        while (getItemCount() > 0) {
+            remove(getItem());
+        }
+    }
+
+    private MovieEntity getItem() {
+        return listMovies.get(0);
     }
 
     @NonNull
     @Override
     public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View itemRow = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, parent, false);
+        View itemRow = LayoutInflater.from(mContext).inflate(R.layout.item_movie, parent, false);
         return new CategoryViewHolder(itemRow);
     }
 
@@ -52,7 +82,9 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
         }
 
         if(getListMovies().get(position).getReleaseDate() != null && !getListMovies().get(position).getReleaseDate().isEmpty()) {
-            holder.txtRelease.setText(getListMovies().get(position).getReleaseDate());
+            String date = getListMovies().get(position).getReleaseDate();
+            String newDate = CustomDateFormat.formatDateFromString(date);
+            holder.txtRelease.setText(newDate);
         } else {
             holder.txtRelease.setText(mContext.getResources().getString(R.string.no_release_date));
         }
@@ -69,7 +101,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
             holder.txtOverview.setText(mContext.getResources().getString(R.string.availability_overview));
         }
 
-        String posterUrl = Constant.BASE_URL_POSTER + getListMovies().get(position).getPosterPath();
+        if(getListMovies().get(position).getFavorite() != null && !getListMovies().get(position).getFavorite())
+            holder.imgFavorite.setVisibility(View.GONE);
+        else {
+            holder.imgFavorite.setVisibility(View.VISIBLE);
+        }
+
+        String posterUrl = ApiConstant.BASE_URL_POSTER + getListMovies().get(position).getPosterPath();
         Glide.with(mContext)
                 .load(posterUrl)
                 .placeholder(R.drawable.poster_background_loading)
@@ -92,6 +130,7 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
         private final TextView txtRelease;
         private final TextView txtRating;
         private final TextView txtOverview;
+        private final ImageView imgFavorite;
 
         CategoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,13 +139,14 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
             txtRelease = itemView.findViewById(R.id.txt_release_date);
             txtRating = itemView.findViewById(R.id.txt_rating);
             txtOverview = itemView.findViewById(R.id.txt_overview);
+            imgFavorite = itemView.findViewById(R.id.img_bookmark);
         }
 
         void addListener(int position) {
-            itemView.setOnClickListener(new CustomOnItemClickListener(position, position1 -> {
-                DiscoverMovie movie = getListMovies().get(position1);
+            itemView.setOnClickListener(new CustomOnItemClickListener(position, listPosition -> {
+                Long movieId = getListMovies().get(listPosition).getId();
                 Intent moveWithDataIntent = new Intent(mContext, MovieDetailsActivity.class);
-                moveWithDataIntent.putExtra(MovieDetailsActivity.EXTRA_MOVIE, movie);
+                moveWithDataIntent.putExtra(MovieDetailsActivity.EXTRA_MOVIE_ID, movieId);
                 mContext.startActivity(moveWithDataIntent);
             }));
         }

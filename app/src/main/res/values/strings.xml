@@ -4,9 +4,14 @@
     <string name="title_activity_tv_show_details">Tv Show Details</string>
 
     <string name="title_movie">Movies</string>
-    <string name="title_tv_show">TvShows</string>
+    <string name="title_tv_show">Tv Shows</string>
     <string name="list_movies">Movie List</string>
     <string name="list_tv_shows">Tv Show List</string>
+    <string name="list_favorites">Favorite List</string>
+
+    <string name="movies">Movies</string>
+    <string name="tv_shows">Tv Shows</string>
+    <string name="favorite">Favorites</string>
 
     <string name="title">Title:</string>
     <string name="genre">Genre:</string>
@@ -15,6 +20,8 @@
     <string name="release_date">Release Date:</string>
     <string name="overview">Overview:</string>
     <string name="cast_crew">Cast/Crew:</string>
+    <string name="empty_fav">You don\'t have a favorite collection yet.</string>
+    <string name="searchToolTip">Type here for search</string>
 
     <string name="todo">TODO</string>
     <string name="no_rating">No Rating</string>
@@ -22,4 +29,20 @@
     <string name="no_release_date">No Release Date</string>
     <string name="availability_overview">Overview not available.</string>
     <string name="long_text">Lorem Ipsum is simply dummy text of the printing and typesetting industry.</string>
+    <string name="no_data_found">No data.</string>
+    <string name="no_genre">No Genres</string>
+    <string name="no_language">No Language</string>
+    <string name="english_lang">English</string>
+    <string name="search_list_movies">Search Movies</string>
+    <string name="search_list_tv_shows">Search Tv Shows</string>
+    <string name="setting">Settings</string>
+
+    <string name="setting_language">Setting language</string>
+    <string name="settings">Settings</string>
+    <string name="error">Error load data</string>
+    <string name="page">Page:</string>
+    <!--<string name="success">Success load data</string>-->
+    <string name="message_undo">Do you want to cancel?</string>
+    <string name="message_ok" translatable="false">OK</string>
+    <string name="refresh">Refresh</string>
 </resources>
