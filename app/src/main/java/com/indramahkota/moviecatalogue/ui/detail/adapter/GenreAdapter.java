@@ -48,7 +48,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.CategoryView
         return getListGenres().size();
     }
 
-    class CategoryViewHolder extends RecyclerView.ViewHolder {
+    static class CategoryViewHolder extends RecyclerView.ViewHolder {
         private final TextView txtName;
 
         CategoryViewHolder(@NonNull View itemView) {

@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -89,12 +88,12 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             languages = savedInstanceState.getParcelableArrayList(STATE_LANGUAGE_RESPONSE);
         }
 
-        favoriteTvShowViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
+        favoriteTvShowViewModel = new ViewModelProvider(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
 
         if (tvShowEntity != null && languages != null)
             setTxtLanguage();
         else {
-            LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
+            LanguageViewModel languageViewModel = new ViewModelProvider(this, viewModelFactory).get(LanguageViewModel.class);
             languageViewModel.getLanguages().observe(this, languageResponseState -> {
                 if (languageResponseState.isSuccess()) {
                     languages = languageResponseState.data;
@@ -105,7 +104,7 @@ public class TvShowDetailsActivity extends AppCompatActivity {
             });
         }
 
-        TvShowDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvShowDetailsViewModel.class);
+        TvShowDetailsViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(TvShowDetailsViewModel.class);
         viewModel.tvShowDetail.observe(this, tvShowResponseState -> {
             switch (tvShowResponseState.status) {
                 case LOADING:

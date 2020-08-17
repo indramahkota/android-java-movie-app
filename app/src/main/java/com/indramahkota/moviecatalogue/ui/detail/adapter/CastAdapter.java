@@ -54,7 +54,7 @@ public class CastAdapter extends RecyclerView.Adapter<CastAdapter.CategoryViewHo
         return getListCasts().size();
     }
 
-    class CategoryViewHolder extends RecyclerView.ViewHolder {
+    static class CategoryViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imgPoster;
         private final TextView txtName;
 

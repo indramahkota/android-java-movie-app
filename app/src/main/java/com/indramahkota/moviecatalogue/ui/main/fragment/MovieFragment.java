@@ -3,6 +3,7 @@ package com.indramahkota.moviecatalogue.ui.main.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,7 +155,7 @@ public class MovieFragment extends Fragment {
                             discoverMovies.addAll(discoverMovieResponseResource.data.getResults());
                             listMovieAdapter.addAll(discoverMovieResponseResource.data.getResults());
                             if(discoverMovies.size() < 1) {
-                                new Handler().postDelayed(() -> {
+                                new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                     if(discoverMovies.size() < 1) {
                                         relativeLayout.setVisibility(View.VISIBLE);
                                         rvFragmentMovies.setVisibility(View.GONE);
@@ -164,7 +165,7 @@ public class MovieFragment extends Fragment {
                             } else {
                                 mShimmerViewContainer.setVisibility(View.GONE);
                             }
-                            new Handler().postDelayed(() -> isLoading = false, 2000);
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> isLoading = false, 2000);
                             //showToast(getResources().getString(R.string.success));
                             break;
                         case ERROR:
@@ -177,7 +178,7 @@ public class MovieFragment extends Fragment {
                                     currentPage--;
                             }
                             if(discoverMovies.size() < 1) {
-                                new Handler().postDelayed(() -> {
+                                new Handler(Looper.getMainLooper()).postDelayed(() -> {
                                     if(discoverMovies.size() < 1) {
                                         relativeLayout.setVisibility(View.VISIBLE);
                                         rvFragmentMovies.setVisibility(View.GONE);
@@ -187,7 +188,7 @@ public class MovieFragment extends Fragment {
                             } else {
                                 mShimmerViewContainer.setVisibility(View.GONE);
                             }
-                            new Handler().postDelayed(() -> isLoading = false, 2000);
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> isLoading = false, 2000);
                             //showToast(getResources().getString(R.string.error));
                             break;
                     }

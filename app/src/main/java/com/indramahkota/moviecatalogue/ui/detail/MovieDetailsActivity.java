@@ -13,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -88,12 +87,12 @@ public class MovieDetailsActivity extends AppCompatActivity {
             languages = savedInstanceState.getParcelableArrayList(STATE_LANGUAGE_RESPONSE);
         }
 
-        favoriteMovieViewModel = ViewModelProviders.of(this, viewModelFactory).get(FavoriteMovieViewModel.class);
+        favoriteMovieViewModel = new ViewModelProvider(this, viewModelFactory).get(FavoriteMovieViewModel.class);
 
         if(movieEntity!= null && languages != null)
             setTxtLanguage();
         else {
-            LanguageViewModel languageViewModel = ViewModelProviders.of(this, viewModelFactory).get(LanguageViewModel.class);
+            LanguageViewModel languageViewModel = new ViewModelProvider(this, viewModelFactory).get(LanguageViewModel.class);
             languageViewModel.getLanguages().observe(this, languageResponseState -> {
                 if (languageResponseState.isSuccess()) {
                     languages = languageResponseState.data;
@@ -104,7 +103,7 @@ public class MovieDetailsActivity extends AppCompatActivity {
             });
         }
 
-        MovieDetailsViewModel viewModel = ViewModelProviders.of(this, viewModelFactory).get(MovieDetailsViewModel.class);
+        MovieDetailsViewModel viewModel = new ViewModelProvider(this, viewModelFactory).get(MovieDetailsViewModel.class);
         viewModel.movieDetail.observe(this, movieResponseState -> {
             switch (movieResponseState.status) {
                 case LOADING:
