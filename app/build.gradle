@@ -93,16 +93,16 @@ dependencies {
     //implementation "io.reactivex.rxjava2:rxandroid:2.1.1"
 
     // Dependencies for Dagger
-    implementation 'com.google.dagger:dagger:2.28.3'
-    annotationProcessor 'com.google.dagger:dagger-compiler:2.28.3'
+    implementation 'com.google.dagger:dagger:2.29.1'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.29.1'
 
     // Dependencies for Dagger Android
     //noinspection GradleDependency
-    implementation 'com.google.dagger:dagger-android-support:2.28.3'
-    annotationProcessor 'com.google.dagger:dagger-android-processor:2.28.3'
+    implementation 'com.google.dagger:dagger-android-support:2.29.1'
+    annotationProcessor 'com.google.dagger:dagger-android-processor:2.29.1'
 
     // Dagger Instrumentation Test
-    androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.28.3'
+    androidTestAnnotationProcessor 'com.google.dagger:dagger-compiler:2.29.1'
 
     // Dependencies for Facebook Shimmer
     implementation 'com.facebook.shimmer:shimmer:0.5.0'
