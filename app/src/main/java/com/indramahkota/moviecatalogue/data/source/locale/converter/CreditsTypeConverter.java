@@ -12,7 +12,8 @@ public class CreditsTypeConverter {
 
     @TypeConverter
     public Credits fromString(String value) {
-        Type listType = new TypeToken<Credits>() {}.getType();
+        Type listType = new TypeToken<Credits>() {
+        }.getType();
         return new Gson().fromJson(value, listType);
     }
 

@@ -17,36 +17,29 @@ import javax.inject.Singleton;
 import dagger.BindsInstance;
 import dagger.Component;
 import dagger.android.AndroidInjectionModule;
+import dagger.android.AndroidInjector;
 
 @Singleton
 @Component(
-    modules = {
-            AndroidInjectionModule.class,
-            AppModule.class,
-            ApiModule.class,
-            DbModule.class,
-            RepositoryModule.class,
-            ViewModelModule.class,
-            ActivityModule.class,
-            FragmentModule.class,
-            ExecutorModule.class
-    }
+        modules = {
+                AndroidInjectionModule.class,
+                AppModule.class,
+                ApiModule.class,
+                DbModule.class,
+                RepositoryModule.class,
+                ViewModelModule.class,
+                ActivityModule.class,
+                FragmentModule.class,
+                ExecutorModule.class
+        }
 )
 
-public interface AppComponent {
+public interface AppComponent extends AndroidInjector<MovieCatalogueApp> {
     @Component.Builder
     interface Builder {
         @BindsInstance
-        Builder application(Application application);
-
-        @BindsInstance
-        Builder apiModule(ApiModule apiModule);
-
-        @BindsInstance
-        Builder dbModule(DbModule dbModule);
+        Builder application(Application app);
 
         AppComponent build();
     }
-
-    void inject(MovieCatalogueApp movieCatalogueApp);
 }

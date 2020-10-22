@@ -39,7 +39,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
     private final AppExecutors exec;
 
     @Inject
-    public MovieCatalogueRepository(AppDao appDao, ApiEndPoint apiEndPoint, AppExecutors exec){
+    public MovieCatalogueRepository(AppDao appDao, ApiEndPoint apiEndPoint, AppExecutors exec) {
         this.dao = appDao;
         this.api = apiEndPoint;
         this.exec = exec;
@@ -85,17 +85,13 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                     public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                         if (response.body() != null) {
                             List<MovieEntity> helper = new ArrayList<>();
-                            for(MovieEntity movieEntity : response.body().getResults()) {
+                            for (MovieEntity movieEntity : response.body().getResults()) {
                                 MovieEntity storedMovieEntity = dao.selectMovieById(movieEntity.getId());
                                 if (storedMovieEntity == null) {
                                     movieEntity.setFavorite(false);
                                     movieEntity.setPage(page);
                                 } else {
-                                    if(storedMovieEntity.getFavorite()) {
-                                        movieEntity.setFavorite(true);
-                                    } else {
-                                        movieEntity.setFavorite(false);
-                                    }
+                                    movieEntity.setFavorite(storedMovieEntity.getFavorite());
                                     movieEntity.setPage(page);
                                 }
                                 helper.add(movieEntity);
@@ -167,17 +163,13 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                     public void onResponse(@NonNull Call<TvShowResponse> call, @NonNull Response<TvShowResponse> response) {
                         if (response.body() != null) {
                             List<TvShowEntity> helper = new ArrayList<>();
-                            for(TvShowEntity tvShowEntity : response.body().getResults()) {
+                            for (TvShowEntity tvShowEntity : response.body().getResults()) {
                                 TvShowEntity storedTvShowEntity = dao.selectTvShowById(tvShowEntity.getId());
                                 if (storedTvShowEntity == null) {
                                     tvShowEntity.setFavorite(false);
                                     tvShowEntity.setPage(page);
                                 } else {
-                                    if(storedTvShowEntity.getFavorite()) {
-                                        tvShowEntity.setFavorite(true);
-                                    } else {
-                                        tvShowEntity.setFavorite(false);
-                                    }
+                                    tvShowEntity.setFavorite(storedTvShowEntity.getFavorite());
                                     tvShowEntity.setPage(page);
                                 }
                                 helper.add(tvShowEntity);
@@ -304,18 +296,14 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                 call.enqueue(new Callback<MovieEntity>() {
                     @Override
                     public void onResponse(@NonNull Call<MovieEntity> call, @NonNull Response<MovieEntity> response) {
-                        if(response.body() != null) {
+                        if (response.body() != null) {
                             MovieEntity storedMovieEntity = dao.selectMovieById(movieId);
                             MovieEntity movieEntity = response.body();
 
                             if (storedMovieEntity == null) {
                                 movieEntity.setFavorite(false);
                             } else {
-                                if(storedMovieEntity.getFavorite()) {
-                                    movieEntity.setFavorite(true);
-                                } else {
-                                    movieEntity.setFavorite(false);
-                                }
+                                movieEntity.setFavorite(storedMovieEntity.getFavorite());
                                 movieEntity.setPage(storedMovieEntity.getPage());
                             }
                             resultMovie.setValue(ApiResponse.success(movieEntity));
@@ -336,7 +324,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
             @Override
             protected void saveCallResult(MovieEntity data) {
-                if(dao.selectMovieById(movieId) == null) {
+                if (dao.selectMovieById(movieId) == null) {
                     dao.insertMovie(data);
                 } else {
                     dao.updateMovie(data);
@@ -371,18 +359,14 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                 call.enqueue(new Callback<TvShowEntity>() {
                     @Override
                     public void onResponse(@NonNull Call<TvShowEntity> call, @NonNull Response<TvShowEntity> response) {
-                        if(response.body() != null) {
+                        if (response.body() != null) {
                             TvShowEntity storedTvShowEntity = dao.selectTvShowById(tvShowId);
                             TvShowEntity tvShowEntity = response.body();
 
                             if (storedTvShowEntity == null) {
                                 tvShowEntity.setFavorite(false);
                             } else {
-                                if(storedTvShowEntity.getFavorite()) {
-                                    tvShowEntity.setFavorite(true);
-                                } else {
-                                    tvShowEntity.setFavorite(false);
-                                }
+                                tvShowEntity.setFavorite(storedTvShowEntity.getFavorite());
                                 tvShowEntity.setPage(storedTvShowEntity.getPage());
                             }
                             resultTvShow.setValue(ApiResponse.success(tvShowEntity));
@@ -403,7 +387,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
             @Override
             protected void saveCallResult(TvShowEntity data) {
-                if(dao.selectTvShowById(tvShowId) == null) {
+                if (dao.selectTvShowById(tvShowId) == null) {
                     dao.insertTvShow(data);
                 } else {
                     dao.updateTvShow(data);
@@ -428,16 +412,12 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
             public void onResponse(@NonNull Call<MovieResponse> call, @NonNull Response<MovieResponse> response) {
                 if (response.body() != null) {
                     ArrayList<MovieEntity> helper = new ArrayList<>();
-                    for(MovieEntity movieEntity : response.body().getResults()) {
+                    for (MovieEntity movieEntity : response.body().getResults()) {
                         MovieEntity storedMovieEntity = dao.selectMovieById(movieEntity.getId());
                         if (storedMovieEntity == null) {
                             movieEntity.setFavorite(false);
                         } else {
-                            if(storedMovieEntity.getFavorite()) {
-                                movieEntity.setFavorite(true);
-                            } else {
-                                movieEntity.setFavorite(false);
-                            }
+                            movieEntity.setFavorite(storedMovieEntity.getFavorite());
                         }
                         helper.add(movieEntity);
                     }
@@ -476,16 +456,12 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
             public void onResponse(@NonNull Call<TvShowResponse> call, @NonNull Response<TvShowResponse> response) {
                 if (response.body() != null) {
                     ArrayList<TvShowEntity> helper = new ArrayList<>();
-                    for(TvShowEntity tvShowEntity : response.body().getResults()) {
+                    for (TvShowEntity tvShowEntity : response.body().getResults()) {
                         TvShowEntity storedTvShowEntity = dao.selectTvShowById(tvShowEntity.getId());
                         if (storedTvShowEntity == null) {
                             tvShowEntity.setFavorite(false);
                         } else {
-                            if(storedTvShowEntity.getFavorite()) {
-                                tvShowEntity.setFavorite(true);
-                            } else {
-                                tvShowEntity.setFavorite(false);
-                            }
+                            tvShowEntity.setFavorite(storedTvShowEntity.getFavorite());
                         }
                         helper.add(tvShowEntity);
                     }

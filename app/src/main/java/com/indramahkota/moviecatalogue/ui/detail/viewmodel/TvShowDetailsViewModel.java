@@ -14,7 +14,7 @@ import javax.inject.Inject;
 public class TvShowDetailsViewModel extends ViewModel {
     private MovieCatalogueRepository repository;
 
-    private MutableLiveData<Long> stateHandler = new MutableLiveData<>();
+    private final MutableLiveData<Long> stateHandler = new MutableLiveData<>();
     public LiveData<Resource<TvShowEntity>> tvShowDetail = Transformations.switchMap(stateHandler,
             stateId -> repository.loadTvShowDetails(stateId));
 

@@ -88,7 +88,8 @@ public class TvShowEntity implements Parcelable {
     @ColumnInfo(name = PAGE)
     private Long page;
 
-    public TvShowEntity() {}
+    public TvShowEntity() {
+    }
 
     protected TvShowEntity(@NonNull Parcel in) {
         if (in.readByte() == 0) {

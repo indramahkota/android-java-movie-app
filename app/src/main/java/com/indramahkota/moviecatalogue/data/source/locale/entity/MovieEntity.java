@@ -88,7 +88,8 @@ public class MovieEntity implements Parcelable {
     @ColumnInfo(name = PAGE)
     private Long page;
 
-    public MovieEntity() {}
+    public MovieEntity() {
+    }
 
     protected MovieEntity(@NonNull Parcel in) {
         if (in.readByte() == 0) {

@@ -19,14 +19,14 @@ import com.indramahkota.moviecatalogue.ui.utils.CustomViewPager;
 import java.util.ArrayList;
 import java.util.List;
 
-import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.DaggerFragment;
 
-public class FavoriteFragment extends Fragment {
-    public FavoriteFragment() { }
+public class FavoriteFragment extends DaggerFragment {
+    public FavoriteFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
     }
 

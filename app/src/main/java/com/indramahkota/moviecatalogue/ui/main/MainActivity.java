@@ -7,7 +7,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,9 +18,9 @@ import com.indramahkota.moviecatalogue.ui.main.fragment.MovieFragment;
 import com.indramahkota.moviecatalogue.ui.main.fragment.TvShowFragment;
 import com.indramahkota.moviecatalogue.ui.setting.SettingsActivity;
 
-import dagger.android.AndroidInjection;
+import dagger.android.support.DaggerAppCompatActivity;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends DaggerAppCompatActivity {
     private static final String STATE_MODE = "state_mode";
     private static final String SCROLL_STATE_MOVIE = "movie_rv_scroll_state";
     private static final String FRAGMENT_STATE_MOVIE = "movie_fragment_state";
@@ -41,11 +40,10 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if(getSupportActionBar() != null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setElevation(0);
         }
 
@@ -63,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
             movieCounter = savedInstanceState.getInt(SCROLL_STATE_MOVIE);
             tvShowCounter = savedInstanceState.getInt(SCROLL_STATE_TV_SHOW);
 
-            if(mode == R.id.navigation_movie) {
+            if (mode == R.id.navigation_movie) {
                 mMovieFragment = (MovieFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_STATE_MOVIE);
-            } else if(mode == R.id.navigation_tv_show) {
+            } else if (mode == R.id.navigation_tv_show) {
                 mTvShowFragment = (TvShowFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_STATE_TV_SHOW);
             }
         }
@@ -78,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt(SCROLL_STATE_MOVIE, movieCounter);
         outState.putInt(SCROLL_STATE_TV_SHOW, tvShowCounter);
 
-        if(mode == R.id.navigation_movie) {
+        if (mode == R.id.navigation_movie) {
             getSupportFragmentManager().putFragment(outState, FRAGMENT_STATE_MOVIE, mMovieFragment);
-        } else if(mode == R.id.navigation_tv_show) {
+        } else if (mode == R.id.navigation_tv_show) {
             getSupportFragmentManager().putFragment(outState, FRAGMENT_STATE_TV_SHOW, mTvShowFragment);
         }
     }
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.settings) {
+        if (item.getItemId() == R.id.settings) {
             Intent mIntent = new Intent(this, SettingsActivity.class);
             startActivity(mIntent);
         }
@@ -105,38 +103,37 @@ public class MainActivity extends AppCompatActivity {
             = item -> setMode(item.getItemId());
 
     private boolean setMode(int selectedMode) {
-        switch (selectedMode) {
-            case R.id.navigation_movie:
-                mode = R.id.navigation_movie;
-                setTitle(R.string.list_movies);
-                movieCounter++;
-                tvShowCounter = 0;
-                showMovieFragment();
-                return true;
-            case R.id.navigation_tv_show:
-                mode = R.id.navigation_tv_show;
-                setTitle(R.string.list_tv_shows);
-                tvShowCounter++;
-                movieCounter = 0;
-                showTvShowFragment();
-                return true;
-            case R.id.navigation_favorite:
-                mode = R.id.navigation_favorite;
-                setTitle(R.string.list_favorites);
-                movieCounter = 0;
-                tvShowCounter = 0;
-                showFavoriteFragment();
-                return true;
+        if (selectedMode == R.id.navigation_movie) {
+            mode = R.id.navigation_movie;
+            setTitle(R.string.list_movies);
+            movieCounter++;
+            tvShowCounter = 0;
+            showMovieFragment();
+            return true;
+        } else if (selectedMode == R.id.navigation_tv_show) {
+            mode = R.id.navigation_tv_show;
+            setTitle(R.string.list_tv_shows);
+            tvShowCounter++;
+            movieCounter = 0;
+            showTvShowFragment();
+            return true;
+        } else if (selectedMode == R.id.navigation_favorite) {
+            mode = R.id.navigation_favorite;
+            setTitle(R.string.list_favorites);
+            movieCounter = 0;
+            tvShowCounter = 0;
+            showFavoriteFragment();
+            return true;
         }
         return false;
     }
 
     private void showMovieFragment() {
-        if(mMovieFragment == null) {
+        if (mMovieFragment == null) {
             mMovieFragment = new MovieFragment();
         }
 
-        if(movieCounter > 1) {
+        if (movieCounter > 1) {
             mMovieFragment.scrollToTop();
         }
 
@@ -149,11 +146,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showTvShowFragment() {
-        if(mTvShowFragment == null) {
+        if (mTvShowFragment == null) {
             mTvShowFragment = new TvShowFragment();
         }
 
-        if(tvShowCounter > 1) {
+        if (tvShowCounter > 1) {
             mTvShowFragment.scrollToTop();
         }
 
@@ -166,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showFavoriteFragment() {
-        if(mFavoriteFragment == null) {
+        if (mFavoriteFragment == null) {
             mFavoriteFragment = new FavoriteFragment();
         }
 

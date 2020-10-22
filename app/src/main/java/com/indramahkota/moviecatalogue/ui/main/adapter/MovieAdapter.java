@@ -75,13 +75,13 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
 
     @Override
     public void onBindViewHolder(@NonNull final CategoryViewHolder holder, int position) {
-        if(getListMovies().get(position).getTitle() != null && !getListMovies().get(position).getTitle().isEmpty()) {
+        if (getListMovies().get(position).getTitle() != null && !getListMovies().get(position).getTitle().isEmpty()) {
             holder.txtTitle.setText(getListMovies().get(position).getTitle());
         } else {
             holder.txtTitle.setText(mContext.getResources().getString(R.string.no_title));
         }
 
-        if(getListMovies().get(position).getReleaseDate() != null && !getListMovies().get(position).getReleaseDate().isEmpty()) {
+        if (getListMovies().get(position).getReleaseDate() != null && !getListMovies().get(position).getReleaseDate().isEmpty()) {
             String date = getListMovies().get(position).getReleaseDate();
             String newDate = CustomDateFormat.formatDateFromString(date);
             holder.txtRelease.setText(newDate);
@@ -89,19 +89,19 @@ public class MovieAdapter extends RecyclerView.Adapter<MovieAdapter.CategoryView
             holder.txtRelease.setText(mContext.getResources().getString(R.string.no_release_date));
         }
 
-        if(getListMovies().get(position).getVoteAverage() != null) {
+        if (getListMovies().get(position).getVoteAverage() != null) {
             holder.txtRating.setText(String.valueOf(getListMovies().get(position).getVoteAverage()));
         } else {
             holder.txtRating.setText(mContext.getResources().getString(R.string.no_rating));
         }
 
-        if(getListMovies().get(position).getOverview() != null && !getListMovies().get(position).getOverview().isEmpty())
+        if (getListMovies().get(position).getOverview() != null && !getListMovies().get(position).getOverview().isEmpty())
             holder.txtOverview.setText(getListMovies().get(position).getOverview());
         else {
             holder.txtOverview.setText(mContext.getResources().getString(R.string.availability_overview));
         }
 
-        if(getListMovies().get(position).getFavorite() != null && !getListMovies().get(position).getFavorite())
+        if (getListMovies().get(position).getFavorite() != null && !getListMovies().get(position).getFavorite())
             holder.imgFavorite.setVisibility(View.GONE);
         else {
             holder.imgFavorite.setVisibility(View.VISIBLE);

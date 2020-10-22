@@ -75,13 +75,13 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.CategoryVi
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        if(getListTvShows().get(position).getName() != null && !getListTvShows().get(position).getName().isEmpty()) {
+        if (getListTvShows().get(position).getName() != null && !getListTvShows().get(position).getName().isEmpty()) {
             holder.txtTitle.setText(getListTvShows().get(position).getName());
         } else {
             holder.txtTitle.setText(mContext.getResources().getString(R.string.no_title));
         }
 
-        if(getListTvShows().get(position).getFirstAirDate() != null && !getListTvShows().get(position).getFirstAirDate().isEmpty()) {
+        if (getListTvShows().get(position).getFirstAirDate() != null && !getListTvShows().get(position).getFirstAirDate().isEmpty()) {
             String date = getListTvShows().get(position).getFirstAirDate();
             String newDate = CustomDateFormat.formatDateFromString(date);
             holder.txtRelease.setText(newDate);
@@ -89,19 +89,19 @@ public class TvShowAdapter extends RecyclerView.Adapter<TvShowAdapter.CategoryVi
             holder.txtRelease.setText(mContext.getResources().getString(R.string.no_release_date));
         }
 
-        if(getListTvShows().get(position).getVoteAverage() != null) {
+        if (getListTvShows().get(position).getVoteAverage() != null) {
             holder.txtRating.setText(String.valueOf(getListTvShows().get(position).getVoteAverage()));
         } else {
             holder.txtRating.setText(mContext.getResources().getString(R.string.no_rating));
         }
 
-        if(getListTvShows().get(position).getOverview() != null && !getListTvShows().get(position).getOverview().isEmpty())
+        if (getListTvShows().get(position).getOverview() != null && !getListTvShows().get(position).getOverview().isEmpty())
             holder.txtOverview.setText(getListTvShows().get(position).getOverview());
         else {
             holder.txtOverview.setText(mContext.getResources().getString(R.string.availability_overview));
         }
 
-        if(getListTvShows().get(position).getFavorite() != null && !getListTvShows().get(position).getFavorite())
+        if (getListTvShows().get(position).getFavorite() != null && !getListTvShows().get(position).getFavorite())
             holder.imgFavorite.setVisibility(View.GONE);
         else {
             holder.imgFavorite.setVisibility(View.VISIBLE);

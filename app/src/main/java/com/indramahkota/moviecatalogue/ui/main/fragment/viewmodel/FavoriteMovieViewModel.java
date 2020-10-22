@@ -23,5 +23,7 @@ public class FavoriteMovieViewModel extends ViewModel {
         return repository.getAllMovie();
     }
 
-    public void updateMovie(MovieEntity movieEntity) {repository.updateMovie(movieEntity);}
+    public void updateMovie(MovieEntity movieEntity) {
+        repository.updateMovie(movieEntity);
+    }
 }

@@ -32,6 +32,7 @@ public class MoviePagedListAdapter extends PagedListAdapter<MovieEntity, MoviePa
         super(DIFF_CALLBACK);
         this.mContext = context;
     }
+
     @NonNull
     @Override
     public MovieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,13 +45,13 @@ public class MoviePagedListAdapter extends PagedListAdapter<MovieEntity, MoviePa
         final MovieEntity movie = getItem(position);
 
         if (movie != null) {
-            if(!movie.getTitle().isEmpty()) {
+            if (!movie.getTitle().isEmpty()) {
                 holder.txtTitle.setText(movie.getTitle());
             } else {
                 holder.txtTitle.setText(mContext.getResources().getString(R.string.no_title));
             }
 
-            if(!movie.getReleaseDate().isEmpty()) {
+            if (!movie.getReleaseDate().isEmpty()) {
                 String date = movie.getReleaseDate();
                 String newDate = CustomDateFormat.formatDateFromString(date);
                 holder.txtRelease.setText(newDate);
@@ -58,13 +59,13 @@ public class MoviePagedListAdapter extends PagedListAdapter<MovieEntity, MoviePa
                 holder.txtRelease.setText(mContext.getResources().getString(R.string.no_release_date));
             }
 
-            if(movie.getVoteAverage() != null) {
+            if (movie.getVoteAverage() != null) {
                 holder.txtRating.setText(String.valueOf(movie.getVoteAverage()));
             } else {
                 holder.txtRating.setText(mContext.getResources().getString(R.string.no_rating));
             }
 
-            if(!movie.getOverview().isEmpty())
+            if (!movie.getOverview().isEmpty())
                 holder.txtOverview.setText(movie.getOverview());
             else {
                 holder.txtOverview.setText(mContext.getResources().getString(R.string.availability_overview));
@@ -114,19 +115,19 @@ public class MoviePagedListAdapter extends PagedListAdapter<MovieEntity, MoviePa
         }
     }
 
-    private static DiffUtil.ItemCallback<MovieEntity> DIFF_CALLBACK =
-        new DiffUtil.ItemCallback<MovieEntity>() {
-            // Concert details may have changed if reloaded from the database,
-            // but ID is fixed.
-            @Override
-            public boolean areItemsTheSame(MovieEntity oldMovie, MovieEntity newMovie) {
-                return oldMovie.getTitle().equals(newMovie.getTitle());
-            }
+    private static final DiffUtil.ItemCallback<MovieEntity> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<MovieEntity>() {
+                // Concert details may have changed if reloaded from the database,
+                // but ID is fixed.
+                @Override
+                public boolean areItemsTheSame(MovieEntity oldMovie, MovieEntity newMovie) {
+                    return oldMovie.getTitle().equals(newMovie.getTitle());
+                }
 
-            @SuppressLint("DiffUtilEquals")
-            @Override
-            public boolean areContentsTheSame(MovieEntity oldMovie, @NonNull MovieEntity newMovie) {
-                return oldMovie.equals(newMovie);
-            }
-        };
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(MovieEntity oldMovie, @NonNull MovieEntity newMovie) {
+                    return oldMovie.equals(newMovie);
+                }
+            };
 }

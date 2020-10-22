@@ -37,7 +37,8 @@ public class LanguageEntity implements Parcelable {
     @SerializedName("name")
     private String name;
 
-    public LanguageEntity(){}
+    public LanguageEntity() {
+    }
 
     private LanguageEntity(@NonNull Parcel in) {
         if (in.readByte() == 0) {

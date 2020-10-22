@@ -1,34 +1,14 @@
 package com.indramahkota.moviecatalogue;
 
-import android.app.Application;
-
 import com.indramahkota.moviecatalogue.di.component.DaggerAppComponent;
-import com.indramahkota.moviecatalogue.di.module.ApiModule;
-import com.indramahkota.moviecatalogue.di.module.DbModule;
-
-import javax.inject.Inject;
 
 import dagger.android.AndroidInjector;
-import dagger.android.DispatchingAndroidInjector;
-import dagger.android.HasAndroidInjector;
+import dagger.android.support.DaggerApplication;
 
-public class MovieCatalogueApp extends Application implements HasAndroidInjector {
-    @Inject
-    DispatchingAndroidInjector<Object> dispatchingAndroidInjector;
+public class MovieCatalogueApp extends DaggerApplication {
 
     @Override
-    public AndroidInjector<Object> androidInjector() {
-        return dispatchingAndroidInjector;
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        DaggerAppComponent.builder()
-                .application(this)
-                .apiModule(new ApiModule())
-                .dbModule(new DbModule())
-                .build()
-                .inject(this);
+    protected AndroidInjector<? extends DaggerApplication> applicationInjector() {
+        return DaggerAppComponent.builder().application(this).build();
     }
 }

@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CustomDateFormat {
-    public static String formatDateFromString(String inputDate){
+    public static String formatDateFromString(String inputDate) {
         Date parsed;
         String outputDate = "";
 

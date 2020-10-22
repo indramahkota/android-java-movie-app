@@ -7,8 +7,8 @@ import com.indramahkota.moviecatalogue.data.source.remote.response.ApiResponse;
 import com.indramahkota.moviecatalogue.ui.utils.AppExecutors;
 
 public abstract class NetworkBoundResource<ResultType, RequestType> {
-    private MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
-    private AppExecutors mExecutors;
+    private final MediatorLiveData<Resource<ResultType>> result = new MediatorLiveData<>();
+    private final AppExecutors mExecutors;
 
     NetworkBoundResource(AppExecutors appExecutors) {
         this.mExecutors = appExecutors;

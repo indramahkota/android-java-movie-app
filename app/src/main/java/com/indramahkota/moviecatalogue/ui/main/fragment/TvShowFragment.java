@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,9 +31,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.DaggerFragment;
 
-public class TvShowFragment extends Fragment {
+public class TvShowFragment extends DaggerFragment {
     private static final String STATE_PAGE = "state_page";
     private static final String STATE_SCROLL = "state_scroll";
     private static final String STATE_DISCOVER_TV_SHOW_RESPONSE = "state_discover_tv_show_response";
@@ -55,11 +54,11 @@ public class TvShowFragment extends Fragment {
 
     private Toast mToast;
 
-    public TvShowFragment() { }
+    public TvShowFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
@@ -124,6 +123,7 @@ public class TvShowFragment extends Fragment {
                 startActivity(moveToSearchActivity);
                 return true;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
@@ -145,7 +145,7 @@ public class TvShowFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
             rvFragmentTvShows.setVisibility(View.VISIBLE);
 
-            if(discoverTvShowResponseResource.data != null) {
+            if (discoverTvShowResponseResource.data != null) {
                 if (discoverTvShows == null) {
                     discoverTvShows = new ArrayList<>(discoverTvShowResponseResource.data.getResults());
                 } else {
@@ -154,9 +154,9 @@ public class TvShowFragment extends Fragment {
                             //show data
                             discoverTvShows.addAll(discoverTvShowResponseResource.data.getResults());
                             listTvShowAdapter.addAll(discoverTvShowResponseResource.data.getResults());
-                            if(discoverTvShows.size() < 1) {
+                            if (discoverTvShows.size() < 1) {
                                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                    if(discoverTvShows.size() < 1) {
+                                    if (discoverTvShows.size() < 1) {
                                         relativeLayout.setVisibility(View.VISIBLE);
                                         rvFragmentTvShows.setVisibility(View.GONE);
                                         mShimmerViewContainer.setVisibility(View.GONE);
@@ -170,16 +170,16 @@ public class TvShowFragment extends Fragment {
                             break;
                         case ERROR:
                             //show error
-                            if(discoverTvShowResponseResource.data.getResults().size() > 1) {
+                            if (discoverTvShowResponseResource.data.getResults().size() > 1) {
                                 discoverTvShows.addAll(discoverTvShowResponseResource.data.getResults());
                                 listTvShowAdapter.addAll(discoverTvShowResponseResource.data.getResults());
-                            }else {
-                                if(currentPage > 1)
+                            } else {
+                                if (currentPage > 1)
                                     currentPage--;
                             }
-                            if(discoverTvShows.size() < 1) {
+                            if (discoverTvShows.size() < 1) {
                                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                    if(discoverTvShows.size() < 1) {
+                                    if (discoverTvShows.size() < 1) {
                                         relativeLayout.setVisibility(View.VISIBLE);
                                         rvFragmentTvShows.setVisibility(View.GONE);
                                         mShimmerViewContainer.setVisibility(View.GONE);
@@ -196,11 +196,11 @@ public class TvShowFragment extends Fragment {
             }
         });
 
-        if(discoverTvShows != null) {
+        if (discoverTvShows != null) {
             listTvShowAdapter.addAll(discoverTvShows);
             linearLayoutManager.scrollToPosition(scrollPosition);
             mShimmerViewContainer.setVisibility(View.GONE);
-            if(discoverTvShows.size() < 1) {
+            if (discoverTvShows.size() < 1) {
                 rvFragmentTvShows.setVisibility(View.GONE);
                 relativeLayout.setVisibility(View.VISIBLE);
             }
@@ -215,7 +215,7 @@ public class TvShowFragment extends Fragment {
     }
 
     private void showToast(String message) {
-        if(mToast != null)
+        if (mToast != null)
             mToast.cancel();
 
         mToast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
@@ -228,10 +228,10 @@ public class TvShowFragment extends Fragment {
         outState.putInt(STATE_SCROLL, scrollPosition);
         outState.putLong(STATE_PAGE, currentPage);
 
-        if(discoverTvShows != null) {
+        if (discoverTvShows != null) {
             ArrayList<TvShowEntity> helper = new ArrayList<>();
             int len = discoverTvShows.size();
-            for(int i = 0; i<len; ++i) {
+            for (int i = 0; i < len; ++i) {
                 helper.add(discoverTvShows.get(i));
             }
             outState.putParcelableArrayList(STATE_DISCOVER_TV_SHOW_RESPONSE, helper);

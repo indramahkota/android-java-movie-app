@@ -13,7 +13,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,9 +31,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.DaggerFragment;
 
-public class MovieFragment extends Fragment {
+public class MovieFragment extends DaggerFragment {
     private static final String STATE_PAGE = "state_page";
     private static final String STATE_SCROLL = "state_scroll";
     private static final String STATE_DISCOVER_MOVIE_RESPONSE = "state_discover_movie_response";
@@ -55,11 +54,11 @@ public class MovieFragment extends Fragment {
 
     private Toast mToast;
 
-    public MovieFragment() { }
+    public MovieFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
@@ -124,6 +123,7 @@ public class MovieFragment extends Fragment {
                 startActivity(moveToSearchActivity);
                 return true;
             }
+
             @Override
             public boolean onQueryTextChange(String newText) {
                 return false;
@@ -145,7 +145,7 @@ public class MovieFragment extends Fragment {
             swipeRefreshLayout.setRefreshing(false);
             rvFragmentMovies.setVisibility(View.VISIBLE);
 
-            if(discoverMovieResponseResource.data != null) {
+            if (discoverMovieResponseResource.data != null) {
                 if (discoverMovies == null) {
                     discoverMovies = new ArrayList<>(discoverMovieResponseResource.data.getResults());
                 } else {
@@ -154,9 +154,9 @@ public class MovieFragment extends Fragment {
                             //show data
                             discoverMovies.addAll(discoverMovieResponseResource.data.getResults());
                             listMovieAdapter.addAll(discoverMovieResponseResource.data.getResults());
-                            if(discoverMovies.size() < 1) {
+                            if (discoverMovies.size() < 1) {
                                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                    if(discoverMovies.size() < 1) {
+                                    if (discoverMovies.size() < 1) {
                                         relativeLayout.setVisibility(View.VISIBLE);
                                         rvFragmentMovies.setVisibility(View.GONE);
                                         mShimmerViewContainer.setVisibility(View.GONE);
@@ -170,16 +170,16 @@ public class MovieFragment extends Fragment {
                             break;
                         case ERROR:
                             //show error
-                            if(discoverMovieResponseResource.data.getResults().size() > 1) {
+                            if (discoverMovieResponseResource.data.getResults().size() > 1) {
                                 discoverMovies.addAll(discoverMovieResponseResource.data.getResults());
                                 listMovieAdapter.addAll(discoverMovieResponseResource.data.getResults());
-                            }else {
-                                if(currentPage > 1)
+                            } else {
+                                if (currentPage > 1)
                                     currentPage--;
                             }
-                            if(discoverMovies.size() < 1) {
+                            if (discoverMovies.size() < 1) {
                                 new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                    if(discoverMovies.size() < 1) {
+                                    if (discoverMovies.size() < 1) {
                                         relativeLayout.setVisibility(View.VISIBLE);
                                         rvFragmentMovies.setVisibility(View.GONE);
                                         mShimmerViewContainer.setVisibility(View.GONE);
@@ -196,11 +196,11 @@ public class MovieFragment extends Fragment {
             }
         });
 
-        if(discoverMovies != null) {
+        if (discoverMovies != null) {
             listMovieAdapter.addAll(discoverMovies);
             linearLayoutManager.scrollToPosition(scrollPosition);
             mShimmerViewContainer.setVisibility(View.GONE);
-            if(discoverMovies.size() < 1) {
+            if (discoverMovies.size() < 1) {
                 rvFragmentMovies.setVisibility(View.GONE);
                 relativeLayout.setVisibility(View.VISIBLE);
             }
@@ -215,7 +215,7 @@ public class MovieFragment extends Fragment {
     }
 
     private void showToast(String message) {
-        if(mToast != null)
+        if (mToast != null)
             mToast.cancel();
 
         mToast = Toast.makeText(getContext(), message, Toast.LENGTH_SHORT);
@@ -228,10 +228,10 @@ public class MovieFragment extends Fragment {
         outState.putInt(STATE_SCROLL, scrollPosition);
         outState.putLong(STATE_PAGE, currentPage);
 
-        if(discoverMovies != null) {
+        if (discoverMovies != null) {
             ArrayList<MovieEntity> helper = new ArrayList<>();
             int len = discoverMovies.size();
-            for(int i = 0; i<len; ++i) {
+            for (int i = 0; i < len; ++i) {
                 helper.add(discoverMovies.get(i));
             }
             outState.putParcelableArrayList(STATE_DISCOVER_MOVIE_RESPONSE, helper);

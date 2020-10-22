@@ -23,5 +23,7 @@ public class FavoriteTvShowViewModel extends ViewModel {
         return repository.getAllTvShow();
     }
 
-    public void updateTvShow(TvShowEntity tvShowEntity) {repository.updateTvShow(tvShowEntity);}
+    public void updateTvShow(TvShowEntity tvShowEntity) {
+        repository.updateTvShow(tvShowEntity);
+    }
 }

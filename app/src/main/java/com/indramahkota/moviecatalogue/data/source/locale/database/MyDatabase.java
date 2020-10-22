@@ -1,6 +1,9 @@
 package com.indramahkota.moviecatalogue.data.source.locale.database;
 
+import android.content.Context;
+
 import androidx.room.Database;
+import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.room.TypeConverters;
 
@@ -15,5 +18,22 @@ import com.indramahkota.moviecatalogue.data.source.locale.entity.TvShowEntity;
 @TypeConverters({GenresTypeConverter.class, CreditsTypeConverter.class})
 public abstract class MyDatabase extends RoomDatabase {
     public static final String DATABASE_NAME = "my_movie_catalogue_database.db";
+
     public abstract AppDao appDao();
+
+    private static volatile MyDatabase INSTANCE;
+
+    public static MyDatabase getInstance(Context context) {
+        if (INSTANCE == null) {
+            synchronized (MyDatabase.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            MyDatabase.class, DATABASE_NAME)
+                            .allowMainThreadQueries()
+                            .build();
+                }
+            }
+        }
+        return INSTANCE;
+    }
 }

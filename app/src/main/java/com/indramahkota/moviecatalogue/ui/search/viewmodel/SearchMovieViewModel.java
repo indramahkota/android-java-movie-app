@@ -15,7 +15,7 @@ public class SearchMovieViewModel extends ViewModel {
     private MovieCatalogueRepository repository;
 
     private String stringQuery;
-    private MutableLiveData<Long> pageHandler = new MutableLiveData<>();
+    private final MutableLiveData<Long> pageHandler = new MutableLiveData<>();
     public LiveData<Resource<MovieResponse>> searchMovie = Transformations.switchMap(pageHandler,
             page -> repository.searchListMovie(stringQuery, page));
 
@@ -34,7 +34,7 @@ public class SearchMovieViewModel extends ViewModel {
 
     public boolean isLastPage() {
         boolean lastPage = false;
-        if(searchMovie.getValue() != null &&
+        if (searchMovie.getValue() != null &&
                 searchMovie.getValue().data != null &&
                 searchMovie.getValue().data.getPage() != null &&
                 searchMovie.getValue().data.getTotalPages() != null) {

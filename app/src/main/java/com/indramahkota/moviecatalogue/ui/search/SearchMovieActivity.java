@@ -6,7 +6,6 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,9 +23,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import dagger.android.AndroidInjection;
+import dagger.android.support.DaggerAppCompatActivity;
 
-public class SearchMovieActivity extends AppCompatActivity {
+public class SearchMovieActivity extends DaggerAppCompatActivity {
     public static final String EXTRA_SEARCH_QUERY = "extra_search_query";
     private static final String STATE_SCROLL = "state_scroll";
     private static final String STATE_SEARCH_MOVIE_RESPONSE = "state_search_movie_response";
@@ -47,11 +46,10 @@ public class SearchMovieActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        AndroidInjection.inject(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
-        if(getSupportActionBar() != null) {
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
 
@@ -122,7 +120,7 @@ public class SearchMovieActivity extends AppCompatActivity {
                     rvSearch.setVisibility(View.VISIBLE);
                     mShimmerViewContainer.setVisibility(View.GONE);
                     if (movieViewState.data != null) {
-                        if(searchMovies == null) {
+                        if (searchMovies == null) {
                             searchMovies = new ArrayList<>(movieViewState.data.getResults());
                         } else {
                             searchMovies.addAll(movieViewState.data.getResults());
@@ -130,7 +128,7 @@ public class SearchMovieActivity extends AppCompatActivity {
                         listMovieAdapter.addAll(movieViewState.data.getResults());
                         isLoading = false;
 
-                        if(searchMovies.size() < 1) {
+                        if (searchMovies.size() < 1) {
                             relativeLayout.setVisibility(View.VISIBLE);
                         }
                     }
@@ -156,7 +154,7 @@ public class SearchMovieActivity extends AppCompatActivity {
     }
 
     private void showToast(String message) {
-        if(mToast != null)
+        if (mToast != null)
             mToast.cancel();
 
         mToast = Toast.makeText(this, message, Toast.LENGTH_SHORT);
@@ -168,10 +166,10 @@ public class SearchMovieActivity extends AppCompatActivity {
         scrollPosition = linearLayoutManager.findFirstVisibleItemPosition();
         outState.putInt(STATE_SCROLL, scrollPosition);
 
-        if(searchMovies != null) {
+        if (searchMovies != null) {
             ArrayList<MovieEntity> movieHelper = new ArrayList<>();
             int movieLen = searchMovies.size();
-            for(int i = 0; i<movieLen; ++i) {
+            for (int i = 0; i < movieLen; ++i) {
                 movieHelper.add(searchMovies.get(i));
             }
             outState.putParcelableArrayList(STATE_SEARCH_MOVIE_RESPONSE, movieHelper);
@@ -181,7 +179,7 @@ public class SearchMovieActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onSupportNavigateUp(){
+    public boolean onSupportNavigateUp() {
         finish();
         return true;
     }

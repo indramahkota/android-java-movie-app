@@ -14,7 +14,7 @@ import javax.inject.Inject;
 public class MovieDetailsViewModel extends ViewModel {
     private MovieCatalogueRepository repository;
 
-    private MutableLiveData<Long> stateHandler = new MutableLiveData<>();
+    private final MutableLiveData<Long> stateHandler = new MutableLiveData<>();
     public LiveData<Resource<MovieEntity>> movieDetail = Transformations.switchMap(stateHandler,
             stateId -> repository.loadMovieDetails(stateId));
 

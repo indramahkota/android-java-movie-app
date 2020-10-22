@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -24,9 +23,9 @@ import com.indramahkota.moviecatalogue.ui.main.fragment.viewmodel.FavoriteTvShow
 
 import javax.inject.Inject;
 
-import dagger.android.support.AndroidSupportInjection;
+import dagger.android.support.DaggerFragment;
 
-public class FavoriteTvShowFragment extends Fragment {
+public class FavoriteTvShowFragment extends DaggerFragment {
     private static final String STATE_SCROLL = "state_scroll";
 
     @Inject
@@ -38,7 +37,7 @@ public class FavoriteTvShowFragment extends Fragment {
     private RelativeLayout relativeLayout;
     private FavoriteTvShowViewModel favoriteTvShowViewModel;
     private TvShowPagedListAdapter favoriteTvShowAdapter;
-    private ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
+    private final ItemTouchHelper itemTouchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
         @Override
         public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
             // Aksi di bawah digunakan untuk melakukan swap ke kenan dan ke kiri
@@ -58,20 +57,12 @@ public class FavoriteTvShowFragment extends Fragment {
 
                 // Kemudian memanggil CourseEntity sesuai posisi ketika diswipe
                 TvShowEntity tvShowEntity = favoriteTvShowAdapter.getItemById(swipedPosition);
-                if(tvShowEntity.getFavorite()) {
-                    tvShowEntity.setFavorite(false);
-                } else {
-                    tvShowEntity.setFavorite(true);
-                }
+                tvShowEntity.setFavorite(!tvShowEntity.getFavorite());
 
                 // Melakukan setBookmark untuk menghapus bookmark dari list course
                 favoriteTvShowViewModel.updateTvShow(tvShowEntity);
 
-                if(tvShowEntity.getFavorite()) {
-                    tvShowEntity.setFavorite(false);
-                } else {
-                    tvShowEntity.setFavorite(true);
-                }
+                tvShowEntity.setFavorite(!tvShowEntity.getFavorite());
 
                 // Memanggil Snackbar untuk melakukan pengecekan, apakah benar melakukan penghapusan bookmark
                 Snackbar snackbar = Snackbar.make(getView(), R.string.message_undo, Snackbar.LENGTH_LONG);
@@ -96,7 +87,6 @@ public class FavoriteTvShowFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
 
         if (savedInstanceState != null) {
@@ -139,7 +129,7 @@ public class FavoriteTvShowFragment extends Fragment {
 
         favoriteTvShowViewModel = new ViewModelProvider(this, viewModelFactory).get(FavoriteTvShowViewModel.class);
         favoriteTvShowViewModel.getListTvShow().observe(getViewLifecycleOwner(), tvShows -> {
-            if(tvShows.data != null) {
+            if (tvShows.data != null) {
                 switch (tvShows.status) {
                     case LOADING:
                         mShimmerViewContainer.setVisibility(View.VISIBLE);
@@ -156,7 +146,7 @@ public class FavoriteTvShowFragment extends Fragment {
                         break;
                 }
 
-                if(tvShows.data.size() < 1) {
+                if (tvShows.data.size() < 1) {
                     relativeLayout.setVisibility(View.VISIBLE);
                 }
             }

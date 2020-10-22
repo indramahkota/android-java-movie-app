@@ -14,7 +14,7 @@ import javax.inject.Inject;
 public class MovieFragmentViewModel extends ViewModel {
     private MovieCatalogueRepository repository;
 
-    private MutableLiveData<Long> pageHandler = new MutableLiveData<>();
+    private final MutableLiveData<Long> pageHandler = new MutableLiveData<>();
     public LiveData<Resource<MovieResponse>> listDiscoverMovie = Transformations.switchMap(pageHandler,
             page -> repository.loadListMovie(page));
 
@@ -29,10 +29,10 @@ public class MovieFragmentViewModel extends ViewModel {
 
     public boolean isLastPage() {
         boolean lastPage = false;
-        if(listDiscoverMovie.getValue() != null &&
+        if (listDiscoverMovie.getValue() != null &&
                 listDiscoverMovie.getValue().data != null &&
-                    listDiscoverMovie.getValue().data.getPage() != null &&
-                        listDiscoverMovie.getValue().data.getTotalPages() != null) {
+                listDiscoverMovie.getValue().data.getPage() != null &&
+                listDiscoverMovie.getValue().data.getTotalPages() != null) {
             lastPage = listDiscoverMovie.getValue().data.getPage() >= listDiscoverMovie.getValue().data.getTotalPages();
         }
         return lastPage;

@@ -15,7 +15,7 @@ public class SearchTvShowViewModel extends ViewModel {
     private MovieCatalogueRepository repository;
 
     private String stringQuery;
-    private MutableLiveData<Long> pageHandler = new MutableLiveData<>();
+    private final MutableLiveData<Long> pageHandler = new MutableLiveData<>();
     public LiveData<Resource<TvShowResponse>> searchTvShow = Transformations.switchMap(pageHandler,
             page -> repository.searchListTvShow(stringQuery, page));
 
@@ -34,7 +34,7 @@ public class SearchTvShowViewModel extends ViewModel {
 
     public boolean isLastPage() {
         boolean lastPage = false;
-        if(searchTvShow.getValue() != null &&
+        if (searchTvShow.getValue() != null &&
                 searchTvShow.getValue().data != null &&
                 searchTvShow.getValue().data.getPage() != null &&
                 searchTvShow.getValue().data.getTotalPages() != null) {

@@ -36,7 +36,7 @@ public class GenreAdapter extends RecyclerView.Adapter<GenreAdapter.CategoryView
 
     @Override
     public void onBindViewHolder(@NonNull CategoryViewHolder holder, int position) {
-        if(getListGenres().get(position).getName() != null && !getListGenres().get(position).getName().isEmpty()) {
+        if (getListGenres().get(position).getName() != null && !getListGenres().get(position).getName().isEmpty()) {
             holder.txtName.setText(getListGenres().get(position).getName());
         } else {
             holder.txtName.setText(mContext.getResources().getString(R.string.no_genre));

@@ -32,6 +32,7 @@ public class TvShowPagedListAdapter extends PagedListAdapter<TvShowEntity, TvSho
         super(DIFF_CALLBACK);
         this.mContext = context;
     }
+
     @NonNull
     @Override
     public TvShowViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -44,13 +45,13 @@ public class TvShowPagedListAdapter extends PagedListAdapter<TvShowEntity, TvSho
         final TvShowEntity movie = getItem(position);
 
         if (movie != null) {
-            if(!movie.getName().isEmpty()) {
+            if (!movie.getName().isEmpty()) {
                 holder.txtTitle.setText(movie.getName());
             } else {
                 holder.txtTitle.setText(mContext.getResources().getString(R.string.no_title));
             }
 
-            if(!movie.getFirstAirDate().isEmpty()) {
+            if (!movie.getFirstAirDate().isEmpty()) {
                 String date = movie.getFirstAirDate();
                 String newDate = CustomDateFormat.formatDateFromString(date);
                 holder.txtRelease.setText(newDate);
@@ -58,13 +59,13 @@ public class TvShowPagedListAdapter extends PagedListAdapter<TvShowEntity, TvSho
                 holder.txtRelease.setText(mContext.getResources().getString(R.string.no_release_date));
             }
 
-            if(movie.getVoteAverage() != null) {
+            if (movie.getVoteAverage() != null) {
                 holder.txtRating.setText(String.valueOf(movie.getVoteAverage()));
             } else {
                 holder.txtRating.setText(mContext.getResources().getString(R.string.no_rating));
             }
 
-            if(!movie.getOverview().isEmpty())
+            if (!movie.getOverview().isEmpty())
                 holder.txtOverview.setText(movie.getOverview());
             else {
                 holder.txtOverview.setText(mContext.getResources().getString(R.string.availability_overview));
@@ -114,19 +115,19 @@ public class TvShowPagedListAdapter extends PagedListAdapter<TvShowEntity, TvSho
         }
     }
 
-    private static DiffUtil.ItemCallback<TvShowEntity> DIFF_CALLBACK =
-        new DiffUtil.ItemCallback<TvShowEntity>() {
-            // Concert details may have changed if reloaded from the database,
-            // but ID is fixed.
-            @Override
-            public boolean areItemsTheSame(TvShowEntity oldTvShow, TvShowEntity newTvShow) {
-                return oldTvShow.getName().equals(newTvShow.getName());
-            }
+    private static final DiffUtil.ItemCallback<TvShowEntity> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<TvShowEntity>() {
+                // Concert details may have changed if reloaded from the database,
+                // but ID is fixed.
+                @Override
+                public boolean areItemsTheSame(TvShowEntity oldTvShow, TvShowEntity newTvShow) {
+                    return oldTvShow.getName().equals(newTvShow.getName());
+                }
 
-            @SuppressLint("DiffUtilEquals")
-            @Override
-            public boolean areContentsTheSame(TvShowEntity oldTvShow, @NonNull TvShowEntity newTvShow) {
-                return oldTvShow.equals(newTvShow);
-            }
-        };
+                @SuppressLint("DiffUtilEquals")
+                @Override
+                public boolean areContentsTheSame(TvShowEntity oldTvShow, @NonNull TvShowEntity newTvShow) {
+                    return oldTvShow.equals(newTvShow);
+                }
+            };
 }
