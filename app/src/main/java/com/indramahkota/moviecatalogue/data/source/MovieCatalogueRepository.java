@@ -67,6 +67,7 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
 
             @Override
             protected Boolean shouldFetch(MovieResponse data) {
+
                 return true;
             }
 
@@ -89,11 +90,10 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                                 MovieEntity storedMovieEntity = dao.selectMovieById(movieEntity.getId());
                                 if (storedMovieEntity == null) {
                                     movieEntity.setFavorite(false);
-                                    movieEntity.setPage(page);
                                 } else {
                                     movieEntity.setFavorite(storedMovieEntity.getFavorite());
-                                    movieEntity.setPage(page);
                                 }
+                                movieEntity.setPage(page);
                                 helper.add(movieEntity);
                             }
                             MovieResponse movieResponse = new MovieResponse();
@@ -167,11 +167,10 @@ public class MovieCatalogueRepository implements MovieCatalogueDataSource {
                                 TvShowEntity storedTvShowEntity = dao.selectTvShowById(tvShowEntity.getId());
                                 if (storedTvShowEntity == null) {
                                     tvShowEntity.setFavorite(false);
-                                    tvShowEntity.setPage(page);
                                 } else {
                                     tvShowEntity.setFavorite(storedTvShowEntity.getFavorite());
-                                    tvShowEntity.setPage(page);
                                 }
+                                tvShowEntity.setPage(page);
                                 helper.add(tvShowEntity);
                             }
                             TvShowResponse tvShowResponse = new TvShowResponse();
