@@ -19,15 +19,15 @@ public abstract class ActivityModule {
     @ContributesAndroidInjector(modules = FragmentModule.class)
     abstract SingleFragmentActivity bindSingleFragmentActivity();
 
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract MovieDetailsActivity bindMovieDetailsActivity();
 
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract TvShowDetailsActivity bindTvShowDetailsActivity();
 
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract SearchMovieActivity bindSearchMovieActivity();
 
-    @ContributesAndroidInjector()
+    @ContributesAndroidInjector
     abstract SearchTvShowActivity bindSearchTvShowActivity();
 }

@@ -23,16 +23,11 @@ public class ApiModule {
 
     @Provides
     @Singleton
-    Retrofit provideRetrofit(Gson gson) {
+    ApiEndPoint provideRetrofit(Gson gson) {
         return new Retrofit.Builder()
                 .baseUrl(ApiConstant.BASE_URL_TMDB)
                 .addConverterFactory(GsonConverterFactory.create(gson))
-                .build();
-    }
-
-    @Provides
-    @Singleton
-    ApiEndPoint provideTmdbApi(Retrofit retrofit) {
-        return retrofit.create(ApiEndPoint.class);
+                .build()
+                .create(ApiEndPoint.class);
     }
 }

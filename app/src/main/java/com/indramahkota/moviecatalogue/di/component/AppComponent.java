@@ -35,11 +35,10 @@ import dagger.android.AndroidInjector;
 )
 
 public interface AppComponent extends AndroidInjector<MovieCatalogueApp> {
-    @Component.Builder
-    interface Builder {
-        @BindsInstance
-        Builder application(Application app);
-
-        AppComponent build();
+    // Factory to create instances of the AppComponent
+    @Component.Factory
+    interface Factory {
+        // With @BindsInstance, the Context passed in will be available in the graph
+        AppComponent create(@BindsInstance Application application);
     }
 }
